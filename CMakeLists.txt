@@ -7,4 +7,6 @@ include_directories(include)
 
 add_executable(ADS_Project
         include/hash_map.h
-        src/hash_map.cpp)
+        src/hash_map.cpp
+        include/priority_queue.h
+        src/priority_queue.cpp)
