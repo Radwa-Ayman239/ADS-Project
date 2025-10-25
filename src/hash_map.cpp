@@ -3,28 +3,27 @@
 //
 
 #include "hash_map.h"
+#include <functional>
 
-HashMap::HashMap() : buckets_(nullptr), capacity_(16), size_(0), max_load_(0.75f) {
+template<typename K, typename V>
+HashMap<K, V>::HashMap() : buckets_(nullptr), capacity_(16), size_(0), max_load_(0.75f) {
     buckets_ = new Node *[capacity_];
     for (int i = 0; i < capacity_; i++) buckets_[i] = nullptr;
 }
 
-HashMap::~HashMap() {
+template<typename K, typename V>
+HashMap<K, V>::~HashMap() {
     clear();
     delete[] buckets_;
 }
 
-unsigned long HashMap::hash(const string &s) {
-    const auto *str = reinterpret_cast<const unsigned char *>(s.c_str());
-    unsigned long h = 5381;
-    int c;
-    while ((c = *str++))
-        h = ((h << 5) + h) + static_cast<unsigned long>(c);
-
-    return h;
+template<typename K, typename V>
+size_t HashMap<K, V>::hash(const K &key) {
+    return std::hash<K>{}(key);
 }
 
-void HashMap::rehash(const int newCap) {
+template<typename K, typename V>
+void HashMap<K, V>::rehash(const int newCap) {
     const auto newBuckets = new Node *[newCap];
     for (int i = 0; i < newCap; i++) newBuckets[i] = nullptr;
 
@@ -45,7 +44,8 @@ void HashMap::rehash(const int newCap) {
     capacity_ = newCap;
 }
 
-void HashMap::ensureCapacity() {
+template<typename K, typename V>
+void HashMap<K, V>::ensureCapacity() {
     const float lf = (capacity_ == 0) ? 1.0f : static_cast<float>(size_) / static_cast<float>(capacity_);
     if (lf > max_load_) {
         int newCap = capacity_ * 2;
@@ -54,8 +54,9 @@ void HashMap::ensureCapacity() {
     }
 }
 
-bool HashMap::putNew(const string &key, void *value) {
-    const unsigned long h = hash(key);
+template<typename K, typename V>
+bool HashMap<K, V>::putNew(const K &key, const V &value) {
+    const size_t h = hash(key);
     const int idx = static_cast<int>(h % capacity_);
     const Node *cur = buckets_[idx];
     while (cur) {
@@ -72,20 +73,22 @@ bool HashMap::putNew(const string &key, void *value) {
     return true;
 }
 
-void *HashMap::get(const string &key) const {
-    const unsigned long h = hash(key);
+template<typename K, typename V>
+V *HashMap<K, V>::get(const K &key) const {
+    const size_t h = hash(key);
     const int idx = static_cast<int>(h % capacity_);
     const Node *cur = buckets_[idx];
     while (cur) {
-        if (cur->key == key) return cur->val;
+        if (cur->key == key) return &(cur->val);
         cur = cur->next;
     }
 
     return nullptr;
 }
 
-bool HashMap::erase(const string &key) {
-    const unsigned long h = hash(key);
+template<typename K, typename V>
+bool HashMap<K, V>::erase(const K &key) {
+    const size_t h = hash(key);
     const int idx = static_cast<int>(h % capacity_);
     Node *cur = buckets_[idx];
     Node *prev = nullptr;
@@ -94,7 +97,7 @@ bool HashMap::erase(const string &key) {
             if (prev) prev->next = cur->next;
             else buckets_[idx] = cur->next;
             delete cur;
-            size_ -= 1;
+            size_--;
             return true;
         }
         prev = cur;
@@ -104,11 +107,13 @@ bool HashMap::erase(const string &key) {
     return false;
 }
 
-bool HashMap::contains(const string &key) const {
+template<typename K, typename V>
+bool HashMap<K, V>::contains(const K &key) const {
     return get(key) != nullptr;
 }
 
-void HashMap::clear() {
+template<typename K, typename V>
+void HashMap<K, V>::clear() {
     for (int i = 0; i < capacity_; i++) {
         const Node *cur = buckets_[i];
         while (cur) {
