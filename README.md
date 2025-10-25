@@ -108,3 +108,45 @@ Removes all key-value pairs from the HashMap but retains the bucket structure.
 
 #### `int size() const`
 Returns the number of entries in the HashMap.
+
+
+
+**-Queue Documentation:**
+Why We Used a Queue?
+
+In our library scheduling system, we implemented a Queue data structure to manage multiple user commands efficiently, such as borrowing books, reserving laptops, and booking study rooms, all within a single program run.
+
+A Queue follows the First-In-First-Out (FIFO) principle, meaning that commands are processed in the exact order they are received.
+This guarantees fairness, order preservation, and smooth handling of sequential tasks, especially when users perform multiple actions at once.
+
+**-Role of the Queue in Our System**
+
+When a user enters several commands (e.g., borrow, book, cancel), each command is enqueued in order.
+The system then dequeues and executes them one by one.
+This design prevents command overlap, avoids scheduling collisions, and ensures that operations are handled consistently.
+
+**Exmaple:**
+User commands: borrow → book → cancel
+Queue order:  [borrow] → [book] → [cancel]
+Execution:    borrow (done) → book (done) → cancel (done)
+
+
+**Why a Circular Dynamic Queue?**
+
+**1-Circular structure:** avoids wasting memory after dequeuing elements.
+**2- Dynamic resizing:** automatically doubles in size when full.
+
+
+**Queue Flow Diagram**
+    A[User Inputs Command] --> B[Enqueue Command into Queue]
+    B --> C{Is Queue Full?}
+    C -- Yes --> D[Resize Queue]
+    C -- No --> E[Keep Adding Commands]
+    E --> F[Dequeue Commands Sequentially]
+    F --> G[Execute Each Command (Borrow, Book, Cancel)]
+    G --> H[Display Updated Schedule]
+
+**What makes it special?**
+-Handles multiple user commands efficiently in one session.
+-Preserves execution order and avoids task collisions.
+-Offers a fair, and memory-efficient command scheduler.
