@@ -125,7 +125,7 @@ When a user enters several commands (e.g., borrow, book, cancel), each command i
 The system then dequeues and executes them one by one.
 This design prevents command overlap, avoids scheduling collisions, and ensures that operations are handled consistently.
 
-**Exmaple:**
+**Example:**
 User commands: borrow → book → cancel <br>
 Queue order:  [borrow] → [book] → [cancel]<br>
 Execution:    borrow (done) → book (done) → cancel (done) <br>
