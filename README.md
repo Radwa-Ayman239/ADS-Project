@@ -1,1 +1,6 @@
 # ADS-Project
+// Documentation of the use of priority queues: 
+In this project, a priority queue is used to manage book borrowing requests in situations where time conflicts occur between multiple users.
+Consider the following scenario:
+A student borrows a book for a month and then returns it. If the same student tries to borrow the same book again the following month, they will receive a notification stating:
+“Same book borrowed the month before! Please note that if another student borrows it before your requested start date, your borrow request will be cancelled.” This situation introduces a potential borrowing conflict — two users requesting the same book for overlapping or consecutive time periods. To handle this efficiently, all borrow requests for a specific book are placed in a priority queue based on their priority level rather than the order of submission. If another user submits a borrow request before the start date of the first user’s requested borrowing interval, that user is assigned a higher priority in the queue. Even if the first user submitted their request earlier, the second user (with the earlier borrowing period) takes precedence because their request conflicts directly with the start of the first user’s interval.
