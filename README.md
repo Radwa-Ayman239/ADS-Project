@@ -126,9 +126,9 @@ The system then dequeues and executes them one by one.
 This design prevents command overlap, avoids scheduling collisions, and ensures that operations are handled consistently.
 
 **Exmaple:**
-User commands: borrow → book → cancel
-Queue order:  [borrow] → [book] → [cancel]
-Execution:    borrow (done) → book (done) → cancel (done)
+User commands: borrow → book → cancel <br>
+Queue order:  [borrow] → [book] → [cancel]<br>
+Execution:    borrow (done) → book (done) → cancel (done) <br>
 
 
 **Why a Circular Dynamic Queue?**
@@ -138,15 +138,15 @@ Execution:    borrow (done) → book (done) → cancel (done)
 
 
 **Queue Flow Diagram**
-    A[User Inputs Command] --> B[Enqueue Command into Queue]
-    B --> C{Is Queue Full?}
-    C -- Yes --> D[Resize Queue]
-    C -- No --> E[Keep Adding Commands]
-    E --> F[Dequeue Commands Sequentially]
-    F --> G[Execute Each Command (Borrow, Book, Cancel)]
-    G --> H[Display Updated Schedule]
+    A[User Inputs Command] --> B[Enqueue Command into Queue]<br>
+    B --> C{Is Queue Full?}<br>
+    C -- Yes --> D[Resize Queue]<br>
+    C -- No --> E[Keep Adding Commands]<br>
+    E --> F[Dequeue Commands Sequentially]<br>
+    F --> G[Execute Each Command (Borrow, Book, Cancel)]<br>
+    G --> H[Display Updated Schedule]<br>
 
 **What makes it special?**
--Handles multiple user commands efficiently in one session.
--Preserves execution order and avoids task collisions.
--Offers a fair, and memory-efficient command scheduler.
+-Handles multiple user commands efficiently in one session.<br>
+-Preserves execution order and avoids task collisions.<br>
+-Offers a fair, and memory-efficient command scheduler.<br>
