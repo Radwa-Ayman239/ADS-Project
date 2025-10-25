@@ -133,8 +133,8 @@ Execution:    borrow (done) → book (done) → cancel (done) <br>
 
 **Why a Circular Dynamic Queue?**
 
-**1-Circular structure:** avoids wasting memory after dequeuing elements.
-**2- Dynamic resizing:** automatically doubles in size when full.
+**1-Circular structure:** avoids wasting memory after dequeuing elements.<br>
+**2- Dynamic resizing:** automatically doubles in size when full.<br>
 
 
 **Queue Flow Diagram**
