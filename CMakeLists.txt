@@ -7,4 +7,4 @@ include_directories(include)
 
 add_executable(ADS_Project
         include/hash_map.h
-        src/hash_map.cpp)
+        tests/hash_test.cpp)
