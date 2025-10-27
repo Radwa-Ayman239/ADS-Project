@@ -245,7 +245,8 @@ Execution:    borrow (done) → book (done) → cancel (done) <br>
 Overview:
 The RedBlackIntervalTree is a tree that stores intervals like [start, end] and keeps them balanced using Red-Black Tree rules. We use it to make sure that no two bookings or checkouts overlap for the same resource (when booking out a study room, or checking out a laptop or book).
 Method details:
-insert(int low, int high)
+
+1. insert(int low, int high)
 Adds a new interval [low, high] to the tree
 Fixes the tree if adding the new interval breaks the Red-Black rules
 Updates the maximum values for each subtree (this value is used to efficiently search for overlapping intervals)
