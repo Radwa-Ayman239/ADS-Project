@@ -109,7 +109,7 @@ Queue Reordered Automatically:
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-## HashMap 
+## 2. HashMap 
 
 ### Overview
 The `HashMap` class is a core component of the Library Time Conflict Detection Tool, providing efficient storage and retrieval of library resources and their associated booking schedules. This generic hash table implementation uses separate chaining for collision resolution and is designed to manage various library resources such as devices, books, study rooms, and user information.
@@ -214,7 +214,7 @@ Returns the number of entries in the HashMap.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-**-Queue Documentation:**
+**3. Queue Documentation:**
 Why We Used a Queue?
 
 In our library scheduling system, we implemented a Queue data structure to manage multiple user commands efficiently, such as borrowing books, reserving laptops, and booking study rooms, all within a single program run.
@@ -259,7 +259,7 @@ Execution:    borrow (done) → book (done) → cancel (done) <br>
 
 
 
-**Red-Black Interval**
+**4. Red-Black Interval**
 Overview:
 The RedBlackIntervalTree is a tree that stores intervals like [start, end] and keeps them balanced using Red-Black Tree rules. We use it to make sure that no two bookings or checkouts overlap for the same resource (when booking out a study room, or checking out a laptop or book).
 Method details:
