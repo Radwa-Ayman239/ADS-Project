@@ -1,13 +1,102 @@
 # ADS-Project
 
 ## Priority Queue
-Documentation of the use of priority queues: 
-In this project, a priority queue is used to manage book borrowing requests in situations where time conflicts occur between multiple users.
-Consider the following scenario:
-A student borrows a book for a month and then returns it. If the same student tries to borrow the same book again the following month, they will receive a notification stating:
-“Same book borrowed the month before! Please note that if another student borrows it before your requested start date, your borrow request will be cancelled.” This situation introduces a potential borrowing conflict — two users requesting the same book for overlapping or consecutive time periods. To handle this efficiently, all borrow requests for a specific book are placed in a priority queue based on their priority level rather than the order of submission. If another user submits a borrow request before the start date of the first user’s requested borrowing interval, that user is assigned a higher priority in the queue. Even if the first user submitted their request earlier, the second user (with the earlier borrowing period) takes precedence because their request conflicts directly with the start of the first user’s interval.
+A Priority Queue is a specialized data structure that stores elements in a way that allows the highest-priority element to be accessed first, regardless of the order they were added. Unlike a normal queue (FIFO), where the first element inserted is served first, a priority queue arranges elements by a defined priority rule — meaning insertion order does not determine service order. In this implementation, the priority queue is built using a binary heap, providing:
+O(log n) insertion and deletion
+O(1) access to the highest-priority element
+## Main functions: 
+1. PriorityQueue(int initialCapacity = 10)
+Initializes an empty priority queue with a given initial capacity.
+Allocates dynamic memory for the heap array and sets the current size to zero.
+Used to create a new queue for each book to store its borrow requests.
+Complexity: O(1)
 
----
+2. ~PriorityQueue()
+Releases all dynamically allocated memory and destroys the heap array when the queue object goes out of scope.
+Prevents memory leaks and ensures clean termination.
+Complexity: O(1)
+
+3. void push(const T& value)
+Inserts a new element into the priority queue.
+If the array is full, the capacity is doubled using resize().
+The new element is placed at the end of the heap and moved to its proper position using heapifyUp().
+Ensures correct order based on the priority rule — earlier borrow intervals or non-repeating borrowers rise to the top.
+Complexity: O(log n)
+
+4. T top() const
+Returns the element with the highest priority without removing it from the queue.
+Accesses the element at the root of the heap (heapArray[0]).
+If the queue is empty, displays an error message and exits.
+Complexity: O(1)
+
+5. void pop()
+Removes the highest-priority element from the queue.
+Replaces the root element with the last element in the heap, decreases the size, and restores heap order using heapifyDown().
+Ensures the next eligible borrower automatically moves to the top.
+Complexity: O(log n)
+
+6. bool isEmpty() const
+Checks whether the queue is empty.
+Returns true if no elements are stored; otherwise, returns false.
+Used to verify if any pending borrow requests exist for a specific book.
+Complexity: O(1)
+
+7. int size() const
+Returns the total number of elements currently stored in the queue.
+Used to display or track how many requests are pending for a particular book.
+Complexity: O(1)
+
+8. void printHeap() const
+Prints all elements of the heap array in their current internal order.
+Used mainly for visualization and debugging to observe how borrow requests are arranged by priority.
+Complexity: O(n)
+
+9. void resize()
+Doubles the capacity of the heap array when it becomes full.
+Creates a new array, copies existing elements, deletes the old array, and replaces it with the new one.
+Ensures the queue can handle a growing number of requests efficiently.
+Complexity: O(n)
+
+10. void heapifyUp(int index)
+Moves a newly added element upward in the heap to restore the correct order.
+Compares the element with its parent and swaps them if it has higher priority.
+Continues until the correct position is reached or the root is found.
+Complexity: O(log n)
+
+11. void heapifyDown(int index)
+Rebalances the heap after removing the top element.
+Compares the current node with its children and swaps it with the higher-priority child when necessary.
+Repeats the process until the heap property is restored throughout the structure.
+Complexity: O(log n)
+
+### Purpose
+In the context of the library booking system, the priority queues acts as follows: 
+Each book in the library has its own priority queue that manages all active borrow requests for that specific title.
+The queue ensures:
+Requests are handled in the order they were submitted (standard queue logic).
+Conflicts between overlapping requests are resolved fairly.
+Students who borrowed the same book before cannot automatically monopolize it if another student requests it next. This is done by the
+`Exception — Borrowing Conflict Rule`:
+If a student who borrowed the same book previously submits a new request and another student requests it for an overlapping interval, the other student’s request receives higher priority, even if it was submitted later.
+### Example visualization in flow form: 
+📖 Book: “Data Structures and Algorithms”
+
+1️⃣ Ali requests (April 10 – May 10)
+   → Queue: [Ali]
+
+2️⃣ Sara requests (April 5 – April 20)
+   → Overlaps with Ali’s new request
+   → Ali borrowed this book last month ⚠️
+   → Rule triggered: Sara gains priority
+
+Queue Reordered Automatically:
+   [Sara, Ali]
+
+3️⃣ System Processes:
+   → top() → Sara
+   → pop() → remove Sara after processing
+   → top() → Ali (next in line)
+
 
 ## HashMap 
 
