@@ -6,12 +6,11 @@ using namespace std;
 
 class queue{
     private:
-    string * com; // array that will store the commands from the user
+    string * com; 
     int capacity, front, rear;
-    int count;
-
-
+    int count; // to keep track of the number if elemnts stored in the queue 
     void resize(); //when the array is full 
+
 
 
     public:
@@ -26,15 +25,14 @@ class queue{
     }
 
 
-    //queue();
-    void enqueue( string);
+
+    void enqueue(const string&);
     void dequeue();
     bool isEmpty() const;
     bool isFull() const;
     string Front() const;
     int size() const;
-
-    //maybe we need displaying the queue
+    int getCapacity() const; 
     void display() const;
 
     //destructor 
