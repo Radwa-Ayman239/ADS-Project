@@ -1,6 +1,13 @@
 # ADS-Project
+## Documentation for the usage of the following data structures ##
+1. Priority Queue
+2. Hashamp
+3. Queue
+4. Red-Black Interval Tree
 
-## Priority Queue
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 1. Priority Queue
 A Priority Queue is a specialized data structure that stores elements in a way that allows the highest-priority element to be accessed first, regardless of the order they were added. Unlike a normal queue (FIFO), where the first element inserted is served first, a priority queue arranges elements by a defined priority rule — meaning insertion order does not determine service order. In this implementation, the priority queue is built using a binary heap, providing:
 O(log n) insertion and deletion
 O(1) access to the highest-priority element
@@ -96,6 +103,10 @@ Queue Reordered Automatically:
    → top() → Sara
    → pop() → remove Sara after processing
    → top() → Ali (next in line)
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 ## HashMap 
@@ -200,6 +211,9 @@ Returns the number of entries in the HashMap.
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 **-Queue Documentation:**
 Why We Used a Queue?
 
@@ -239,6 +253,10 @@ Execution:    borrow (done) → book (done) → cancel (done) <br>
 -Handles multiple user commands efficiently in one session.<br>
 -Preserves execution order and avoids task collisions.<br>
 -Offers a fair, and memory-efficient command scheduler.<br>
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 **Red-Black Interval**
