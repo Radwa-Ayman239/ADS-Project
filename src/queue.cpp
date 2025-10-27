@@ -88,3 +88,43 @@ void queue::resize() {
 }
 
 
+int main() {
+    queue q;
+
+    cout << "Testing queue implementation...\n";
+
+    // Test 1: Enqueue a few commands
+    cout << "\n--- Enqueueing commands ---\n";
+    q.enqueue("Borrow Laptop");
+    q.enqueue("Book studyRoom");
+    q.enqueue("Borrow Book");
+    q.display();
+
+    // Test 2: Check front and size
+    cout << "\nFront element: " << q.Front() << endl;
+    cout << "Current size: " << q.getCapacity() << endl;
+    cout<<"The actual number of elements in the queue: "<<q.size()<<endl;
+
+    // Test 3: Dequeue a command
+    cout << "\n--- Dequeueing one command ---\n";
+    q.dequeue();
+    q.display();
+
+    // Test 4: Enqueue more items (test wrapping around)
+    cout << "\n--- Enqueueing more to test wrap-around ---\n";
+    for (int i = 1; i <= 10; i++) {
+        q.enqueue("Command " + to_string(i+2));
+    }
+    q.display();
+
+    // Test 5: Force resize
+    cout << "\n--- Forcing resize ---\n";
+    //q.enqueue("Extra Command");
+    //q.display();
+    cout << "New capacity after resize: " << q.getCapacity() << endl;
+    cout<<"The actual number of elements in the queue: "<<q.size()<<endl;
+
+   
+
+}
+
