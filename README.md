@@ -239,3 +239,27 @@ Execution:    borrow (done) → book (done) → cancel (done) <br>
 -Handles multiple user commands efficiently in one session.<br>
 -Preserves execution order and avoids task collisions.<br>
 -Offers a fair, and memory-efficient command scheduler.<br>
+
+
+**Red-Black Interval**
+Overview:
+The RedBlackIntervalTree is a tree that stores intervals like [start, end] and keeps them balanced using Red-Black Tree rules. We use it to make sure that no two bookings or checkouts overlap for the same resource (when booking out a study room, or checking out a laptop or book).
+Method details:
+insert(int low, int high)
+Adds a new interval [low, high] to the tree
+Fixes the tree if adding the new interval breaks the Red-Black rules
+Updates the maximum values for each subtree (this value is used to efficiently search for overlapping intervals)
+
+
+2. remove(int low, int high)
+Removes an interval [low, high] from the tree if found
+Fixes the tree if removing the node breaks the Red-Black rules.
+Updates the maximum values for each subtree 
+3. searchOverlap(int low, int high)
+Checks if there’s any interval in the tree that overlaps with [low, high].
+Prints the first overlapping interval it finds, or "No overlapping interval found." if none exist.
+
+
+4. printTree()
+Shows the tree on the screen where each interval in each node is shown as well as its maximum value in its subtree and whether it's a red node or a black node.
+
