@@ -5,65 +5,65 @@ A Priority Queue is a specialized data structure that stores elements in a way t
 O(log n) insertion and deletion
 O(1) access to the highest-priority element
 ## Main functions: 
-1. PriorityQueue(int initialCapacity = 10)
+1. PriorityQueue(int initialCapacity = 10):
 Initializes an empty priority queue with a given initial capacity.
 Allocates dynamic memory for the heap array and sets the current size to zero.
 Used to create a new queue for each book to store its borrow requests.
 Complexity: O(1)
 
-2. ~PriorityQueue()
+2. ~PriorityQueue():
 Releases all dynamically allocated memory and destroys the heap array when the queue object goes out of scope.
 Prevents memory leaks and ensures clean termination.
 Complexity: O(1)
 
-3. void push(const T& value)
+3. void push(const T& value):
 Inserts a new element into the priority queue.
 If the array is full, the capacity is doubled using resize().
 The new element is placed at the end of the heap and moved to its proper position using heapifyUp().
 Ensures correct order based on the priority rule — earlier borrow intervals or non-repeating borrowers rise to the top.
 Complexity: O(log n)
 
-4. T top() const
+4. T top() const:
 Returns the element with the highest priority without removing it from the queue.
 Accesses the element at the root of the heap (heapArray[0]).
 If the queue is empty, displays an error message and exits.
 Complexity: O(1)
 
-5. void pop()
+5. void pop():
 Removes the highest-priority element from the queue.
 Replaces the root element with the last element in the heap, decreases the size, and restores heap order using heapifyDown().
 Ensures the next eligible borrower automatically moves to the top.
 Complexity: O(log n)
 
-6. bool isEmpty() const
+6. bool isEmpty() const:
 Checks whether the queue is empty.
 Returns true if no elements are stored; otherwise, returns false.
 Used to verify if any pending borrow requests exist for a specific book.
 Complexity: O(1)
 
-7. int size() const
+7. int size() const:
 Returns the total number of elements currently stored in the queue.
 Used to display or track how many requests are pending for a particular book.
 Complexity: O(1)
 
-8. void printHeap() const
+8. void printHeap() const:
 Prints all elements of the heap array in their current internal order.
 Used mainly for visualization and debugging to observe how borrow requests are arranged by priority.
 Complexity: O(n)
 
-9. void resize()
+9. void resize():
 Doubles the capacity of the heap array when it becomes full.
 Creates a new array, copies existing elements, deletes the old array, and replaces it with the new one.
 Ensures the queue can handle a growing number of requests efficiently.
 Complexity: O(n)
 
-10. void heapifyUp(int index)
+10. void heapifyUp(int index):
 Moves a newly added element upward in the heap to restore the correct order.
 Compares the element with its parent and swaps them if it has higher priority.
 Continues until the correct position is reached or the root is found.
 Complexity: O(log n)
 
-11. void heapifyDown(int index)
+11. void heapifyDown(int index):
 Rebalances the heap after removing the top element.
 Compares the current node with its children and swaps it with the higher-priority child when necessary.
 Repeats the process until the heap property is restored throughout the structure.
