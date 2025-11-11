@@ -20,7 +20,7 @@ private:
 public:
     UserManager();
 
-    User login();
+    User* login();
 
     bool signup();
 
