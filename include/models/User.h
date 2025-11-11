@@ -8,7 +8,6 @@
 #include "queue.h"
 #include <string>
 #include <utility>
-using namespace std;
 
 enum Role {
     ADMIN,
@@ -43,8 +42,19 @@ public:
     bool isActive();
 
     bool isNormal();
+
+    const string &getUsername() const { return username_; }
 };
 
 int User::counter_ = 0;
+
+namespace std {
+    template<>
+    struct hash<User> {
+        size_t operator()(const User &u) const noexcept {
+            return std::hash<std::string>()(u.getUsername());
+        }
+    };
+}
 
 #endif //ADS_PROJECT_USER_H
