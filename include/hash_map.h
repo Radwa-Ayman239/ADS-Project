@@ -132,6 +132,25 @@ public:
     bool contains(const K &key) const;
 
     /**
+     * @brief Applies a function to each key-value pair in the map.
+     *
+     * The function should accept two parameters: const K&, V&
+     *
+     * @tparam Func Callable type (e.g., function pointer, lambda, functor)
+     * @param func The function to invoke on each key-value pair
+     */
+    template <typename Func>
+    void forEach(Func func) {
+        for (int i = 0; i < capacity_; i++) {
+            Node* cur = buckets_[i];
+            while (cur) {
+                func(cur->key, cur->val);
+                cur = cur->next;
+            }
+        }
+    }
+
+    /**
      * @brief Remove all entries from the map
      *
      * Removes and deallocates all nodes, but retains the bucket array.

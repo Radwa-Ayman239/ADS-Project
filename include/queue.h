@@ -8,7 +8,7 @@ class queue{
     private:
     string * com; 
     int capacity, front, rear;
-    int count; // to keep track of the number if elemnts stored in the queue 
+    int count; // to keep track of the number if elements stored in the queue
     void resize(); //when the array is full 
 
 
