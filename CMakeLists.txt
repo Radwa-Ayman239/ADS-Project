@@ -11,7 +11,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # All the header files (.h) have been removed.
 add_executable(ADS_Project
         # Source files for the main application
-        src/main.cpp
+        main.cpp
         src/IntervalTreeComplete.cpp
         src/priority_queue.cpp
         src/queue.cpp
@@ -24,5 +24,4 @@ add_executable(ADS_Project
         # Source files for the test (if you want to build tests into the main executable)
         # Note: It's usually better to define a separate target for tests, but we'll
         # include it here to compile all .cpp files you had listed.
-        tests/hash_test.cpp
 )

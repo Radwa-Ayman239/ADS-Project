@@ -2,7 +2,7 @@
 // Created by hamdy on 11/10/2025.
 //
 #include "models/User.h"
-#include "../queue.h"
+#include "queue.h"
 
 
 using namespace std;
@@ -42,4 +42,4 @@ bool User::isNormal() {
 }
 */
 
-
+int User::counter_ = 0;

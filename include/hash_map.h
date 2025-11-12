@@ -318,7 +318,7 @@ V HashMap<K, V>::get(const K &key) const {
     int idx = static_cast<int>(h % capacity_);
     Node *cur = buckets_[idx];
     while (cur) {
-        if (cur->key == key) return &cur->val;
+        if (cur->key == key) return cur->val;
         cur = cur->next;
     }
     return nullptr;

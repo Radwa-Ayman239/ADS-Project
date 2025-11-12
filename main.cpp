@@ -3,14 +3,10 @@
 //
 
 #include <iostream>
-#include "../include/models/User.h"
+#include "include/models/User.h"
 
-#include "../include/managers/UserManager.h"
-#include "../include/queue.h"
-#include "../include/hash_map.h"
-
-
-
+#include "include/managers/UserManager.h"
+#include "include/queue.h"
 
 
 using namespace std;

@@ -55,8 +55,6 @@ public:
     const string &getPassword() const { return password_; }
 };
 
-int User::counter_ = 0;
-
 namespace std {
     template<>
     struct hash<User> {
