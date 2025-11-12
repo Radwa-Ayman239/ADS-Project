@@ -313,7 +313,7 @@ bool HashMap<K, V>::putNew(const K &key, const V &value) {
 }
 
 template<typename K, typename V>
-V *HashMap<K, V>::get(const K &key) const {
+V HashMap<K, V>::get(const K &key) const {
     const size_t h = hash(key);
     int idx = static_cast<int>(h % capacity_);
     Node *cur = buckets_[idx];

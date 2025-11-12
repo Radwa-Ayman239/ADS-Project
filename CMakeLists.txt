@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 # This command tells the compiler where to look for your header files,
 # allowing includes like #include "managers/UserManager.h" to work.
-include_directories(include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # CRITICAL FIX: Only list the .cpp (source) files here.
 # All the header files (.h) have been removed.

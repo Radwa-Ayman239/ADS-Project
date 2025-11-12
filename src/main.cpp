@@ -3,10 +3,12 @@
 //
 
 #include <iostream>
-#include "models/User.h"
-#include "managers/UserManager.h"
-#include "queue.h"
-#include "hash_map.h"
+#include "../include/models/User.h"
+
+#include "../include/managers/UserManager.h"
+#include "../include/queue.h"
+#include "../include/hash_map.h"
+
 
 
 
