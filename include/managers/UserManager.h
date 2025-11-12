@@ -4,9 +4,14 @@
 
 #ifndef ADS_PROJECT_USERMANAGER_H
 #define ADS_PROJECT_USERMANAGER_H
-#include "hash_map.h"
-#include "models/User.h"
+#include "../queue.h"
+#include "../hash_map.h"
+#include "../models/User.h"
+
 #include <string>
+
+
+
 using namespace std;
 
 class UserManager {
@@ -22,7 +27,7 @@ public:
 
     User* login();
 
-    bool signup();
+    User* signup();
 
     bool changePassword();
 

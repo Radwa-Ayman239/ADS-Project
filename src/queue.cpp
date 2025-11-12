@@ -87,6 +87,12 @@ void queue::resize() {
     rear = count - 1 ;
 }
 
+void queue:: clear() {
+    front= 0;
+    rear = -1;
+    count = 0;
+
+}
 
 int main() {
     queue q;

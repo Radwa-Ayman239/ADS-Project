@@ -2,6 +2,7 @@
 #define QUEUE_H
 
 #include <string>
+
 using namespace std;
 
 class queue{
@@ -34,6 +35,7 @@ class queue{
     int size() const;
     int getCapacity() const; 
     void display() const;
+    void clear();
 
     //destructor 
     ~queue() {

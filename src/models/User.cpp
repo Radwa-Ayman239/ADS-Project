@@ -1,38 +1,45 @@
 //
 // Created by hamdy on 11/10/2025.
 //
-#include "models/User.h"
+#include "User.h"
+#include "../queue.h"
 
-bool User::checkPassword(string inputPassword) {
 
+using namespace std;
 
+bool User::checkPassword(const string& inputPassword) const {
+    return inputPassword == password_;
 }
 
+/*
 bool User::changePassword(string oldPassword, string newPassword) {
-
 }
+*/
 
 void User::notify(string msg) {
-
-    notifications.enqueue(std::move(msg));
+    notifications.enqueue(move(msg));
 }
+
+
 
 queue User::allNotifications() {
-
-
-    return notifications;
+    queue temp = notifications;
+    notifications.clear();    //cuz accorrding to the logic, we won't display all the history all the time
+    return temp;
 }
-void clearNotifications();
 
 
-//Done
+
+
+/*
 bool User::isActive() {
     return isActive_;
 }
-//Done
+
+
 bool User::isNormal() {
     return role_ == Role::NORMAL;
 }
-
+*/
 
 

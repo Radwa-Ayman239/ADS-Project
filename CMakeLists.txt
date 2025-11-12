@@ -3,21 +3,26 @@ project(ADS_Project)
 
 set(CMAKE_CXX_STANDARD 14)
 
+# This command tells the compiler where to look for your header files,
+# allowing includes like #include "managers/UserManager.h" to work.
 include_directories(include)
 
+# CRITICAL FIX: Only list the .cpp (source) files here.
+# All the header files (.h) have been removed.
 add_executable(ADS_Project
-        include/hash_map.h
-<<<<<<< HEAD
-        src/hash_map.cpp
-        include/priority_queue.h
-        src/priority_queue.cpp)
-=======
-        tests/hash_test.cpp
-        include/models/user.h
-        include/managers/UserManager.h
-        src/models/User.cpp
+        # Source files for the main application
+        src/main.cpp
+        src/IntervalTreeComplete.cpp
+        src/priority_queue.cpp
+        src/queue.cpp
+
+        # Source files for managers and models
         src/managers/LibrarySystem.cpp
-        include/managers/LibrarySystem.h
         src/managers/UserManager.cpp
+        src/models/User.cpp
+
+        # Source files for the test (if you want to build tests into the main executable)
+        # Note: It's usually better to define a separate target for tests, but we'll
+        # include it here to compile all .cpp files you had listed.
+        tests/hash_test.cpp
 )
->>>>>>> 0e4d7108eb19128f542528576d2b72cf5b123637
