@@ -31,9 +31,9 @@ public:
 
     bool changePassword();
 
-    void notify();
+    void notify(User* u, const string& msg);
 
-    void allNotifications();
+    void allNotifications(User* u);
 
     void showUsers();
 };

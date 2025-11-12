@@ -32,8 +32,8 @@ public:
 //Sedra: move "moves" the input string into the member to avoid copying, effecient transfer.
 
     explicit User(string username, string password) : id_(++counter_), username_(move(username)),
-                                                      password_(move(password)), /*role_(Role::NORMAL),*/
-                                                      isActive_(true) {
+                                                      password_(move(password)) /*role_(Role::NORMAL),*/
+                                                     /* isActive_(true)*/ {
 
 
     }
@@ -52,6 +52,7 @@ public:
 
     const string &getUsername() const { return username_; }
     const int &getId() const { return id_; }
+    const string &getPassword() const { return password_; }
 };
 
 int User::counter_ = 0;

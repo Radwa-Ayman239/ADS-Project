@@ -4,7 +4,7 @@
 
 #include "managers/UserManager.h"
 #include "models/User.h"
-#include "../hash_map.h"
+#include "hash_map.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -27,7 +27,7 @@ void UserManager::save() {
     users.forEach([&outFile](const string& username, User* userPtr) {
         if (userPtr != nullptr) {
             outFile << userPtr->getUsername() << '\n'
-                    << userPtr->getPassword() << '\n'
+                    << userPtr->getPassword() << '\n';
                     //<< (userPtr->isNormal() ? 1 : 0) << '\n'
                     //<< (userPtr->isActive() ? 1 : 0) << '\n';
         }
@@ -72,7 +72,7 @@ User* UserManager::signup() {
     } while (password.empty());
 
     User* u = new User(username, password);
-    users.putNEW(username, u);
+    users.putNew(username, u);
 
     cout << "User created. Your ID = " << u->getId() << "\n";
      save();
@@ -171,13 +171,13 @@ void UserManager::allNotifications(User* u) {
 
     queue q = u->allNotifications();
 
-    if (q.empty()) {
+    if (q.isEmpty()) {
         cout << "No notifications.";
         return;
     }
 
     cout << "--- Notifications for " << u->getUsername() << " ---\n";
-    while (!q.empty()) {
+    while (!q.isEmpty()) {
         cout << q.Front() << endl;
         q.dequeue();
     }

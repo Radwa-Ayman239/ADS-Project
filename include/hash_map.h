@@ -105,7 +105,7 @@ public:
      * Time Complexity: O(1) average case, O(n) worst case
      * Space Complexity: O(1)
      */
-    V *get(const K &key) const;
+    V get(const K &key) const;
 
     /**
      * @brief Remove a key-value pair

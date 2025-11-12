@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include "managers/UserManager.h"
 #include "models/User.h"
+#include "managers/UserManager.h"
 #include "queue.h"
 #include "hash_map.h"
 
@@ -54,7 +54,7 @@ int main() {
         commandQueue.enqueue(cmd);
 
         // Process all commands in the queue
-        while (!commandQueue.empty()) {
+        while (!commandQueue.isEmpty()) {
             string command = commandQueue.Front();
             commandQueue.dequeue();
 
