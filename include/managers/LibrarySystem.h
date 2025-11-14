@@ -4,6 +4,7 @@
 
 #ifndef ADS_PROJECT_LIBRARYSYSTEM_H
 #define ADS_PROJECT_LIBRARYSYSTEM_H
+#include "BooksManager.h"
 #include "UserManager.h"
 #include "models/User.h"
 using namespace std;
@@ -12,6 +13,7 @@ using namespace std;
 class LibrarySystem {
 private:
     UserManager user_manager_;
+    BooksManager books_manager_;
     User *currentUser;
 
     static void showMenu() ;
