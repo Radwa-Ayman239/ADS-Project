@@ -18,22 +18,26 @@ class UserManager {
 private:
     HashMap<string, User *> users;
 
+    User* login(const string& username, const string& password) const;
+    User* signup(const string& username, const string& password);
+
     void load();
 
     void save();
 
 public:
     UserManager();
+    ~UserManager();
 
-    User* login();
+    User* login() const;
 
     User* signup();
 
-    bool changePassword();
+    // bool changePassword();
 
-    void notify(User* u, const string& msg);
+    static void notify(User* u, const string& msg);
 
-    void allNotifications(User* u);
+    static void allNotifications(User* u);
 
     void showUsers();
 };
