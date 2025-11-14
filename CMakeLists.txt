@@ -20,6 +20,8 @@ add_executable(ADS_Project
         src/managers/LibrarySystem.cpp
         src/managers/UserManager.cpp
         src/models/User.cpp
+        src/models/Book.cpp
+        include/models/Book.h
 
         # Source files for the test (if you want to build tests into the main executable)
         # Note: It's usually better to define a separate target for tests, but we'll

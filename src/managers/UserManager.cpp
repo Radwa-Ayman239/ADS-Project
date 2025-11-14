@@ -236,7 +236,7 @@ void UserManager::allNotifications(User *u) {
 void UserManager::showUsers() {
     users.forEach([](const string &username, const User *userPtr) {
         if (userPtr != nullptr) {
-            cout << "Username: " << username << ", "
+            cout << "Username: " << username
                     // << "Active: " << (userPtr->isActive() ? "Yes" : "No")
                     //<< ", Role: " << (userPtr->isNormal() ? "Normal" : "Admin")
                     << endl;
