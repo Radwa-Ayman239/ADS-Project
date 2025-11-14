@@ -66,14 +66,14 @@ bool BooksManager::borrowNow(User *user, const string &bookId, const int todayDa
 }
 
 bool BooksManager::returnBook(User *user, const string &bookId, const int todayDay) const {
-    (void)todayDay;
+    (void) todayDay;
 
     if (!user) {
         cout << "No user logged in.\n";
         return false;
     }
 
-    Book* b = books.get(bookId);
+    Book *b = books.get(bookId);
     if (!b) {
         cout << "Book not found.\n";
         return false;
@@ -93,17 +93,49 @@ bool BooksManager::returnBook(User *user, const string &bookId, const int todayD
 
     if (user_manager_) {
         UserManager::notify(user,
-            "You returned '" + b->getTitle() + "'. Thank you!");
+                            "You returned '" + b->getTitle() + "'. Thank you!");
     }
 
     return true;
 }
 
-void BooksManager::listBooks() {
-    books.forEach([] (const string& id, Book* b) {
-        cout << "Book ID: " << id << ", Title: " << b->getTitle()
-        << (b->isOnLoan() ? " (on loan)" : " (available)") << endl;
-    });
+bool BooksManager::extendLoan(User *user, const string &bookId, int extraDays) {
+    if (!user) {
+        cout << "No user logged in.\n";
+        return false;
+    }
+
+    Book *b = books.get(bookId);
+    if (!b) {
+        cout << "Book not found.\n";
+        return false;
+    }
+
+    const Loan &loan = b->getLoan();
+    if (loan.username != user->getUsername()) {
+        cout << "You are not the current borrower of this book.\n";
+        return false;
+    }
+
+    // per-book waitlist for be implemented
+
+    Day newDue{loan.due.value + extraDays};
+    b->startLoan(loan.username, loan.start, newDue);
+
+    if (user_manager_) {
+        UserManager::notify(user,
+                            "Loan for '" + b->getTitle() +
+                            "' extended by " + to_string(extraDays) +
+                            " days. New due day = " + to_string(newDue.value) + ".");
+    }
+
+    return true;
 }
 
 
+void BooksManager::listBooks() {
+    books.forEach([](const string &id, const Book *b) {
+        cout << "Book ID: " << id << ", Title: " << b->getTitle()
+                << (b->isOnLoan() ? " (on loan)" : " (available)") << endl;
+    });
+}

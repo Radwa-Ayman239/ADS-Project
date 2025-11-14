@@ -16,16 +16,22 @@ using namespace std;
 class BooksManager {
 private:
     HashMap<string, Book *> books;
-    UserManager* user_manager_;     // non-owning; LibrarySystem own it
+    UserManager *user_manager_; // non-owning; LibrarySystem own it
 
 public:
-    explicit BooksManager(UserManager* um);
-    ~BooksManager();
-    bool addBook(const string& id, const string& title);
-    Book* findBook(const string& id) const;
+    explicit BooksManager(UserManager *um);
 
-    bool borrowNow(User* user, const string& bookId, int todayDay);
-    bool returnBook(User* user, const string& bookId, int todayDay) const;
+    ~BooksManager();
+
+    bool addBook(const string &id, const string &title);
+
+    Book *findBook(const string &id) const;
+
+    bool borrowNow(User *user, const string &bookId, int todayDay);
+
+    bool returnBook(User *user, const string &bookId, int todayDay) const;
+
+    bool extendLoan(User *user, const string &bookId, int extraDays);
 
     void listBooks();
 };

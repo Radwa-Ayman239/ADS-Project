@@ -22,6 +22,8 @@ void LibrarySystem::showMenu() {
             << "5) List all Books\n"
             << "6) Add Book (manual)\n"
             << "7) Show my notifications\n"
+            << "8) Extend Book\n"
+            << "0) Exit\n"
             << "\n\nChoice: ";
 }
 
@@ -53,8 +55,10 @@ void LibrarySystem::handleChoice(const string &choice) {
         cout << "Under construction.\n";
     } else if (choice == "6") {
         string id, title;
-        cout << "Book ID: "; getline(cin, id);
-        cout << "Title: "; getline(cin, title);
+        cout << "Book ID: ";
+        getline(cin, id);
+        cout << "Title: ";
+        getline(cin, title);
         books_manager_.addBook(id, title);
     } else if (choice == "7") {
         if (!currentUser) {
@@ -62,8 +66,18 @@ void LibrarySystem::handleChoice(const string &choice) {
             return;
         }
         UserManager::allNotifications(currentUser);
-    }
-    else {
+    } else if (choice == "8") {
+        if (!currentUser) {
+            cout << "Log in first.\n";
+            return;
+        }
+        string bookId;
+        cout << "Book ID to extend: ";
+        getline(cin, bookId);
+
+        constexpr int extraDays = 14;
+        books_manager_.extendLoan(currentUser, bookId, extraDays);
+    } else {
         cout << "Invalid choice.\n";
     }
 }
