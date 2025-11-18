@@ -1,11 +1,11 @@
-#include "rooms.h"
+#include "../../include/managers/RoomsManager.h"
 #include <fstream>
 #include <iostream>
 
-Rooms::Rooms() {
+RoomsManager::RoomsManager() {
 }
 
-Rooms::~Rooms() {
+RoomsManager::~RoomsManager() {
     //Data Structure Change
     unordered_map<string, RedBlackIntervalTree*>::iterator it;
 
@@ -18,8 +18,8 @@ Rooms::~Rooms() {
 
 
 
-void Rooms::loadRoomsFromFile() {
-    ifstream file("rooms.txt");
+void RoomsManager::loadRoomsFromFile() {
+    ifstream file("data\\rooms.txt");
     if (!file) {
         cout << "Error opening rooms.txt\n";
         return;
@@ -36,7 +36,7 @@ void Rooms::loadRoomsFromFile() {
 }
 
 
-bool Rooms::bookRoom() {
+bool RoomsManager::bookRoom() {
     //1.Displaying libaray rooms and having user pick which room they want to book:
 
     //Data Structure Change

@@ -1,4 +1,5 @@
-#include "IntervalTreeComplete.h"
+#include "../../include/structures/IntervalTreeComplete.h"
+using namespace std;
 
 // ===================== Node constructor =====================
 RedBlackIntervalTree::Node::Node(int l, int h) {

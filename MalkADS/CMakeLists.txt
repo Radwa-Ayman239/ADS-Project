@@ -1,19 +1,25 @@
-# Minimum CMake version required
 cmake_minimum_required(VERSION 3.10)
 
-# Project name
 project(MalkADS)
 
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Add executable and list all your cpp files
 add_executable(MalkADS
-    main.cpp
-    Users.cpp
-    Rooms.cpp
-    Laptops.cpp
-    Books.cpp
-    IntervalTreeComplete.cpp
+        main.cpp
+
+        # managers
+        src/managers/LibrarySystem.cpp
+        src/managers/UsersManager.cpp
+        src/managers/RoomsManager.cpp
+        src/managers/LaptopsManager.cpp
+        src/managers/BooksManager.cpp
+
+        # models
+        src/models/user.cpp
+        src/models/book.cpp
+
+        # structures
+        src/structures/IntervalTreeComplete.cpp
+        src/structures/queue.cpp      # optional but you probably want it too
 )

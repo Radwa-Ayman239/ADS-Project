@@ -1,10 +1,10 @@
-#include "laptops.h"
+#include "../../include/managers/LaptopsManager.h"
 #include <fstream>
 #include <iostream>
 
-Laptops::Laptops() {}
+LaptopsManager::LaptopsManager() {}
 
-Laptops::~Laptops() {
+LaptopsManager::~LaptopsManager() {
     //Data Structure Change
     unordered_map<string, RedBlackIntervalTree*>::iterator it;
 
@@ -17,8 +17,8 @@ Laptops::~Laptops() {
 }
 
 
-void Laptops::loadLaptopsFromFile() {
-    ifstream file("laptops.txt");
+void LaptopsManager::loadLaptopsFromFile() {
+    ifstream file("data\\laptops.txt");
     if (!file) {
         cout << "Error opening laptop.txt\n";
         return;
@@ -34,7 +34,7 @@ void Laptops::loadLaptopsFromFile() {
 }
 
 
-bool Laptops::BorrowLaptop() {
+bool LaptopsManager::BorrowLaptop() {
     int startperiod, endperiod;
     cout << "\n\nEnter your desired borrowing period";
     cout << "\nStart of borrowing period: "; cin >> startperiod;

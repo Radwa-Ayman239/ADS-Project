@@ -2,18 +2,18 @@
 #define ROOMS_H
 
 #include <string>
-#include "IntervalTreeComplete.h"
+#include "../structures/IntervalTreeComplete.h"
 #include <unordered_map>
 using namespace std;
 
-class Rooms {
+class RoomsManager {
 private:
 //Data Structure Change
     unordered_map<string, RedBlackIntervalTree*> roomTable;
 
 public:
-    Rooms(); 
-    ~Rooms(); 
+    RoomsManager();
+    ~RoomsManager();
 
    
     void loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees

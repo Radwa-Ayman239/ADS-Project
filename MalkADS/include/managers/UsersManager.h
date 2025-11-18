@@ -2,17 +2,17 @@
 #define USERS_H
 
 #include <string>
-#include "user.h"
+#include "../models/user.h"
 #include <unordered_map>
 using namespace std;
 
-class Users {
+class UsersManager {
 private:
     //Data Structure Change
     unordered_map<string, User> userTable;
 
 public:
-    Users();
+    UsersManager();
 
     void loadUsersFromFile(); //Reads user.txt, creates the user objects, adds them to the hashmap
 

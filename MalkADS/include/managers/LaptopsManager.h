@@ -2,18 +2,18 @@
 #define LAPTOPS_H
 
 #include <string>
-#include "IntervalTreeComplete.h"
+#include "../structures/IntervalTreeComplete.h"
 #include <unordered_map>
 using namespace std;
 
-class Laptops {
+class LaptopsManager {
 private:
 //Data Structure Change
     unordered_map<string, RedBlackIntervalTree*> laptopTable;
 
 public:
-    Laptops();
-    ~Laptops(); // delete all interval trees
+    LaptopsManager();
+    ~LaptopsManager(); // delete all interval trees
 
     void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
 

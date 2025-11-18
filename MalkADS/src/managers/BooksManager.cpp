@@ -1,14 +1,14 @@
-#include "books.h"
+#include "../../include/managers/BooksManager.h"
 //#include "book.h"
 #include <fstream>
 #include <iostream>
 using namespace std;
 
-Books::Books() {}
+BooksManager::BooksManager() {}
 
 
 
-Books::~Books() {
+BooksManager::~BooksManager() {
     //Data Structure Change
     unordered_map<string, RedBlackIntervalTree*>::iterator it;
 
@@ -20,8 +20,8 @@ Books::~Books() {
 }
 
 
-void Books::loadBooksFromFile() {
-    ifstream file("books.txt");
+void BooksManager::loadBooksFromFile() {
+    ifstream file("data\\books.txt");
     if (!file) {
         cout << "Error opening books.txt\n";
         return;
@@ -61,7 +61,7 @@ void Books::loadBooksFromFile() {
 }
 
 
-void Books::BorrowBook() {
+void BooksManager::BorrowBook() {
     int searchmethod;
     cout << "\nYou can search for a book either \n\n1. By Title \nor \n2. By Author";
     cout << "\n\nHow would you like to search?: "; cin>> searchmethod;

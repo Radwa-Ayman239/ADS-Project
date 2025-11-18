@@ -1,15 +1,15 @@
-#include "users.h"
+#include "../../include/managers/UsersManager.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 using namespace std;
 
-Users::Users() {
+UsersManager::UsersManager() {
 }
 
 // Load users from file into the hashmap
-void Users::loadUsersFromFile() {
-    ifstream file("users.txt");
+void UsersManager::loadUsersFromFile() {
+    ifstream file(R"(data\users.txt)");
     if (!file) {
         cout << "Unable to open file: users.txt" << endl;
         return;
@@ -31,7 +31,7 @@ void Users::loadUsersFromFile() {
 }
 
 //Check login using unordered_map
-bool Users::login(const string& uname, const string& pass) const {
+bool UsersManager::login(const string& uname, const string& pass) const {
     
     //Checks if username actually exists
 
