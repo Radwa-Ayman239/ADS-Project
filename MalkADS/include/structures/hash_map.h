@@ -105,7 +105,7 @@ public:
      * Time Complexity: O(1) average case, O(n) worst case
      * Space Complexity: O(1)
      */
-    V get(const K &key) const;
+    V* get(const K &key) const;
 
     /**
      * @brief Remove a key-value pair
@@ -129,7 +129,7 @@ public:
      * Time Complexity: O(1) average case, O(n) worst case
      * Space Complexity: O(1)
      */
-    bool contains(const K &key) const;
+    bool contains(const K &key);
 
     /**
      * @brief Applies a function to each key-value pair in the map.
@@ -313,12 +313,12 @@ bool HashMap<K, V>::putNew(const K &key, const V &value) {
 }
 
 template<typename K, typename V>
-V HashMap<K, V>::get(const K &key) const {
+V* HashMap<K, V>::get(const K &key) const {
     const size_t h = hash(key);
     int idx = static_cast<int>(h % capacity_);
     Node *cur = buckets_[idx];
     while (cur) {
-        if (cur->key == key) return cur->val;
+        if (cur->key == key) return &cur->val;
         cur = cur->next;
     }
     return nullptr;
@@ -345,7 +345,7 @@ bool HashMap<K, V>::erase(const K &key) {
 }
 
 template<typename K, typename V>
-bool HashMap<K, V>::contains(const K &key) const {
+bool HashMap<K, V>::contains(const K &key) {
     return get(key) != nullptr;
 }
 

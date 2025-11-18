@@ -4,15 +4,15 @@
 #include <string>
 #include "../models/book.h"
 #include "../structures/IntervalTreeComplete.h"
-#include <unordered_map>
+#include "../structures/hash_map.h"
 using namespace std;
 
 class BooksManager {
 private:
 //Data Structure Change 
-    unordered_map<string, Book> ID_To_BookTable; 
+    HashMap<string, Book> ID_To_BookTable;
 //Data Structure Change 
-    unordered_map<string, RedBlackIntervalTree*> BookTable; 
+    HashMap<string, RedBlackIntervalTree*> BookTable;
 
 
 public:
