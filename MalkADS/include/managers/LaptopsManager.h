@@ -16,8 +16,13 @@ public:
     ~LaptopsManager(); // delete all interval trees
 
     void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
+    void saveLaptopsToFile() const;
 
     bool BorrowLaptop();
+
+    // admin operations
+    void addLaptopInteractive();
+    void removeLaptopInteractive();
 };
 
 #endif

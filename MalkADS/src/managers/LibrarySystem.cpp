@@ -14,7 +14,6 @@ LibrarySystem::LibrarySystem() {
 void LibrarySystem::loadData() {
     users.loadUsersFromFile();
     rooms.loadRoomsFromFile();
-    laptops.loadLaptopsFromFile();
 }
 
 void LibrarySystem::showUserMenu() {
@@ -32,129 +31,153 @@ void LibrarySystem::showAdminMenu() {
     std::cout << "\nMenu:\n";
     std::cout << "1. Add a new book\n";
     std::cout << "2. Remove a book\n";
-    std::cout << "3. Book a room (admin)\n";
-    std::cout << "4. Borrow a laptop (admin)\n";
-    std::cout << "5. Borrow a book (admin)\n";
-    std::cout << "6. LogOut\n";
+    std::cout << "3. Add a laptop\n";
+    std::cout << "4. Remove a laptop\n";
+    std::cout << "5. Book a room (admin)\n";
+    std::cout << "6. Borrow a laptop (admin)\n";
+    std::cout << "7. Borrow a book (admin)\n";
+    std::cout << "8. LogOut\n";
     std::cout << "\nEnter your choice: ";
 }
 
+bool LibrarySystem::loginLoop() {
+    string username;
+    string password;
+
+    cout << "\n================================= Login Page =================================\n";
+    cout << "Enter username (or type 'quit' to quit): ";
+    cin >> username;
+
+    if (username == "quit") {
+        cout << "Exiting program.\n";
+        return false;
+    }
+
+    cout << "Enter password: ";
+    cin >> password;
+
+    const User *loggedIn = users.login(username, password);
+    if (!loggedIn) {
+        cout << "Incorrect username or password. Try again.\n";
+        return true;
+    }
+
+    currentUser = loggedIn;
+    cout << "\nLogin successful! (" << (isCurrentUserAdmin() ? "admin" : "user") << ")\n";
+    return true;
+}
+
+void LibrarySystem::userSession() {
+    bool inSession = true;
+
+    while (inSession) {
+        int choice;
+
+        if (isCurrentUserAdmin()) {
+            showAdminMenu();
+        } else {
+            showUserMenu();
+        }
+
+        cin >> choice;
+        cout << "\n";
+
+        if (isCurrentUserAdmin()) {
+            handleAdminChoice(choice);
+            if (choice == 6) inSession = false;
+        } else {
+            handleUserChoice(choice);
+            if (choice == 4) inSession = false;
+        }
+
+        if (inSession) {
+            char again;
+            cout << "\n\nDo you want to perform another action? (y or n): ";
+            cin >> again;
+            if (again == 'n' || again == 'N') {
+                cout << "\nLogging out...\n";
+                inSession = false;
+            }
+        }
+    }
+
+    currentUser = nullptr;
+}
+
+void LibrarySystem::handleUserChoice(const int choice) {
+    if (choice == 1) {
+        cout << "\n================================= Booking a Room =================================\n";
+        const bool ok = rooms.bookRoom();
+        if (ok) cout << "\nRoom booked successfully!\n";
+        else cout << "\nUnable to book room - conflict in scheduling\n";
+    } else if (choice == 2) {
+        cout << "\n================================= Borrowing a Laptop =================================\n";
+        const bool ok = laptops.BorrowLaptop();
+        if (ok) {
+            cout << "\nFree Laptop available!\n";
+            cout <<
+                    "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
+        } else {
+            cout << "Unable to borrow laptop at this time\n";
+        }
+    } else if (choice == 3) {
+        cout << "\n================================= Borrowing a Book =================================\n";
+        books.BorrowBook();
+    } else if (choice == 4) {
+        cout << "Logging out...\n";
+    } else {
+        cout << "Invalid choice. Try again.\n";
+    }
+}
+
+void LibrarySystem::handleAdminChoice(int choice) {
+    if (choice == 1) {
+        cout << "\n================================= Add Book =================================\n";
+        books.addBookInteractive();
+    } else if (choice == 2) {
+        cout << "\n================================= Remove Book =================================\n";
+        books.removeBookInteractive();
+    } else if (choice == 3) {
+        cout << "\n================================= Add Laptop =================================\n";
+        laptops.addLaptopInteractive();
+    } else if (choice == 4) {
+        cout << "\n================================= Remove Laptop =================================\n";
+        laptops.removeLaptopInteractive();
+    } else if (choice == 5) {
+        cout << "\n================================= Booking a Room (Admin) =================================\n";
+        bool ok = rooms.bookRoom();
+        if (ok) cout << "\nRoom booked successfully!\n";
+        else cout << "\nUnable to book room - conflict in scheduling\n";
+    } else if (choice == 6) {
+        cout << "\n================================= Borrowing a Laptop (Admin) =================================\n";
+        bool ok = laptops.BorrowLaptop();
+        if (ok) {
+            cout << "\nFree Laptop available!\n";
+            cout <<
+                    "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
+        } else {
+            cout << "Unable to borrow laptop at this time\n";
+        }
+    } else if (choice == 7) {
+        cout << "\n================================= Borrowing a Book (Admin) =================================\n";
+        books.BorrowBook();
+    } else if (choice == 8) {
+        cout << "Logging out...\n";
+    } else {
+        cout << "Invalid choice. Try again.\n";
+    }
+}
+
 void LibrarySystem::run() {
-    std::string username;
-    std::string password;
+    bool running = true;
 
-    bool loginLoop = true;
-    while (loginLoop) {
-        std::cout << "\n================================= Login Page =================================\n";
-        std::cout << "Enter username (or type 'quit' to quit): ";
-        std::cin >> username;
-
-        if (username == "quit") {
-            std::cout << "Exiting program.\n";
-            loginLoop = false;
-            continue;
+    while (running) {
+        const bool continueProgram = loginLoop();
+        if (!continueProgram) {
+            running = false;
+            break;
         }
 
-        std::cout << "Enter password: ";
-        std::cin >> password;
-
-        const User *loggedIn = users.login(username, password);
-        if (!loggedIn) {
-            std::cout << "Incorrect username or password. Try again.\n";
-            continue;
-        }
-
-        bool isAdmin = loggedIn->getIsAdmin();
-        std::cout << "\nLogin successful! (" << (isAdmin ? "admin" : "user") << ")\n";
-
-        bool inSession = true;
-        while (inSession) {
-            int choice;
-
-            if (isAdmin) {
-                showAdminMenu();
-            } else {
-                showUserMenu();
-            }
-
-            std::cin >> choice;
-            std::cout << "\n";
-
-            if (!isAdmin) {
-                // regular user actions
-                if (choice == 1) {
-                    std::cout <<
-                            "\n================================= Booking a Room =================================\n";
-                    bool ok = rooms.bookRoom();
-                    if (ok) std::cout << "\nRoom booked successfully!\n";
-                    else std::cout << "\nUnable to book room - conflict in scheduling\n";
-                } else if (choice == 2) {
-                    std::cout <<
-                            "\n================================= Borrowing a Laptop =================================\n";
-                    bool ok = laptops.BorrowLaptop();
-                    if (ok) {
-                        std::cout << "\nFree Laptop available!\n";
-                        std::cout <<
-                                "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
-                    } else {
-                        std::cout << "Unable to borrow laptop at this time\n";
-                    }
-                } else if (choice == 3) {
-                    std::cout <<
-                            "\n================================= Borrowing a Book =================================\n";
-                    books.BorrowBook();
-                } else if (choice == 4) {
-                    std::cout << "Logging out...\n";
-                    inSession = false;
-                } else {
-                    std::cout << "Invalid choice. Try again.\n";
-                }
-            } else {
-                // admin actions
-                if (choice == 1) {
-                    std::cout << "\n================================= Add Book =================================\n";
-                    books.addBookInteractive();
-                } else if (choice == 2) {
-                    std::cout << "\n================================= Remove Book =================================\n";
-                    books.removeBookInteractive();
-                } else if (choice == 3) {
-                    std::cout <<
-                            "\n================================= Booking a Room (Admin) =================================\n";
-                    bool ok = rooms.bookRoom();
-                    if (ok) std::cout << "\nRoom booked successfully!\n";
-                    else std::cout << "\nUnable to book room - conflict in scheduling\n";
-                } else if (choice == 4) {
-                    std::cout <<
-                            "\n================================= Borrowing a Laptop (Admin) =================================\n";
-                    bool ok = laptops.BorrowLaptop();
-                    if (ok) {
-                        std::cout << "\nFree Laptop available!\n";
-                        std::cout <<
-                                "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
-                    } else {
-                        std::cout << "Unable to borrow laptop at this time\n";
-                    }
-                } else if (choice == 5) {
-                    std::cout <<
-                            "\n================================= Borrowing a Book (Admin) =================================\n";
-                    books.BorrowBook();
-                } else if (choice == 6) {
-                    std::cout << "Logging out...\n";
-                    inSession = false;
-                } else {
-                    std::cout << "Invalid choice. Try again.\n";
-                }
-            }
-
-            if (inSession) {
-                char again;
-                std::cout << "\n\nDo you want to perform another action? (y or n): ";
-                std::cin >> again;
-                if (again == 'n' || again == 'N') {
-                    std::cout << "\nLogging out...\n";
-                    inSession = false;
-                }
-            }
-        }
+        userSession();
     }
 }
