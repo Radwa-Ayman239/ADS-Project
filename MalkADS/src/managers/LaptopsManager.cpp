@@ -4,10 +4,12 @@
 
 LaptopsManager::LaptopsManager() {
     loadLaptopsFromFile();
+    loadLaptopBookingsFromFile();
 }
 
 LaptopsManager::~LaptopsManager() {
     saveLaptopsToFile();
+    saveLaptopBookingsToFile();
     //Data Structure Change
     laptopTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {
         delete tree;
@@ -110,6 +112,60 @@ void LaptopsManager::saveLaptopsToFile() const {
         [&](const string &id, RedBlackIntervalTree * &tree) {
             file << id << "\n";
         });
+
+    file.close();
+}
+
+void LaptopsManager::loadLaptopBookingsFromFile() const {
+    ifstream file("data/laptop_bookings.txt");
+    if (!file) {
+        // no bookings yet; fine
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+
+        const size_t c1 = line.find(',');
+        if (c1 == string::npos) continue;
+        const size_t c2 = line.find(',', c1 + 1);
+        if (c2 == string::npos) continue;
+
+        string id = line.substr(0, c1);
+        string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
+        string endStr = line.substr(c2 + 1);
+
+        const int start = stoi(startStr);
+        const int end = stoi(endStr);
+
+        RedBlackIntervalTree **treePtr = laptopTable.get(id);
+        if (!treePtr || !(*treePtr)) {
+            // booking for laptop that no longer exists
+            continue;
+        }
+
+        RedBlackIntervalTree *tree = *treePtr;
+        tree->insert(start, end);
+    }
+
+    file.close();
+}
+
+void LaptopsManager::saveLaptopBookingsToFile() const {
+    ofstream file("data/laptop_bookings.txt", ios::out | ios::trunc);
+    if (!file) {
+        cout << "Error opening laptop_bookings.txt for writing.\n";
+        return;
+    }
+
+    const_cast<HashMap<string, RedBlackIntervalTree *> &>(laptopTable)
+            .forEach([&](const string &id, RedBlackIntervalTree * &tree) {
+                if (!tree) return;
+                tree->forEachInterval([&](int low, int high) {
+                    file << id << "," << low << "," << high << "\n";
+                });
+            });
 
     file.close();
 }

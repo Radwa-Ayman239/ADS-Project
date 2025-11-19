@@ -14,6 +14,9 @@ private:
     void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
     void saveLaptopsToFile() const;
 
+    void loadLaptopBookingsFromFile() const;
+    void saveLaptopBookingsToFile() const;
+
 public:
     LaptopsManager();
 

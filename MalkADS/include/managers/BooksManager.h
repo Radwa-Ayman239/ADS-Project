@@ -17,6 +17,9 @@ private:
     void loadBooksFromFile(); // read book IDs from "books.txt" and create interval tree
     void saveBooksToFile();
 
+    void loadBookBookingsFromFile();
+    void saveBookBookingsToFile() const;
+
 public:
     BooksManager();
 
