@@ -5,10 +5,12 @@
 using namespace std;
 
 BooksManager::BooksManager() {
+    loadBooksFromFile();
 }
 
 
 BooksManager::~BooksManager() {
+    saveBooksToFile();
     //Data Structure Change
     BookTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {
         delete tree;
@@ -53,6 +55,21 @@ void BooksManager::loadBooksFromFile() {
         //Data Structure Change
         BookTable.putNew(bookID, tree);
     }
+
+    file.close();
+}
+
+void BooksManager::saveBooksToFile() {
+    ofstream file("data/books.txt", ios::out | ios::trunc);
+    if (!file) {
+        cout << "Error opening books.txt for writing\n";
+        return;
+    }
+
+    const_cast<HashMap<string, Book> &>(ID_To_BookTable).forEach(
+        [&](const string &id, Book &book) {
+            file << id << "," << book.getTitle() << "," << book.getAuthor() << "\n";
+        });
 
     file.close();
 }
@@ -273,3 +290,49 @@ void BooksManager::BorrowBook() {
 //Search by bookname
 
 //Search by author
+
+void BooksManager::addBookInteractive() {
+    string id, title, author;
+    cout << "\nEnter new book ID: ";
+    cin >> id;
+    cin.ignore();
+    cout << "Enter title: ";
+    getline(cin, title);
+    cout << "Enter author: ";
+    getline(cin, author);
+
+    if (ID_To_BookTable.contains(id)) {
+        cout << "A book with this ID already exists.\n";
+        return;
+    }
+
+    Book b(id, title, author);
+    ID_To_BookTable.putNew(id, b);
+
+    auto *tree = new RedBlackIntervalTree();
+    BookTable.putNew(id, tree);
+
+    cout << "Book added successfully.\n";
+}
+
+void BooksManager::removeBookInteractive() {
+    string id;
+    cout << "\nEnter book ID to remove: ";
+    cin >> id;
+
+    if (!ID_To_BookTable.contains(id)) {
+        cout << "No book with this ID.\n";
+        return;
+    }
+
+    RedBlackIntervalTree **treePtr = BookTable.get(id);
+    if (treePtr && *treePtr) {
+        delete *treePtr;
+        *treePtr = nullptr;
+    }
+
+    BookTable.erase(id);
+    ID_To_BookTable.erase(id);
+
+    cout << "Book removed.\n";
+}

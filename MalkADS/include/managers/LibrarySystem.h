@@ -23,7 +23,8 @@ private:
 
     void loadData();
 
-    static void showMenu();
+    static void showUserMenu();
+    static void showAdminMenu();
 };
 
 

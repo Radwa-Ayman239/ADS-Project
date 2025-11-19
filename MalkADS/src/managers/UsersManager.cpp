@@ -17,31 +17,39 @@ void UsersManager::loadUsersFromFile() {
 
     string line;
     while (getline(file, line)) {
-        int commaPos = line.find(',');
-        if (commaPos != string::npos) {
-            string uname = line.substr(0, commaPos);
-            string pass = line.substr(commaPos + 1);
-            User newUser(uname, pass);
-            //Data Structure Change
-            userTable.putNew(uname, newUser);
+        int c1 = line.find(',');
+        if (c1 == string::npos) continue;
+        int c2 = line.find(',', c1 + 1);
+
+        string uname = line.substr(0, c1);
+        string pass;
+        bool adminFlag = false;
+
+        if (c2 == string::npos) {
+            pass = line.substr(c1 + 1);
+        } else {
+            pass = line.substr(c1 + 1, c2 - (c1 + 1));
+            string flagStr = line.substr(c2 + 1);
+            adminFlag = (flagStr == "1" || flagStr == "true" || flagStr == "True");
         }
+
+        User newUser(uname, pass, adminFlag);
+        userTable.putNew(uname, newUser);
     }
 
     file.close();
 }
 
 //Check login using unordered_map
-bool UsersManager::login(const string &uname, const string &pass) {
+const User* UsersManager::login(const string &uname, const string &pass) {
     //Checks if username actually exists
 
     //Data Structure Change
-    if (!userTable.contains(uname)) return false;
+    if (!userTable.contains(uname)) return nullptr;
 
-    //If it does, checks if password entered for this username is correct.
+    User* u = userTable.get(uname);
+    if (!u) return nullptr;
 
-    //Data Structure Change
-    User *foundUser = userTable.get(uname);
-    if (!foundUser) return false;
-
-    return (foundUser->getPassword() == pass);
+    if (u->getPassword() != pass) return nullptr;
+    return u;
 }

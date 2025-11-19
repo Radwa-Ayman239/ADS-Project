@@ -1,13 +1,11 @@
+#include <utility>
+
 #include "../../include/models/user.h"
 using namespace std;
 
-User::User() {
-    username = "";
-    password = "";
+User::User() : username(), password(), isAdmin() {
 }
-User::User(const string& uname, const string& pass) {
-    username = uname;
-    password = pass;
+User::User(string  uname, string  pass, const bool admin): username(std::move(uname)), password(std::move(pass)), isAdmin(admin) {
 }
 
 string User::getPassword() {

@@ -1,5 +1,6 @@
-Hamdy,Hamdy1508
-malk,pass123
-alice,alice2025
-bob,qwerty
-charlie,charlie1
+Hamdy,Hamdy1508,0
+malk,pass123,0
+alice,alice2025,0
+bob,qwerty,0
+charlie,charlie1,0
+admin,adminpass,1

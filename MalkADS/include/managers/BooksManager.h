@@ -14,14 +14,19 @@ private:
 //Data Structure Change 
     HashMap<string, RedBlackIntervalTree*> BookTable;
 
+    void loadBooksFromFile(); // read book IDs from "books.txt" and create interval tree
+    void saveBooksToFile();
+
 
 public:
     BooksManager();
     ~BooksManager();
 
-    void loadBooksFromFile(); // read book IDs from "books.txt" and create interval tree
-
     void BorrowBook();
+
+    // admin operations
+    void addBookInteractive();
+    void removeBookInteractive();
 };
 
 #endif

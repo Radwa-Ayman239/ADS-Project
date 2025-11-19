@@ -9,12 +9,14 @@ class User {
 private:
     string username;
     string password;
+    bool isAdmin;
 
 public:
     User();
-    User(const string& uname, const string& pass);
+    User(string  uname, string  pass, bool admin=false);
 
     string getPassword();
+    bool getIsAdmin() const { return isAdmin; }
 };
 
 #endif

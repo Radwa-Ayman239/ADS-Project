@@ -1,12 +1,13 @@
-B001,Introduction to C++,Bjarne Stroustrup
+9780451524935,1984,George Orwell
 B002,Data Structures and Algorithms,Mark Allen Weiss
+B012,Advanced Python Projects,Eric Matthes
+B011,Python Fundamentals,Eric Matthes
+B007,Java Puzzlers,Joshua Bloch
 B003,Effective Java,Joshua Bloch
+B001,Introduction to C++,Bjarne Stroustrup
 B004,Python Crash Course,Eric Matthes
 B005,The C++ Programming Language,Bjarne Stroustrup
-B006,Programming: Principles and Practice Using C++,Bjarne Stroustrup
-B007,Java Puzzlers,Joshua Bloch
+B010,Object-Oriented Data Structures Using Java,Mark Allen Weiss
 B008,Java Concurrency in Practice,Joshua Bloch
 B009,More Data Structures and Problem Solving,Mark Allen Weiss
-B010,Object-Oriented Data Structures Using Java,Mark Allen Weiss
-B011,Python Fundamentals,Eric Matthes
-B012,Advanced Python Projects,Eric Matthes
+B006,Programming: Principles and Practice Using C++,Bjarne Stroustrup

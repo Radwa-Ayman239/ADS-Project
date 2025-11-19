@@ -15,92 +15,146 @@ void LibrarySystem::loadData() {
     users.loadUsersFromFile();
     rooms.loadRoomsFromFile();
     laptops.loadLaptopsFromFile();
-    books.loadBooksFromFile();
 }
 
-void LibrarySystem::showMenu() {
-    cout << "\n================================= Menu =================================\n";
-    cout << "\nMenu:\n";
-    cout << "1. Book a room\n";
-    cout << "2. Borrow a laptop\n";
-    cout << "3. Borrow a book\n";
-    cout << "4. LogOut\n";
-    cout << "\nEnter your choice: ";
+void LibrarySystem::showUserMenu() {
+    std::cout << "\n================================= User Menu =================================\n";
+    std::cout << "\nMenu:\n";
+    std::cout << "1. Book a room\n";
+    std::cout << "2. Borrow a laptop\n";
+    std::cout << "3. Borrow a book\n";
+    std::cout << "4. LogOut\n";
+    std::cout << "\nEnter your choice: ";
+}
+
+void LibrarySystem::showAdminMenu() {
+    std::cout << "\n================================= Admin Menu =================================\n";
+    std::cout << "\nMenu:\n";
+    std::cout << "1. Add a new book\n";
+    std::cout << "2. Remove a book\n";
+    std::cout << "3. Book a room (admin)\n";
+    std::cout << "4. Borrow a laptop (admin)\n";
+    std::cout << "5. Borrow a book (admin)\n";
+    std::cout << "6. LogOut\n";
+    std::cout << "\nEnter your choice: ";
 }
 
 void LibrarySystem::run() {
-    string username;
-    string password;
+    std::string username;
+    std::string password;
 
-    bool login = true;
-    while (login) {
-        cout << "\n================================= Login Page =================================\n";
-        cout << "Enter username (or type 'quit' to quit): ";
-        cin >> username;
+    bool loginLoop = true;
+    while (loginLoop) {
+        std::cout << "\n================================= Login Page =================================\n";
+        std::cout << "Enter username (or type 'quit' to quit): ";
+        std::cin >> username;
 
         if (username == "quit") {
-            cout << "Exiting program.\n";
-            login = false;
+            std::cout << "Exiting program.\n";
+            loginLoop = false;
             continue;
         }
 
-        cout << "Enter password: ";
-        cin >> password;
+        std::cout << "Enter password: ";
+        std::cin >> password;
 
-        if (users.login(username, password)) {
-            cout << "\nLogin successful!\n";
+        const User *loggedIn = users.login(username, password);
+        if (!loggedIn) {
+            std::cout << "Incorrect username or password. Try again.\n";
+            continue;
+        }
 
-            bool keepUsingMenu = true;
-            while (keepUsingMenu) {
-                int choice;
-                showMenu();
-                cin >> choice;
-                cout << "\n";
+        bool isAdmin = loggedIn->getIsAdmin();
+        std::cout << "\nLogin successful! (" << (isAdmin ? "admin" : "user") << ")\n";
 
-                bool resultofBooking = false;
+        bool inSession = true;
+        while (inSession) {
+            int choice;
 
+            if (isAdmin) {
+                showAdminMenu();
+            } else {
+                showUserMenu();
+            }
+
+            std::cin >> choice;
+            std::cout << "\n";
+
+            if (!isAdmin) {
+                // regular user actions
                 if (choice == 1) {
-                    cout << "\n================================= Booking a Room =================================\n";
-                    resultofBooking = rooms.bookRoom();
-                    if (resultofBooking)
-                        cout << "\nRoom booked successfully!\n";
-                    else
-                        cout << "\nUnable to book room - conflict in scheduling\n";
+                    std::cout <<
+                            "\n================================= Booking a Room =================================\n";
+                    bool ok = rooms.bookRoom();
+                    if (ok) std::cout << "\nRoom booked successfully!\n";
+                    else std::cout << "\nUnable to book room - conflict in scheduling\n";
                 } else if (choice == 2) {
-                    cout <<
+                    std::cout <<
                             "\n================================= Borrowing a Laptop =================================\n";
-                    resultofBooking = laptops.BorrowLaptop();
-                    if (resultofBooking) {
-                        cout << "\nFree Laptop available!\n";
-                        cout <<
+                    bool ok = laptops.BorrowLaptop();
+                    if (ok) {
+                        std::cout << "\nFree Laptop available!\n";
+                        std::cout <<
                                 "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
                     } else {
-                        cout << "Unable to borrow laptop at this time\n";
+                        std::cout << "Unable to borrow laptop at this time\n";
                     }
                 } else if (choice == 3) {
-                    cout << "\n================================= Borrowing a Book =================================\n";
-                    cout << "You chose to borrow a book.\n";
+                    std::cout <<
+                            "\n================================= Borrowing a Book =================================\n";
                     books.BorrowBook();
                 } else if (choice == 4) {
-                    cout << "Logging out...\n";
-                    keepUsingMenu = false;
-                    break;
+                    std::cout << "Logging out...\n";
+                    inSession = false;
                 } else {
-                    cout << "Invalid choice. Try again.\n";
-                    continue;
+                    std::cout << "Invalid choice. Try again.\n";
                 }
-
-                char again;
-                cout << "\n\nDo you want to book something else? (y or n): ";
-                cin >> again;
-
-                if (again == 'n' || again == 'N') {
-                    cout << "\nLogging out...\n";
-                    keepUsingMenu = false;
+            } else {
+                // admin actions
+                if (choice == 1) {
+                    std::cout << "\n================================= Add Book =================================\n";
+                    books.addBookInteractive();
+                } else if (choice == 2) {
+                    std::cout << "\n================================= Remove Book =================================\n";
+                    books.removeBookInteractive();
+                } else if (choice == 3) {
+                    std::cout <<
+                            "\n================================= Booking a Room (Admin) =================================\n";
+                    bool ok = rooms.bookRoom();
+                    if (ok) std::cout << "\nRoom booked successfully!\n";
+                    else std::cout << "\nUnable to book room - conflict in scheduling\n";
+                } else if (choice == 4) {
+                    std::cout <<
+                            "\n================================= Borrowing a Laptop (Admin) =================================\n";
+                    bool ok = laptops.BorrowLaptop();
+                    if (ok) {
+                        std::cout << "\nFree Laptop available!\n";
+                        std::cout <<
+                                "\nGo to the library help desk at the start of booking period, give your details, and you will be given a laptop";
+                    } else {
+                        std::cout << "Unable to borrow laptop at this time\n";
+                    }
+                } else if (choice == 5) {
+                    std::cout <<
+                            "\n================================= Borrowing a Book (Admin) =================================\n";
+                    books.BorrowBook();
+                } else if (choice == 6) {
+                    std::cout << "Logging out...\n";
+                    inSession = false;
+                } else {
+                    std::cout << "Invalid choice. Try again.\n";
                 }
             }
-        } else {
-            cout << "Incorrect username or password. Try again.\n";
+
+            if (inSession) {
+                char again;
+                std::cout << "\n\nDo you want to perform another action? (y or n): ";
+                std::cin >> again;
+                if (again == 'n' || again == 'N') {
+                    std::cout << "\nLogging out...\n";
+                    inSession = false;
+                }
+            }
         }
     }
 }
