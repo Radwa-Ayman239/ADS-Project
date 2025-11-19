@@ -3,9 +3,11 @@
 #include <iostream>
 
 RoomsManager::RoomsManager() {
+    loadRoomsFromFile();
 }
 
 RoomsManager::~RoomsManager() {
+    saveRoomsToFile();
     //Data Structure Change
     roomTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {
         delete tree;
@@ -79,3 +81,58 @@ bool RoomsManager::bookRoom() {
         return true;
     }
 }
+
+void RoomsManager::saveRoomsToFile() const {
+    ofstream file("data/rooms.txt", ios::out | ios::trunc);
+    if (!file) {
+        cout << "Error opening rooms.txt for writing\n";
+        return;
+    }
+
+    const_cast<HashMap<string, RedBlackIntervalTree*>&>(roomTable).forEach([&](const string &id, RedBlackIntervalTree* &tree) {
+        file << id << "\n";
+    });
+
+    file.close();
+}
+
+void RoomsManager::addRoomInteractive() {
+    string id;
+    cout << "\nEnter new room ID: ";
+    cin >> id;
+
+    if (roomTable.contains(id)) {
+        cout << "A room with this ID already exists.\n";
+        return;
+    }
+
+    auto* tree = new RedBlackIntervalTree();
+    if (!roomTable.putNew(id, tree)) {
+        delete tree;
+        cout << "Failed to add room.\n";
+        return;
+    }
+
+    cout << "Room " << id << " added successfully.\n";
+}
+
+void RoomsManager::removeRoomInteractive() {
+    string id;
+    cout << "\nEnter room ID to remove: ";
+    cin >> id;
+
+    RedBlackIntervalTree** treePtr = roomTable.get(id);
+    if (!treePtr || !(*treePtr)) {
+        cout << "No room with this ID.\n";
+        return;
+    }
+
+    delete *treePtr;
+    *treePtr = nullptr;
+
+    roomTable.erase(id);
+    cout << "Room " << id << " removed.\n";
+}
+
+
+

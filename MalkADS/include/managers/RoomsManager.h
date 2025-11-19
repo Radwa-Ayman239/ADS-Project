@@ -10,16 +10,18 @@ class RoomsManager {
 private:
 //Data Structure Change
     HashMap<string, RedBlackIntervalTree*> roomTable;
+    void loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees
+    void saveRoomsToFile() const;
 
 public:
     RoomsManager();
     ~RoomsManager();
 
-   
-    void loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees
     bool bookRoom();
 
-
+    // admin operations
+    void addRoomInteractive();
+    void removeRoomInteractive();
 };
 
 #endif

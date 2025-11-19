@@ -11,12 +11,12 @@ private:
 //Data Structure Change
     HashMap<string, RedBlackIntervalTree*> laptopTable;
 
+    void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
+    void saveLaptopsToFile() const;
+
 public:
     LaptopsManager();
     ~LaptopsManager(); // delete all interval trees
-
-    void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
-    void saveLaptopsToFile() const;
 
     bool BorrowLaptop();
 
