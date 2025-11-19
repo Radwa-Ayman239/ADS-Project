@@ -9,23 +9,24 @@ using namespace std;
 
 class BooksManager {
 private:
-//Data Structure Change 
+    //Data Structure Change
     HashMap<string, Book> ID_To_BookTable;
-//Data Structure Change 
-    HashMap<string, RedBlackIntervalTree*> BookTable;
+    //Data Structure Change
+    HashMap<string, RedBlackIntervalTree *> BookTable;
 
     void loadBooksFromFile(); // read book IDs from "books.txt" and create interval tree
     void saveBooksToFile();
 
-
 public:
     BooksManager();
+
     ~BooksManager();
 
     void BorrowBook();
 
     // admin operations
     void addBookInteractive();
+
     void removeBookInteractive();
 };
 

@@ -6,9 +6,8 @@
 using namespace std;
 
 
-void queue::enqueue (const string& comm){
-
-    if (isFull()){
+void queue::enqueue(const string &comm) {
+    if (isFull()) {
         resize();
     }
 
@@ -18,30 +17,26 @@ void queue::enqueue (const string& comm){
     count++;
 }
 
-void queue:: dequeue(){
-    if (isEmpty()){
-        cout <<"The schedule is already empty"<<endl;
+void queue::dequeue() {
+    if (isEmpty()) {
+        cout << "The schedule is already empty" << endl;
         return;
     }
 
 
-    front = (front +1) % capacity;
-    count --;
-
+    front = (front + 1) % capacity;
+    count--;
 }
 
-bool queue:: isEmpty() const{
-    return count ==0 ;
-
+bool queue::isEmpty() const {
+    return count == 0;
 }
 
-bool queue:: isFull() const{
+bool queue::isFull() const {
     return count == capacity;
-
 }
 
-void queue:: display() const{
-
+void queue::display() const {
     if (isEmpty()) {
         cout << "No commands founded." << endl;
         return;
@@ -49,27 +44,25 @@ void queue:: display() const{
 
     cout << "User Commands: ";
     for (int i = 0; i < count; i++) {
-        cout << com[(front + i) % capacity] <<" ";
+        cout << com[(front + i) % capacity] << " ";
     }
     cout << endl;
-
-
 }
 
-string queue :: Front() const{
-    if (isEmpty()){
-        cout<<"No Commands founded";
-        return "" ;
+string queue::Front() const {
+    if (isEmpty()) {
+        cout << "No Commands founded";
+        return "";
     }
     return com[front];
 }
 
-int queue:: size() const {
+int queue::size() const {
     return count; // total elements in the queue
 }
 
 int queue::getCapacity() const {
-    return capacity;     // total available space
+    return capacity; // total available space
 }
 
 
@@ -77,7 +70,7 @@ int queue::getCapacity() const {
 void queue::resize() {
     int oldCapacity = capacity;
     capacity = capacity * 2;
-    string* newarray = new string[capacity];
+    string *newarray = new string[capacity];
 
     for (int i = 0; i < count; i++) {
         newarray[i] = com[(front + i) % oldCapacity];
@@ -87,12 +80,11 @@ void queue::resize() {
     com = newarray;
 
     front = 0;
-    rear = count - 1 ;
+    rear = count - 1;
 }
 
-void queue:: clear() {
-    front= 0;
+void queue::clear() {
+    front = 0;
     rear = -1;
     count = 0;
-
 }

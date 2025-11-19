@@ -4,7 +4,6 @@
 using namespace std;
 
 class Book {
-
 private:
     string bookid;
     string title;
@@ -12,10 +11,13 @@ private:
 
 public:
     Book();
-    Book(const string& bookid, const string& title, const string& author);
+
+    Book(const string &bookid, const string &title, const string &author);
 
     string getID();
+
     string getAuthor();
+
     string getTitle();
 };
 

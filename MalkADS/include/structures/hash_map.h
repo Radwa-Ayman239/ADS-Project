@@ -105,7 +105,7 @@ public:
      * Time Complexity: O(1) average case, O(n) worst case
      * Space Complexity: O(1)
      */
-    V* get(const K &key) const;
+    V *get(const K &key) const;
 
     /**
      * @brief Remove a key-value pair
@@ -139,10 +139,10 @@ public:
      * @tparam Func Callable type (e.g., function pointer, lambda, functor)
      * @param func The function to invoke on each key-value pair
      */
-    template <typename Func>
+    template<typename Func>
     void forEach(Func func) {
         for (int i = 0; i < capacity_; i++) {
-            Node* cur = buckets_[i];
+            Node *cur = buckets_[i];
             while (cur) {
                 func(cur->key, cur->val);
                 cur = cur->next;
@@ -190,22 +190,23 @@ private:
      * for handling collisions via separate chaining.
      */
     struct Node {
-        K key;          ///< The Key
-        V val;          ///< The value
-        Node *next;     ///< Pointer to next node in the chain
+        K key; ///< The Key
+        V val; ///< The value
+        Node *next; ///< Pointer to next node in the chain
 
         /**
          * @brief Node constructor
          * @param k The key to store
          * @param v The value to store
          */
-        Node(K k, const V &v) : key(std::move(k)), val(v), next(nullptr) {}
+        Node(K k, const V &v) : key(std::move(k)), val(v), next(nullptr) {
+        }
     };
 
-    Node **buckets_;    ///< Array of bucket pointers (linked list heads)
-    int capacity_;      ///< Current number of buckets
-    int size_;          ///< Current number of key-value pairs
-    float max_load_;    ///< Maximum load factor before rehashing
+    Node **buckets_; ///< Array of bucket pointers (linked list heads)
+    int capacity_; ///< Current number of buckets
+    int size_; ///< Current number of key-value pairs
+    float max_load_; ///< Maximum load factor before rehashing
 
     /**
      * @brief Hash function for keys
@@ -313,7 +314,7 @@ bool HashMap<K, V>::putNew(const K &key, const V &value) {
 }
 
 template<typename K, typename V>
-V* HashMap<K, V>::get(const K &key) const {
+V *HashMap<K, V>::get(const K &key) const {
     const size_t h = hash(key);
     int idx = static_cast<int>(h % capacity_);
     Node *cur = buckets_[idx];

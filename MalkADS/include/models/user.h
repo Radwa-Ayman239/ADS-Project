@@ -5,7 +5,6 @@ using namespace std;
 #include <string>
 
 class User {
-
 private:
     string username;
     string password;
@@ -13,9 +12,11 @@ private:
 
 public:
     User();
-    User(string  uname, string  pass, bool admin=false);
+
+    User(string uname, string pass, bool admin = false);
 
     string getPassword();
+
     bool getIsAdmin() const { return isAdmin; }
 };
 

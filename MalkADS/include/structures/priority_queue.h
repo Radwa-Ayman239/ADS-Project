@@ -4,40 +4,48 @@
 #include <iostream>
 using namespace std;
 
-template <typename T>
+template<typename T>
 struct DefaultComparator {
-    bool operator()(const T& a, const T& b) const {
+    bool operator()(const T &a, const T &b) const {
         return a < b;
     }
 };
 
 
-template <typename T, typename Comparator = DefaultComparator<T>>
+template<typename T, typename Comparator = DefaultComparator<T> >
 class PriorityQueue {
 private:
-    T* heapArray;
+    T *heapArray;
     int capacity;
     int currentSize;
     Comparator comp;
 
     void resize();
+
     void heapifyUp(int index);
+
     void heapifyDown(int index);
 
 public:
     PriorityQueue(int initialCapacity = 10);
+
     ~PriorityQueue();
 
     bool isEmpty() const;
+
     int size() const;
-    void push(const T& value);
+
+    void push(const T &value);
+
     T top() const;
+
     void pop();
+
     void printHeap() const;
 };
 
 
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 PriorityQueue<T, Comparator>::PriorityQueue(int initialCapacity) {
     capacity = initialCapacity;
     heapArray = new T[capacity];
@@ -45,16 +53,16 @@ PriorityQueue<T, Comparator>::PriorityQueue(int initialCapacity) {
 }
 
 
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 PriorityQueue<T, Comparator>::~PriorityQueue() {
     delete[] heapArray;
 }
 
 
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::resize() {
     int newCapacity = capacity * 2;
-    T* newArray = new T[newCapacity];
+    T *newArray = new T[newCapacity];
     for (int i = 0; i < currentSize; i++)
         newArray[i] = heapArray[i];
     delete[] heapArray;
@@ -63,7 +71,7 @@ void PriorityQueue<T, Comparator>::resize() {
 }
 
 
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::heapifyUp(int index) {
     while (index > 0) {
         int parent = (index - 1) / 2;
@@ -75,7 +83,7 @@ void PriorityQueue<T, Comparator>::heapifyUp(int index) {
 }
 
 
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::heapifyDown(int index) {
     while (true) {
         int left = 2 * index + 1;
@@ -96,20 +104,20 @@ void PriorityQueue<T, Comparator>::heapifyDown(int index) {
 }
 
 // Check empty
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 bool PriorityQueue<T, Comparator>::isEmpty() const {
     return currentSize == 0;
 }
 
 // Size
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 int PriorityQueue<T, Comparator>::size() const {
     return currentSize;
 }
 
 // Push
-template <typename T, typename Comparator>
-void PriorityQueue<T, Comparator>::push(const T& value) {
+template<typename T, typename Comparator>
+void PriorityQueue<T, Comparator>::push(const T &value) {
     if (currentSize == capacity)
         resize();
     heapArray[currentSize] = value;
@@ -118,7 +126,7 @@ void PriorityQueue<T, Comparator>::push(const T& value) {
 }
 
 // Top
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 T PriorityQueue<T, Comparator>::top() const {
     if (isEmpty()) {
         cerr << "PriorityQueue is empty!\n";
@@ -128,7 +136,7 @@ T PriorityQueue<T, Comparator>::top() const {
 }
 
 // Pop
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::pop() {
     if (isEmpty()) {
         cerr << "PriorityQueue is empty!\n";
@@ -140,7 +148,7 @@ void PriorityQueue<T, Comparator>::pop() {
 }
 
 // Print
-template <typename T, typename Comparator>
+template<typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::printHeap() const {
     cout << "Heap elements: ";
     for (int i = 0; i < currentSize; i++)

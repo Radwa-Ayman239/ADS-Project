@@ -14,7 +14,7 @@ RedBlackIntervalTree::Node::Node(int l, int h) {
 
 // ===================== Private helper implementations =====================
 
-void RedBlackIntervalTree::updateMax(Node* node) {
+void RedBlackIntervalTree::updateMax(Node *node) {
     if (node == nullptr) return;
 
     int leftMax = INT_MIN;
@@ -28,8 +28,8 @@ void RedBlackIntervalTree::updateMax(Node* node) {
     if (rightMax > node->max) node->max = rightMax;
 }
 
-void RedBlackIntervalTree::rotateLeft(Node*& node) {
-    Node* child = node->right;
+void RedBlackIntervalTree::rotateLeft(Node *&node) {
+    Node *child = node->right;
     node->right = child->left;
     if (node->right != nullptr) node->right->parent = node;
     child->parent = node->parent;
@@ -43,8 +43,8 @@ void RedBlackIntervalTree::rotateLeft(Node*& node) {
     updateMax(child);
 }
 
-void RedBlackIntervalTree::rotateRight(Node*& node) {
-    Node* child = node->left;
+void RedBlackIntervalTree::rotateRight(Node *&node) {
+    Node *child = node->left;
     node->left = child->right;
     if (node->left != nullptr) node->left->parent = node;
     child->parent = node->parent;
@@ -58,14 +58,14 @@ void RedBlackIntervalTree::rotateRight(Node*& node) {
     updateMax(child);
 }
 
-void RedBlackIntervalTree::fixInsert(Node*& node) {
-    Node* parent = nullptr;
-    Node* grandparent = nullptr;
+void RedBlackIntervalTree::fixInsert(Node *&node) {
+    Node *parent = nullptr;
+    Node *grandparent = nullptr;
     while (node != root && node->color == RED && node->parent->color == RED) {
         parent = node->parent;
         grandparent = parent->parent;
         if (parent == grandparent->left) {
-            Node* uncle = grandparent->right;
+            Node *uncle = grandparent->right;
             if (uncle != nullptr && uncle->color == RED) {
                 grandparent->color = RED;
                 parent->color = BLACK;
@@ -82,7 +82,7 @@ void RedBlackIntervalTree::fixInsert(Node*& node) {
                 node = parent;
             }
         } else {
-            Node* uncle = grandparent->left;
+            Node *uncle = grandparent->left;
             if (uncle != nullptr && uncle->color == RED) {
                 grandparent->color = RED;
                 parent->color = BLACK;
@@ -103,12 +103,12 @@ void RedBlackIntervalTree::fixInsert(Node*& node) {
     root->color = BLACK;
 }
 
-void RedBlackIntervalTree::fixDelete(Node*& node) {
+void RedBlackIntervalTree::fixDelete(Node *&node) {
     if (node == nullptr) return;
 
     while (node != root && node->color == BLACK) {
         if (node == node->parent->left) {
-            Node* sibling = node->parent->right;
+            Node *sibling = node->parent->right;
             if (sibling->color == RED) {
                 sibling->color = BLACK;
                 node->parent->color = RED;
@@ -133,7 +133,7 @@ void RedBlackIntervalTree::fixDelete(Node*& node) {
                 node = root;
             }
         } else {
-            Node* sibling = node->parent->left;
+            Node *sibling = node->parent->left;
             if (sibling->color == RED) {
                 sibling->color = BLACK;
                 node->parent->color = RED;
@@ -162,25 +162,32 @@ void RedBlackIntervalTree::fixDelete(Node*& node) {
     node->color = BLACK;
 }
 
-RedBlackIntervalTree::Node* RedBlackIntervalTree::minValueNode(Node*& node) {
-    Node* current = node;
+RedBlackIntervalTree::Node *RedBlackIntervalTree::minValueNode(Node *&node) {
+    Node *current = node;
     while (current->left != nullptr) current = current->left;
     return current;
 }
 
-void RedBlackIntervalTree::transplant(Node*& root, Node*& u, Node*& v) {
+void RedBlackIntervalTree::transplant(Node *&root, Node *&u, Node *&v) {
     if (u->parent == nullptr) root = v;
     else if (u == u->parent->left) u->parent->left = v;
     else u->parent->right = v;
     if (v != nullptr) v->parent = u->parent;
 }
 
-void RedBlackIntervalTree::printHelper(Node* root, std::string indent, bool last) {
+void RedBlackIntervalTree::printHelper(Node *root, std::string indent, bool last) {
     if (root != nullptr) {
         std::cout << indent;
-        if (indent == "") { std::cout << "Root----"; indent += "\t"; }
-        else if (last) { std::cout << "R----"; indent += "   "; }
-        else { std::cout << "L----"; indent += "|  "; }
+        if (indent == "") {
+            std::cout << "Root----";
+            indent += "\t";
+        } else if (last) {
+            std::cout << "R----";
+            indent += "   ";
+        } else {
+            std::cout << "L----";
+            indent += "|  ";
+        }
 
         std::string sColor = (root->color == RED) ? "RED" : "BLACK";
         std::cout << root->low << ", " << root->high << " (max=" << root->max << ", " << sColor << ")\n";
@@ -190,7 +197,7 @@ void RedBlackIntervalTree::printHelper(Node* root, std::string indent, bool last
     }
 }
 
-void RedBlackIntervalTree::deleteTree(Node* node) {
+void RedBlackIntervalTree::deleteTree(Node *node) {
     if (node != nullptr) {
         deleteTree(node->left);
         deleteTree(node->right);
@@ -202,7 +209,7 @@ bool RedBlackIntervalTree::doOverlap(int low1, int high1, int low2, int high2) {
     return (low1 <= high2 && low2 <= high1);
 }
 
-RedBlackIntervalTree::Node* RedBlackIntervalTree::overlapSearch(Node* root, int low, int high) {
+RedBlackIntervalTree::Node *RedBlackIntervalTree::overlapSearch(Node *root, int low, int high) {
     if (root == nullptr) return nullptr;
 
     if (doOverlap(root->low, root->high, low, high)) return root;
@@ -231,7 +238,8 @@ RedBlackIntervalTree::Node* RedBlackIntervalTree::overlapSearch(Node* root, int 
 //         listAvailableIntervalsHelper(node->right, StartLooking, EndLooking, currenttime, availabletimes);
 // }
 
-void RedBlackIntervalTree::listAvailableIntervalsHelper(Node* node, int StartLooking, int EndLooking, int &currenttime, int& counter ) {
+void RedBlackIntervalTree::listAvailableIntervalsHelper(Node *node, int StartLooking, int EndLooking, int &currenttime,
+                                                        int &counter) {
     if (node == nullptr) return;
 
     if (node->left != nullptr && node->left->max >= StartLooking)
@@ -240,8 +248,8 @@ void RedBlackIntervalTree::listAvailableIntervalsHelper(Node* node, int StartLoo
     if (currenttime < node->low) {
         int startFree = currenttime;
         int endFree = node->low;
-        if (startFree < endFree) 
-        cout << counter << ". [ " << startFree << ", " << endFree << " ]\n";
+        if (startFree < endFree)
+            cout << counter << ". [ " << startFree << ", " << endFree << " ]\n";
         counter++;
     }
 
@@ -258,9 +266,9 @@ RedBlackIntervalTree::RedBlackIntervalTree() { root = nullptr; }
 RedBlackIntervalTree::~RedBlackIntervalTree() { deleteTree(root); }
 
 void RedBlackIntervalTree::insert(int low, int high) {
-    Node* node = new Node(low, high);
-    Node* parent = nullptr;
-    Node* current = root;
+    Node *node = new Node(low, high);
+    Node *parent = nullptr;
+    Node *current = root;
     while (current != nullptr) {
         parent = current;
         if (node->low < current->low) current = current->left;
@@ -271,31 +279,44 @@ void RedBlackIntervalTree::insert(int low, int high) {
     else if (node->low < parent->low) parent->left = node;
     else parent->right = node;
 
-    Node* temp = node->parent;
-    while (temp != nullptr) { updateMax(temp); temp = temp->parent; }
+    Node *temp = node->parent;
+    while (temp != nullptr) {
+        updateMax(temp);
+        temp = temp->parent;
+    }
 
     fixInsert(node);
 }
 
 void RedBlackIntervalTree::remove(int low, int high) {
-    Node* node = root;
-    Node* z = nullptr;
-    Node* x = nullptr;
-    Node* y = nullptr;
+    Node *node = root;
+    Node *z = nullptr;
+    Node *x = nullptr;
+    Node *y = nullptr;
 
     while (node != nullptr) {
-        if (node->low == low && node->high == high) { z = node; break; }
+        if (node->low == low && node->high == high) {
+            z = node;
+            break;
+        }
         if (node->low <= low) node = node->right;
         else node = node->left;
     }
 
-    if (z == nullptr) { std::cout << "Interval not found\n"; return; }
+    if (z == nullptr) {
+        std::cout << "Interval not found\n";
+        return;
+    }
 
     y = z;
     Color yOriginalColor = y->color;
-    if (z->left == nullptr) { x = z->right; transplant(root, z, z->right); }
-    else if (z->right == nullptr) { x = z->left; transplant(root, z, z->left); }
-    else {
+    if (z->left == nullptr) {
+        x = z->right;
+        transplant(root, z, z->right);
+    } else if (z->right == nullptr) {
+        x = z->left;
+        transplant(root, z, z->left);
+    } else {
         y = minValueNode(z->right);
         yOriginalColor = y->color;
         x = y->right;
@@ -319,8 +340,11 @@ void RedBlackIntervalTree::remove(int low, int high) {
     }
 
     if (y == nullptr) return;
-    Node* temp = y->parent;
-    while (temp != nullptr) { updateMax(temp); temp = temp->parent; }
+    Node *temp = y->parent;
+    while (temp != nullptr) {
+        updateMax(temp);
+        temp = temp->parent;
+    }
 }
 
 // bool RedBlackIntervalTree::searchOverlap(int low, int high) {
@@ -329,17 +353,16 @@ void RedBlackIntervalTree::remove(int low, int high) {
 // }
 
 bool RedBlackIntervalTree::searchOverlap(int low, int high, bool announce) {
-    
-    RedBlackIntervalTree::Node* overlapNode = overlapSearch(root, low, high);
+    RedBlackIntervalTree::Node *overlapNode = overlapSearch(root, low, high);
 
     if (overlapNode != nullptr) {
         if (announce == true) {
-            cout << "\nThis period overlaps with the following already booked period: [ " << overlapNode->low << ", " << overlapNode->high << " ]";
+            cout << "\nThis period overlaps with the following already booked period: [ " << overlapNode->low << ", " <<
+                    overlapNode->high << " ]";
         }
-        
+
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -355,15 +378,15 @@ bool RedBlackIntervalTree::searchOverlap(int low, int high, bool announce) {
 // }
 
 void RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
-    std::vector<std::pair<int,int> > available;
+    std::vector<std::pair<int, int> > available;
     int current = StartHere;
     int counter = 1;
     listAvailableIntervalsHelper(root, StartHere, EndHere, current, counter);
     if (current <= EndHere)
-    cout << counter << ". [ " << current << ", " << EndHere << " ]";
+        cout << counter << ". [ " << current << ", " << EndHere << " ]";
 }
 
-void RedBlackIntervalTree::printTree() { 
+void RedBlackIntervalTree::printTree() {
     if (root == nullptr) std::cout << "Tree is empty.\n";
     else {
         std::cout << "Red-Black Tree:\n";

@@ -8,20 +8,22 @@ using namespace std;
 
 class LaptopsManager {
 private:
-//Data Structure Change
-    HashMap<string, RedBlackIntervalTree*> laptopTable;
+    //Data Structure Change
+    HashMap<string, RedBlackIntervalTree *> laptopTable;
 
     void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
     void saveLaptopsToFile() const;
 
 public:
     LaptopsManager();
+
     ~LaptopsManager(); // delete all interval trees
 
     bool BorrowLaptop();
 
     // admin operations
     void addLaptopInteractive();
+
     void removeLaptopInteractive();
 };
 

@@ -7,12 +7,11 @@ Book::Book() {
     title = "";
 }
 
-Book::Book(const string& ID, const string& Title, const string& Author) {
+Book::Book(const string &ID, const string &Title, const string &Author) {
     bookid = ID;
     title = Title;
     author = Author;
 }
-
 
 
 string Book::getID() {
