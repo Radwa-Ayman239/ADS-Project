@@ -17,8 +17,9 @@ private:
         Node *parent;
         Node *left;
         Node *right;
+        std::string bookedBy;
 
-        Node(int l, int h);
+        Node(int l, int h, const std::string& user);
     };
 
     Node *root;
@@ -53,7 +54,7 @@ private:
     void forEachIntervalHelper(Node* node, Func func) {
         if (!node) return;
         forEachIntervalHelper(node->left, func);
-        func(node->low, node->high);
+        func(node->low, node->high, node->bookedBy);
         forEachIntervalHelper(node->right, func);
     }
 
@@ -63,13 +64,13 @@ public:
     ~RedBlackIntervalTree();
 
     //Public functions
-    void insert(int low, int high);
+    void insert(int low, int high, const std::string &user);
 
     void remove(int low, int high);
 
     bool searchOverlap(int low, int high, bool announce);
 
-    void listAvailableIntervals(int StartHere, int EndHere);
+    // void listAvailableIntervals(int StartHere, int EndHere);
 
     void printTree();
 

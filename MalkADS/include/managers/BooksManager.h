@@ -25,12 +25,14 @@ public:
 
     ~BooksManager();
 
-    void BorrowBook();
+    void BorrowBook(const std::string& username);
 
     // admin operations
     void addBookInteractive();
 
     void removeBookInteractive();
+
+    void showUserBookings(const std::string& username) const;
 };
 
 #endif

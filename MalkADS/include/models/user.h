@@ -18,6 +18,8 @@ public:
     string getPassword();
 
     bool getIsAdmin() const { return isAdmin; }
+
+    const std::string& getUsername() const { return username; }
 };
 
 #endif

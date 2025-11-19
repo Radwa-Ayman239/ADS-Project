@@ -37,7 +37,7 @@ void RoomsManager::loadRoomsFromFile() {
 }
 
 
-bool RoomsManager::bookRoom() {
+bool RoomsManager::bookRoom(const std::string &username) {
     //1.Displaying libaray rooms and having user pick which room they want to book:
 
     //Data Structure Change
@@ -79,7 +79,7 @@ bool RoomsManager::bookRoom() {
     if (tree->searchOverlap(startperiod, endperiod, true)) {
         return false;
     } else {
-        tree->insert(startperiod, endperiod);
+        tree->insert(startperiod, endperiod, username);
         return true;
     }
 }
@@ -149,10 +149,13 @@ void RoomsManager::loadRoomBookingsFromFile() const {
         if (c1 == string::npos) continue;;
         const size_t c2 = line.find(',', c1 + 1);
         if (c2 == string::npos) continue;
+        const size_t c3 = line.find(',', c2 + 1);
+        if (c3 == string::npos) continue;
 
         string roomID = line.substr(0, c1);
         string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
         string endStr = line.substr(c2 + 1);
+        string user = line.substr(c3 + 1);
 
         int start = stoi(startStr);
         int end = stoi(endStr);
@@ -161,7 +164,7 @@ void RoomsManager::loadRoomBookingsFromFile() const {
         if (!treePtr || !(*treePtr)) continue;;
 
         RedBlackIntervalTree *tree = *treePtr;
-        tree->insert(start, end);
+        tree->insert(start, end, user);
     }
 
     file.close();
@@ -177,10 +180,29 @@ void RoomsManager::saveRoomBookingsToFile() {
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable).forEach(
         [&](const string &id, RedBlackIntervalTree * &tree) {
             if (!tree) return;
-            tree->forEachInterval([&](const int low, const int high) {
-                file << id << "," << low << "," << high << "\n";
+            tree->forEachInterval([&](const int low, const int high, const std::string &user) {
+                file << id << "," << low << "," << high << "," << user << "\n";
             });
         });
 
     file.close();
+}
+
+void RoomsManager::showUserBookings(const std::string &username) const {
+    bool any = false;
+
+    const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable).forEach(
+        [&](const string &roomId, RedBlackIntervalTree * &tree) {
+            if (!tree) return;
+
+            tree->forEachInterval([&](const int low, const int high, const string &user) {
+                if (user == username) {
+                    cout << "- Room " << roomId
+                            << " | Period: [" << low << ", " << high << "]\n";
+                    any = true;
+                }
+            });
+        });
+
+    if (!any) cout << "You have no room bookings.\n";
 }

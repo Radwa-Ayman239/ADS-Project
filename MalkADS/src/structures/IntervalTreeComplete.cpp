@@ -2,7 +2,7 @@
 using namespace std;
 
 // ===================== Node constructor =====================
-RedBlackIntervalTree::Node::Node(int l, int h) {
+RedBlackIntervalTree::Node::Node(int l, int h, const std::string& user) {
     low = l;
     high = h;
     max = h;
@@ -10,6 +10,7 @@ RedBlackIntervalTree::Node::Node(int l, int h) {
     parent = nullptr;
     left = nullptr;
     right = nullptr;
+    bookedBy = user;
 }
 
 // ===================== Private helper implementations =====================
@@ -265,8 +266,8 @@ RedBlackIntervalTree::RedBlackIntervalTree() { root = nullptr; }
 
 RedBlackIntervalTree::~RedBlackIntervalTree() { deleteTree(root); }
 
-void RedBlackIntervalTree::insert(int low, int high) {
-    Node *node = new Node(low, high);
+void RedBlackIntervalTree::insert(int low, int high, const std::string& user) {
+    Node *node = new Node(low, high, user);
     Node *parent = nullptr;
     Node *current = root;
     while (current != nullptr) {
@@ -377,14 +378,14 @@ bool RedBlackIntervalTree::searchOverlap(int low, int high, bool announce) {
 //     cout << "[ " << current << ", " << EndHere << " ]";
 // }
 
-void RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
-    std::vector<std::pair<int, int> > available;
-    int current = StartHere;
-    int counter = 1;
-    listAvailableIntervalsHelper(root, StartHere, EndHere, current, counter);
-    if (current <= EndHere)
-        cout << counter << ". [ " << current << ", " << EndHere << " ]";
-}
+// void RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
+//     std::vector<std::pair<int, int> > available;
+//     int current = StartHere;
+//     int counter = 1;
+//     listAvailableIntervalsHelper(root, StartHere, EndHere, current, counter);
+//     if (current <= EndHere)
+//         cout << counter << ". [ " << current << ", " << EndHere << " ]";
+// }
 
 void RedBlackIntervalTree::printTree() {
     if (root == nullptr) std::cout << "Tree is empty.\n";

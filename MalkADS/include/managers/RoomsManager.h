@@ -21,12 +21,14 @@ public:
 
     ~RoomsManager();
 
-    bool bookRoom();
+    bool bookRoom(const std::string& username);
 
     // admin operations
     void addRoomInteractive();
 
     void removeRoomInteractive();
+
+    void showUserBookings(const std::string& username) const;
 };
 
 #endif

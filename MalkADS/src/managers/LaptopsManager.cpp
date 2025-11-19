@@ -35,7 +35,7 @@ void LaptopsManager::loadLaptopsFromFile() {
 }
 
 
-bool LaptopsManager::BorrowLaptop() {
+bool LaptopsManager::BorrowLaptop(const std::string &username) {
     int startperiod, endperiod;
     cout << "\n\nEnter your desired borrowing period";
     cout << "\nStart of borrowing period: ";
@@ -50,7 +50,7 @@ bool LaptopsManager::BorrowLaptop() {
         if (booked) return;
 
         if (!tree->searchOverlap(startperiod, endperiod, false)) {
-            tree->insert(startperiod, endperiod);
+            tree->insert(startperiod, endperiod, username);
             cout << "Laptop " << id << " successfully booked from " << startperiod << " to " << endperiod << "!\n";
             booked = true;
         }
@@ -131,10 +131,13 @@ void LaptopsManager::loadLaptopBookingsFromFile() const {
         if (c1 == string::npos) continue;
         const size_t c2 = line.find(',', c1 + 1);
         if (c2 == string::npos) continue;
+        const size_t c3 = line.find(',', c2 + 1);
+        if (c3 == string::npos) continue;
 
         string id = line.substr(0, c1);
         string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
-        string endStr = line.substr(c2 + 1);
+        string endStr = line.substr(c2 + 1, c3 - (c2 + 1));
+        string user = line.substr(c3 + 1);
 
         const int start = stoi(startStr);
         const int end = stoi(endStr);
@@ -146,7 +149,7 @@ void LaptopsManager::loadLaptopBookingsFromFile() const {
         }
 
         RedBlackIntervalTree *tree = *treePtr;
-        tree->insert(start, end);
+        tree->insert(start, end, user);
     }
 
     file.close();
@@ -162,10 +165,30 @@ void LaptopsManager::saveLaptopBookingsToFile() const {
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(laptopTable)
             .forEach([&](const string &id, RedBlackIntervalTree * &tree) {
                 if (!tree) return;
-                tree->forEachInterval([&](int low, int high) {
-                    file << id << "," << low << "," << high << "\n";
+                tree->forEachInterval([&](const int low, const int high, const std::string &username) {
+                    file << id << "," << low << "," << high << "," << username << "\n";
                 });
             });
 
     file.close();
+}
+
+void LaptopsManager::showUserBookings(const std::string &username) const {
+    bool any = false;
+
+    const_cast<HashMap<string, RedBlackIntervalTree *> &>(laptopTable).forEach(
+        [&](const string &id, RedBlackIntervalTree * &tree) {
+            if (!tree) return;
+
+            tree->forEachInterval([&](const int low, const int high, const string &user) {
+                if (user == username) {
+                    cout << "- Laptop " << id
+                            << " | Period: [" << low << ", " << high << "]\n";
+                    any = true;
+                }
+            });
+        });
+
+    if (!any)
+        cout << "You have no laptop bookings.\n";
 }

@@ -22,12 +22,14 @@ public:
 
     ~LaptopsManager(); // delete all interval trees
 
-    bool BorrowLaptop();
+    bool BorrowLaptop(const std::string& username);
 
     // admin operations
     void addLaptopInteractive();
 
     void removeLaptopInteractive();
+
+    void showUserBookings(const std::string& username) const;
 };
 
 #endif

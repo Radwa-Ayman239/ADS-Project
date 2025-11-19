@@ -21,7 +21,8 @@ void LibrarySystem::showUserMenu() {
     std::cout << "1. Book a room\n";
     std::cout << "2. Borrow a laptop\n";
     std::cout << "3. Borrow a book\n";
-    std::cout << "4. LogOut\n";
+    std::cout << "4. View my bookings\n";
+    std::cout << "5. LogOut\n";
     std::cout << "\nEnter your choice: ";
 }
 
@@ -85,10 +86,10 @@ void LibrarySystem::userSession() {
 
         if (isCurrentUserAdmin()) {
             handleAdminChoice(choice);
-            if (choice == 6) inSession = false;
+            if (choice == 10) inSession = false;
         } else {
             handleUserChoice(choice);
-            if (choice == 4) inSession = false;
+            if (choice == 5) inSession = false;
         }
 
         if (inSession) {
@@ -108,12 +109,12 @@ void LibrarySystem::userSession() {
 void LibrarySystem::handleUserChoice(const int choice) {
     if (choice == 1) {
         cout << "\n================================= Booking a Room =================================\n";
-        const bool ok = rooms.bookRoom();
+        const bool ok = rooms.bookRoom(currentUser->getUsername());
         if (ok) cout << "\nRoom booked successfully!\n";
         else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 2) {
         cout << "\n================================= Borrowing a Laptop =================================\n";
-        const bool ok = laptops.BorrowLaptop();
+        const bool ok = laptops.BorrowLaptop(currentUser->getUsername());
         if (ok) {
             cout << "\nFree Laptop available!\n";
             cout <<
@@ -123,8 +124,18 @@ void LibrarySystem::handleUserChoice(const int choice) {
         }
     } else if (choice == 3) {
         cout << "\n================================= Borrowing a Book =================================\n";
-        books.BorrowBook();
+        books.BorrowBook(currentUser->getUsername());
     } else if (choice == 4) {
+        cout << "\n================================= Your Bookings =================================\n";
+        const string uname = currentUser->getUsername();
+        cout << "\nRooms:\n";
+        rooms.showUserBookings(uname);
+        cout << "\nLaptops:\n";
+        laptops.showUserBookings(uname);
+        cout << "\nBooks:\n";
+        books.showUserBookings(uname);
+    }
+    else if (choice == 5) {
         cout << "Logging out...\n";
     } else {
         cout << "Invalid choice. Try again.\n";
@@ -152,12 +163,12 @@ void LibrarySystem::handleAdminChoice(int choice) {
         rooms.removeRoomInteractive();
     } else if (choice == 7) {
         cout << "\n================================= Booking a Room (Admin) =================================\n";
-        bool ok = rooms.bookRoom();
+        bool ok = rooms.bookRoom(currentUser->getUsername());
         if (ok) cout << "\nRoom booked successfully!\n";
         else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 8) {
         cout << "\n================================= Borrowing a Laptop (Admin) =================================\n";
-        bool ok = laptops.BorrowLaptop();
+        bool ok = laptops.BorrowLaptop(currentUser->getUsername());
         if (ok) {
             cout << "\nFree Laptop available!\n";
             cout <<
@@ -167,7 +178,7 @@ void LibrarySystem::handleAdminChoice(int choice) {
         }
     } else if (choice == 9) {
         cout << "\n================================= Borrowing a Book (Admin) =================================\n";
-        books.BorrowBook();
+        books.BorrowBook(currentUser->getUsername());
     } else if (choice == 10) {
         cout << "Logging out...\n";
     } else {

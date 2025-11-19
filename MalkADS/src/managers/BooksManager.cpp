@@ -77,7 +77,7 @@ void BooksManager::saveBooksToFile() {
 }
 
 
-void BooksManager::BorrowBook() {
+void BooksManager::BorrowBook(const std::string &username) {
     int searchmethod;
     cout << "\nYou can search for a book either \n\n1. By Title \nor \n2. By Author";
     cout << "\n\nHow would you like to search?: ";
@@ -134,7 +134,7 @@ void BooksManager::BorrowBook() {
 
         RedBlackIntervalTree *tree = *treePtr;
         if (!tree->searchOverlap(startperiod, endperiod, true)) {
-            tree->insert(startperiod, endperiod);
+            tree->insert(startperiod, endperiod, username);
             cout << "\n\nBooking successful!";
             cout <<
                     "\nGo to the library desk at the start of booking period, give your details, and you will be given your desired book";
@@ -159,7 +159,7 @@ void BooksManager::BorrowBook() {
 
 
         //Data Structure Change
-        ID_To_BookTable.forEach([&](const string &id, Book book) {
+        ID_To_BookTable.forEach([&](const string &id, Book &book) {
             string temp = book.getAuthor();
             for (char &c: temp) c = static_cast<char>(tolower(c));
             if (!authorfound && temp == searchAuthor)
@@ -229,7 +229,7 @@ void BooksManager::BorrowBook() {
             RedBlackIntervalTree *tree = *treePtr;
 
             if (!tree->searchOverlap(startperiod, endperiod, true)) {
-                tree->insert(startperiod, endperiod);
+                tree->insert(startperiod, endperiod, username);
                 cout << "\n\nBooking successful!";
                 cout <<
                         "\nGo to the library help desk at the start of booking period, give your details, and you will be given your desired book";
@@ -341,9 +341,7 @@ void BooksManager::removeBookInteractive() {
 
 void BooksManager::loadBookBookingsFromFile() {
     ifstream file("data/book_bookings.txt");
-    if (!file) {
-        return;
-    }
+    if (!file) return;
 
     string line;
     while (getline(file, line)) {
@@ -353,19 +351,22 @@ void BooksManager::loadBookBookingsFromFile() {
         if (c1 == string::npos) continue;
         size_t c2 = line.find(',', c1 + 1);
         if (c2 == string::npos) continue;
+        size_t c3 = line.find(',', c2 + 1);
+        if (c3 == string::npos) continue;
 
         string bookId = line.substr(0, c1);
         string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
-        string endStr = line.substr(c2 + 1);
+        string endStr = line.substr(c2 + 1, c3 - (c2 + 1));
+        string user = line.substr(c3 + 1);
 
-        const int start = stoi(startStr);
-        const int end = stoi(endStr);
+        int start = stoi(startStr);
+        int end = stoi(endStr);
 
         RedBlackIntervalTree **treePtr = BookTable.get(bookId);
         if (!treePtr || !(*treePtr)) continue;
 
         RedBlackIntervalTree *tree = *treePtr;
-        tree->insert(start, end);
+        tree->insert(start, end, user);
     }
 
     file.close();
@@ -381,10 +382,37 @@ void BooksManager::saveBookBookingsToFile() const {
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(BookTable).forEach(
         [&](const string &id, RedBlackIntervalTree * &tree) {
             if (!tree) return;
-            tree->forEachInterval([&](const int low, const int high) {
-                file << id << "," << low << "," << high << "\n";
+            tree->forEachInterval([&](const int low, const int high, const std::string &username) {
+                file << id << "," << low << "," << high << "," << username << "\n";
             });
         });
 
     file.close();
+}
+
+void BooksManager::showUserBookings(const std::string &username) const {
+    bool any = false;
+
+    const_cast<HashMap<string, RedBlackIntervalTree *> &>(BookTable)
+            .forEach([&](const string &bookId, RedBlackIntervalTree * &tree) {
+                if (!tree) return;
+
+                tree->forEachInterval([&](const int low, const int high, const std::string &user) {
+                    if (user == username) {
+                        Book *b = ID_To_BookTable.get(bookId);
+                        const string title = b ? b->getTitle() : "(unknown)";
+                        const string author = b ? b->getAuthor() : "(unknown)";
+
+                        cout << "- Book ID:" << bookId
+                                << " | Title: " << title
+                                << " | Author: " << author
+                                << " | Period: [" << low << ", " << high << "]\n";
+                        any = true;
+                    }
+                });
+            });
+
+    if (!any) {
+        cout << "You have no book bookings.\n";
+    }
 }
