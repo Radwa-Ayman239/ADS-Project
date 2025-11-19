@@ -6,13 +6,10 @@ LaptopsManager::LaptopsManager() {}
 
 LaptopsManager::~LaptopsManager() {
     //Data Structure Change
-    unordered_map<string, RedBlackIntervalTree*>::iterator it;
-
-    //Data Structure Change
-    for (it = laptopTable.begin(); it != laptopTable.end(); ++it) {
-        delete it->second; 
-    }
-
+    laptopTable.forEach([](const string& id, RedBlackIntervalTree* &tree) {
+        delete tree;
+        tree = nullptr;
+    });
     laptopTable.clear();
 }
 
@@ -26,9 +23,9 @@ void LaptopsManager::loadLaptopsFromFile() {
 
     string laptopID;
     while (getline(file, laptopID)) {
-        RedBlackIntervalTree* tree = new RedBlackIntervalTree();
+        auto* tree = new RedBlackIntervalTree();
         //Data Structure Change
-        laptopTable[laptopID] = tree;
+        laptopTable.putNew(laptopID, tree);
     }
     
 }
@@ -42,19 +39,20 @@ bool LaptopsManager::BorrowLaptop() {
 
     // Iterate over all laptops in the map
     //Data Structure Change
-    unordered_map<string, RedBlackIntervalTree*>::iterator it;
-    for (it = laptopTable.begin(); it != laptopTable.end(); ++it) {
-        RedBlackIntervalTree* tree = it->second;
+    bool booked = false;
+    laptopTable.forEach([&](const string &id, RedBlackIntervalTree* &tree) {
+        if (booked) return;
 
-        // Check if the interval is free
         if (!tree->searchOverlap(startperiod, endperiod, false)) {
             tree->insert(startperiod, endperiod);
-            cout << "Laptop " << it->first << " successfully booked from " << startperiod << " to " << endperiod << "!\n";
-            return true; // booking done, exit function
+            cout << "Laptop " << id << " successfully booked from " << startperiod << " to " << endperiod << "!\n";
+            booked = true;
         }
-    }
+    });
 
     // If we reach here, all laptops had conflicts
-    cout << "No laptops are available for the requested period.\n";
-    return false;
+    if (!booked) {
+        cout << "No laptops available for the requested period.\n";
+    }
+    return booked;
 }

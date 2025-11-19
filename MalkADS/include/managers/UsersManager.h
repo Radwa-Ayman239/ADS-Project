@@ -3,22 +3,20 @@
 
 #include <string>
 #include "../models/user.h"
-#include <unordered_map>
+#include "../structures/hash_map.h"
 using namespace std;
 
 class UsersManager {
 private:
     //Data Structure Change
-    unordered_map<string, User> userTable;
+    HashMap<string, User> userTable;
 
 public:
     UsersManager();
 
     void loadUsersFromFile(); //Reads user.txt, creates the user objects, adds them to the hashmap
 
-    bool login(const string& username, const string& password) const; //Checks entered username and password against hashmap
-
-
+    bool login(const string &username, const string &password); //Checks entered username and password against hashmap
 };
 
 #endif

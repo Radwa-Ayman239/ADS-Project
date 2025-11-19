@@ -3,13 +3,13 @@
 
 #include <string>
 #include "../structures/IntervalTreeComplete.h"
-#include <unordered_map>
+#include "../structures/hash_map.h"
 using namespace std;
 
 class LaptopsManager {
 private:
 //Data Structure Change
-    unordered_map<string, RedBlackIntervalTree*> laptopTable;
+    HashMap<string, RedBlackIntervalTree*> laptopTable;
 
 public:
     LaptopsManager();

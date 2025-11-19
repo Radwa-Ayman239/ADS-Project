@@ -23,7 +23,7 @@ void UsersManager::loadUsersFromFile() {
             string pass = line.substr(commaPos + 1);
             User newUser(uname, pass);
             //Data Structure Change
-            userTable[uname] = newUser;
+            userTable.putNew(uname, newUser);
         }
     }
 
@@ -31,16 +31,17 @@ void UsersManager::loadUsersFromFile() {
 }
 
 //Check login using unordered_map
-bool UsersManager::login(const string& uname, const string& pass) const {
-    
+bool UsersManager::login(const string &uname, const string &pass) {
     //Checks if username actually exists
 
     //Data Structure Change
-    if (userTable.find(uname) == userTable.end() ) return false;
+    if (!userTable.contains(uname)) return false;
 
     //If it does, checks if password entered for this username is correct.
-    
+
     //Data Structure Change
-    User finduser = userTable.at(uname);
-    return (finduser.getPassword() == pass);
+    User *foundUser = userTable.get(uname);
+    if (!foundUser) return false;
+
+    return (foundUser->getPassword() == pass);
 }
