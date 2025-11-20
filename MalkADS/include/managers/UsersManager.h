@@ -18,6 +18,11 @@ public:
 
     User *login(const string &username, const string &password);
 
+    User *getUser(const string &uname) {
+        if (!userTable.contains(uname)) return nullptr;
+        return userTable.get(uname);
+    }
+
     //Checks entered username and password against hashmap
 };
 

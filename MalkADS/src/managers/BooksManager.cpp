@@ -347,3 +347,13 @@ void BooksManager::showUserBookings(const std::string &username) const {
 
     if (!any) printHint("You have no book bookings.");
 }
+
+void BooksManager::syncUserBookings(UsersManager &usersManager) {
+    BookTable.forEach([&](const string &bookId, RedBlackIntervalTree * &tree) {
+        if (!tree) return;
+        tree->forEachInterval([&](const int low, const int high, const string &username) {
+            User *u = usersManager.getUser(username);
+            if (u) u->addBookBooking(low, high);
+        })
+    })
+}

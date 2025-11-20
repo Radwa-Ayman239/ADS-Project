@@ -2,6 +2,8 @@
 #define BOOKS_H
 
 #include <string>
+
+#include "UsersManager.h"
 #include "../models/book.h"
 #include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
@@ -20,6 +22,7 @@ private:
     void saveBooksToFile();
 
     void loadBookBookingsFromFile();
+
     void saveBookBookingsToFile() const;
 
 public:
@@ -27,14 +30,16 @@ public:
 
     ~BooksManager();
 
-    void BorrowBook(User* user);
+    void BorrowBook(User *user);
 
     // admin operations
     void addBookInteractive();
 
     void removeBookInteractive();
 
-    void showUserBookings(const std::string& username) const;
+    void showUserBookings(const std::string &username) const;
+
+    void syncUserBookings(UsersManager &usersManager);
 };
 
 #endif

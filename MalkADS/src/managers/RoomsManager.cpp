@@ -219,3 +219,14 @@ void RoomsManager::showRoomsWithAvailableTimes(int openStart, int openEnd) {
         cout << "\n";
     });
 }
+
+void RoomsManager::syncUserBookings(UsersManager &usersManager) {
+    roomTable.forEach([&](const string &roomId, RedBlackIntervalTree * &tree) {
+        if (!tree) return;
+        tree->forEachInterval([&](const int low, const int high, const string &username) {
+            User *u = usersManager.getUser(username);
+            if (u)
+                u->addRoomBooking(low, high);
+        });
+    });
+}

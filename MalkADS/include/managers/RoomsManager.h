@@ -2,6 +2,8 @@
 #define ROOMS_H
 
 #include <string>
+
+#include "UsersManager.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
 #include "../models/user.h"
@@ -27,11 +29,11 @@ private:
 
     static constexpr int MAX_INTERVALS = 64;
 
-    static int collectBookedIntervals(RedBlackIntervalTree *tree, SimpleInterval *arr, int maxCount) ;
+    static int collectBookedIntervals(RedBlackIntervalTree *tree, SimpleInterval *arr, int maxCount);
 
-    static void sortIntervals(SimpleInterval *arr, int n) ;
+    static void sortIntervals(SimpleInterval *arr, int n);
 
-    static int mergeIntervals(SimpleInterval *arr, int n) ;
+    static int mergeIntervals(SimpleInterval *arr, int n);
 
 public:
     RoomsManager();
@@ -48,6 +50,8 @@ public:
     void showUserBookings(const std::string &username) const;
 
     void showRoomsWithAvailableTimes(int openStart, int openEnd);
+
+    void syncUserBookings(UsersManager &usersManager);
 };
 
 #endif

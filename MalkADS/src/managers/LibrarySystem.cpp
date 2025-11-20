@@ -16,6 +16,9 @@ LibrarySystem::LibrarySystem() {
 
 void LibrarySystem::loadData() {
     users.loadUsersFromFile();
+    rooms.syncUserBookings(users);
+    laptops.syncUserBookings(users);
+    books.syncUserBookings(users);
 }
 
 void LibrarySystem::showUserMenu() {

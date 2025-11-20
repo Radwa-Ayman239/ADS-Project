@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "UsersManager.h"
 #include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
@@ -18,6 +19,7 @@ private:
     void saveLaptopsToFile() const;
 
     void loadLaptopBookingsFromFile() const;
+
     void saveLaptopBookingsToFile() const;
 
 public:
@@ -25,14 +27,16 @@ public:
 
     ~LaptopsManager(); // delete all interval trees
 
-    bool BorrowLaptop(User* user);
+    bool BorrowLaptop(User *user);
 
     // admin operations
     void addLaptopInteractive();
 
     void removeLaptopInteractive();
 
-    void showUserBookings(const std::string& username) const;
+    void showUserBookings(const std::string &username) const;
+
+    void syncUserBookings(UsersManager &usersManager);
 };
 
 #endif

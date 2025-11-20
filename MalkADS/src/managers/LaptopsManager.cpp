@@ -134,3 +134,14 @@ void LaptopsManager::showUserBookings(const std::string &username) const {
 
     if (!any) printHint("You have no laptop bookings.");
 }
+
+void LaptopsManager::syncUserBookings(UsersManager &usersManager) {
+    laptopTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
+        if (!tree) return;
+        tree->forEachInterval([&](const int low, const int high, const string &username) {
+            User *u = usersManager.getUser(username);
+            if (u)
+                u->addRoomBooking(low, high);
+        });
+    });
+}
