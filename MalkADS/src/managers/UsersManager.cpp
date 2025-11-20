@@ -1,4 +1,5 @@
 #include "../../include/managers/UsersManager.h"
+#include "../../include/helpers/UIHelpers.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>

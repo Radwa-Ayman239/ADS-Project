@@ -1,4 +1,5 @@
 #include "../../include/managers/BooksManager.h"
+#include "../../include/helpers/UIHelpers.h"
 //#include "book.h"
 #include <fstream>
 #include <iostream>
@@ -78,30 +79,34 @@ void BooksManager::saveBooksToFile() {
 
 
 void BooksManager::BorrowBook(User *user) {
+    printSectionHeader("Borrow a Book");
+
     int searchmethod;
-    cout << "\nYou can search for a book either \n\n1. By Title \nor \n2. By Author";
-    cout << "\n\nHow would you like to search?: ";
+    cout << COLOR_MENU
+            << "\nYou can search for a book:\n"
+            << "  1. By Title\n"
+            << "  2. By Author\n\n"
+            << COLOR_RESET;
+    cout << COLOR_PROMPT << "How would you like to search? " << COLOR_RESET;
     cin >> searchmethod;
 
-    //Data Structure Change
     string titlesearch = "";
     string currentTitle;
     string foundbookID;
-    bool bookfound;
-
+    bool bookfound = false;
 
     if (searchmethod == 1) {
         currentTitle = "";
         foundbookID = "";
         bookfound = false;
 
-        cout << "\nEnter the title of the book you are searching for: ";
+        cout << COLOR_PROMPT << "\nEnter the title of the book you are searching for: "
+                << COLOR_RESET;
         cin.ignore();
         getline(cin, titlesearch);
 
         for (char &c: titlesearch) c = static_cast<char>(tolower(c));
 
-        //Data Structure Change
         ID_To_BookTable.forEach([&](const string &id, Book &book) {
             string temp = book.getTitle();
             for (char &c: temp) c = static_cast<char>(tolower(c));
@@ -112,28 +117,25 @@ void BooksManager::BorrowBook(User *user) {
         });
 
         if (!bookfound) {
-            cout << "\nSorry the library does not have this book";
+            printError("Sorry, the library does not have this book.");
             return;
         }
 
         int startperiod;
         int endperiod;
-        cout << "\n\nWhen would you like to borrow this book?";
-        cout << "\n\nStart of borrowing period: ";
+        cout << COLOR_PROMPT << "\nStart of borrowing period: " << COLOR_RESET;
         cin >> startperiod;
-        cout << "End of borrowing period: ";
+        cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
         cin >> endperiod;
 
         if (!user->canBookBook(startperiod, endperiod)) {
-            cout << "\nYou already have 3 books borrowed during this period.\n";
+            printError("You already have 3 books borrowed during this period.");
             return;
         }
 
-
-        //Data Structure Change
         RedBlackIntervalTree **treePtr = BookTable.get(foundbookID);
         if (!treePtr || !(*treePtr)) {
-            cout << "\nInternal Error: No tree for this book ID.\n";
+            printError("Internal Error: No tree for this book ID.");
             return;
         }
 
@@ -141,11 +143,11 @@ void BooksManager::BorrowBook(User *user) {
         if (!tree->searchOverlap(startperiod, endperiod, true)) {
             tree->insert(startperiod, endperiod, user->getUsername());
             user->addBookBooking(startperiod, endperiod);
-            cout << "\n\nBooking successful!";
-            cout <<
-                    "\nGo to the library desk at the start of booking period, give your details, and you will be given your desired book";
+            printSuccess("Booking successful!");
+            printHint("Go to the library desk at the start of the booking period "
+                "and you will be given your book.");
         } else {
-            cout << "\nUnable to borrow this book during the desired period.";
+            printError("Unable to borrow this book during the desired period.");
         }
     } else {
         string searchAuthor = "";
@@ -156,15 +158,12 @@ void BooksManager::BorrowBook(User *user) {
         foundbookID = "";
         bookfound = false;
 
-
-        cout << "\nEnter the author you are searching for: ";
+        cout << COLOR_PROMPT << "\nEnter the author you are searching for: " << COLOR_RESET;
         cin.ignore();
         getline(cin, searchAuthor);
 
         for (char &c: searchAuthor) c = static_cast<char>(tolower(c));
 
-
-        //Data Structure Change
         ID_To_BookTable.forEach([&](const string &id, Book &book) {
             string temp = book.getAuthor();
             for (char &c: temp) c = static_cast<char>(tolower(c));
@@ -173,26 +172,26 @@ void BooksManager::BorrowBook(User *user) {
         });
 
         if (!authorfound) {
-            cout << "\nSorry we do not have any books by this author";
+            printError("Sorry, we do not have any books by this author.");
             return;
         }
-        cout << "\nHere are the books we have written by this author: " << endl;
 
-        //Data Structure Change
+        cout << COLOR_MENU << "\nHere are the books we have by this author:\n\n"
+                << COLOR_RESET;
         ID_To_BookTable.forEach([&](const string &id, Book &book) {
             string temp = book.getAuthor();
             for (char &c: temp) c = static_cast<char>(tolower(c));
             if (temp == searchAuthor)
-                cout << "- " << book.getTitle() << endl;
+                cout << "  - " << book.getTitle() << "\n";
         });
 
-        cout << "\nEnter the title of the book you are searching for: ";
+        cout << COLOR_PROMPT << "\nEnter the title of the book you are searching for: "
+                << COLOR_RESET;
         getline(cin, titlesearch);
         string author_of_inputbook = "";
 
         for (char &c: titlesearch) c = static_cast<char>(tolower(c));
 
-        //Data Structure Change
         ID_To_BookTable.forEach([&](const string &id, Book &book) {
             string TempTitle = book.getTitle();
             for (char &c: TempTitle) c = static_cast<char>(tolower(c));
@@ -204,7 +203,7 @@ void BooksManager::BorrowBook(User *user) {
         });
 
         if (!bookfound) {
-            cout << "\nSorry the library does not have this book.";
+            printError("Sorry, the library does not have this book.");
             return;
         }
 
@@ -213,79 +212,45 @@ void BooksManager::BorrowBook(User *user) {
 
         char stillwant = 'y';
         if (!authormatch) {
-            cout << "\nThe author of " << titlesearch << " is " << author_of_inputbook;
-            cout << "\nThis is not the author you were originally looking for ";
-            cout << "\nDo you still want the book? (y or n): ";
+            cout << COLOR_ERROR
+                    << "\nNote: the author of \"" << titlesearch << "\" is "
+                    << author_of_inputbook << "."
+                    << "\nThis does not match the author you initially searched for."
+                    << COLOR_RESET << "\n";
+            cout << COLOR_PROMPT << "Do you still want this book? (y or n): "
+                    << COLOR_RESET;
             cin >> stillwant;
         }
 
         if (authormatch || stillwant == 'y' || stillwant == 'Y') {
             int startperiod, endperiod;
-            cout << "\n\nWhen would you like to borrow this book?";
-            cout << "\n\nStart of borrowing period: ";
+            cout << COLOR_PROMPT << "\nStart of borrowing period: " << COLOR_RESET;
             cin >> startperiod;
-            cout << "End of borrowing period: ";
+            cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
             cin >> endperiod;
+
+            if (!user->canBookBook(startperiod, endperiod)) {
+                printError("You already have 3 books borrowed during this period.");
+                return;
+            }
 
             RedBlackIntervalTree **treePtr = BookTable.get(foundbookID);
             if (!treePtr || !(*treePtr)) {
-                cout << "\nInternal error: no tree for this book ID.\n";
+                printError("Internal error: no tree for this book ID.");
                 return;
             }
             RedBlackIntervalTree *tree = *treePtr;
 
             if (!tree->searchOverlap(startperiod, endperiod, true)) {
                 tree->insert(startperiod, endperiod, user->getUsername());
-                cout << "\n\nBooking successful!";
-                cout <<
-                        "\nGo to the library help desk at the start of booking period, give your details, and you will be given your desired book";
+                user->addBookBooking(startperiod, endperiod);
+                printSuccess("Booking successful!");
+                printHint("Go to the library help desk at the start of the booking period "
+                    "and you will be given your book.");
             } else {
-                cout << "\nUnable to borrow this book during the desired period";
+                printError("Unable to borrow this book during the desired period.");
             }
         }
-
-
-        // bool authormatch = false;
-        //
-        // for (int i = 0; i < author_of_inputbook.length(); i++) {
-        //     author_of_inputbook[i] = tolower(author_of_inputbook[i]);
-        // }
-        //
-        // if (author_of_inputbook == searchAuthor) {
-        //     authormatch = true;
-        // }
-        //
-        // if (bookfound == false) {
-        //     cout << "\nSorry the library does not have this book";
-        // } else {
-        //     char stillwant;
-        //     if (authormatch == false) {
-        //         cout << "\nThe author of " << titlesearch << " is " << author_of_inputbook;
-        //         cout << "\nThis is not the author you were originally looking for ";
-        //         cout << "\nDo you still want the book? (y or n): ";
-        //         cin >> stillwant;
-        //     }
-        //
-        //     if (authormatch == true || stillwant == 'y' || stillwant == 'Y') {
-        //         int startperiod;
-        //         int endperiod;
-        //         cout << "\n\nWhen would you like to borrow this book?";
-        //         cout << "\n\nStart of borrowing period: ";
-        //         cin >> startperiod;
-        //         cout << "End of borrowing period: ";
-        //         cin >> endperiod;
-        //
-        //         //Data Structure Change
-        //         if (BookTable[foundbookID]->searchOverlap(startperiod, endperiod, true) == false) {
-        //             BookTable[foundbookID]->insert(startperiod, endperiod);
-        //             cout << "\n\nBooking successful!";
-        //             cout <<
-        //                     "\nGo to the library help desk at the start of booking period, give your details, and you will be given your desired book";
-        //         } else {
-        //             cout << "\nUnable to borrow this book during the desired period";
-        //         }
-        //     }
-        // }
     }
 }
 
@@ -300,17 +265,19 @@ void BooksManager::BorrowBook(User *user) {
 //Search by author
 
 void BooksManager::addBookInteractive() {
+    printSectionHeader("Add New Book");
+
     string id, title, author;
-    cout << "\nEnter new book ID: ";
+    cout << COLOR_PROMPT << "Enter new book ID: " << COLOR_RESET;
     cin >> id;
     cin.ignore();
-    cout << "Enter title: ";
+    cout << COLOR_PROMPT << "Enter title: " << COLOR_RESET;
     getline(cin, title);
-    cout << "Enter author: ";
+    cout << COLOR_PROMPT << "Enter author: " << COLOR_RESET;
     getline(cin, author);
 
     if (ID_To_BookTable.contains(id)) {
-        cout << "A book with this ID already exists.\n";
+        printError("A book with this ID already exists.");
         return;
     }
 
@@ -320,16 +287,18 @@ void BooksManager::addBookInteractive() {
     auto *tree = new RedBlackIntervalTree();
     BookTable.putNew(id, tree);
 
-    cout << "Book added successfully.\n";
+    printSuccess("Book added successfully.");
 }
 
 void BooksManager::removeBookInteractive() {
+    printSectionHeader("Remove Book");
+
     string id;
-    cout << "\nEnter book ID to remove: ";
+    cout << COLOR_PROMPT << "Enter book ID to remove: " << COLOR_RESET;
     cin >> id;
 
     if (!ID_To_BookTable.contains(id)) {
-        cout << "No book with this ID.\n";
+        printError("No book with this ID.");
         return;
     }
 
@@ -342,7 +311,7 @@ void BooksManager::removeBookInteractive() {
     BookTable.erase(id);
     ID_To_BookTable.erase(id);
 
-    cout << "Book removed.\n";
+    printSuccess("Book removed.");
 }
 
 void BooksManager::loadBookBookingsFromFile() {
@@ -354,8 +323,9 @@ void BooksManager::saveBookBookingsToFile() const {
 }
 
 void BooksManager::showUserBookings(const std::string &username) const {
-    bool any = false;
+    cout << COLOR_MENU << "\nYour book bookings:\n\n" << COLOR_RESET;
 
+    bool any = false;
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(BookTable)
             .forEach([&](const string &bookId, RedBlackIntervalTree * &tree) {
                 if (!tree) return;
@@ -366,7 +336,7 @@ void BooksManager::showUserBookings(const std::string &username) const {
                         const string title = b ? b->getTitle() : "(unknown)";
                         const string author = b ? b->getAuthor() : "(unknown)";
 
-                        cout << "- Book ID:" << bookId
+                        cout << "  - Book ID: " << bookId
                                 << " | Title: " << title
                                 << " | Author: " << author
                                 << " | Period: [" << low << ", " << high << "]\n";
@@ -375,7 +345,5 @@ void BooksManager::showUserBookings(const std::string &username) const {
                 });
             });
 
-    if (!any) {
-        cout << "You have no book bookings.\n";
-    }
+    if (!any) printHint("You have no book bookings.");
 }

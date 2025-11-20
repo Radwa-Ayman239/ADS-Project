@@ -3,8 +3,11 @@
 //
 
 #include "../../include/managers/LibrarySystem.h"
+#include "../../include/helpers/UIHelpers.h"
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <limits>
 using namespace std;
 
 LibrarySystem::LibrarySystem() {
@@ -16,57 +19,90 @@ void LibrarySystem::loadData() {
 }
 
 void LibrarySystem::showUserMenu() {
-    std::cout << "\n================================= User Menu =================================\n";
-    std::cout << "\nMenu:\n";
-    std::cout << "1. Book a room\n";
-    std::cout << "2. Borrow a laptop\n";
-    std::cout << "3. Borrow a book\n";
-    std::cout << "4. View my bookings\n";
-    std::cout << "5. LogOut\n";
-    std::cout << "\nEnter your choice: ";
+    clearScreen();
+    printLine();
+    printCentered("AUC Library System - User Menu");
+    printLine();
+
+    cout << COLOR_MENU << "\n  Available actions:\n\n" << COLOR_RESET;
+
+    cout << "  " << COLOR_PROMPT << "1" << COLOR_RESET << "  Book a room\n";
+    cout << "  " << COLOR_PROMPT << "2" << COLOR_RESET << "  Borrow a laptop\n";
+    cout << "  " << COLOR_PROMPT << "3" << COLOR_RESET << "  Borrow a book\n";
+    cout << "  " << COLOR_PROMPT << "4" << COLOR_RESET << "  View my bookings\n";
+    cout << "  " << COLOR_PROMPT << "5" << COLOR_RESET << "  Log out\n\n";
+
+    printLine('-');
+    cout << COLOR_PROMPT << "Enter your choice" << COLOR_RESET << ": ";
 }
 
 void LibrarySystem::showAdminMenu() {
-    cout << "\n================================= Admin Menu =================================\n";
-    cout << "\nMenu:\n";
-    cout << "1. Add a new book\n";
-    cout << "2. Remove a book\n";
-    cout << "3. Add a laptop\n";
-    cout << "4. Remove a laptop\n";
-    cout << "5. Add a room\n";
-    cout << "6. Remove a room\n";
-    cout << "7. Book a room (admin)\n";
-    cout << "8. Borrow a laptop (admin)\n";
-    cout << "9. Borrow a book (admin)\n";
-    cout << "10. LogOut\n";
-    cout << "\nEnter your choice: ";
+    clearScreen();
+    printLine();
+    printCentered("AUC Library System - Admin Menu");
+    printLine();
+
+    cout << COLOR_MENU << "\n  Management actions:\n\n" << COLOR_RESET;
+
+    cout << "  " << COLOR_PROMPT << "1" << COLOR_RESET << "  Add a new book\n";
+    cout << "  " << COLOR_PROMPT << "2" << COLOR_RESET << "  Remove a book\n";
+    cout << "  " << COLOR_PROMPT << "3" << COLOR_RESET << "  Add a laptop\n";
+    cout << "  " << COLOR_PROMPT << "4" << COLOR_RESET << "  Remove a laptop\n";
+    cout << "  " << COLOR_PROMPT << "5" << COLOR_RESET << "  Add a room\n";
+    cout << "  " << COLOR_PROMPT << "6" << COLOR_RESET << "  Remove a room\n";
+    cout << "  " << COLOR_PROMPT << "7" << COLOR_RESET << "  Book a room (admin)\n";
+    cout << "  " << COLOR_PROMPT << "8" << COLOR_RESET << "  Borrow a laptop (admin)\n";
+    cout << "  " << COLOR_PROMPT << "9" << COLOR_RESET << "  Borrow a book (admin)\n";
+    cout << "  " << COLOR_PROMPT << "10" << COLOR_RESET << " Log out\n\n";
+
+    printLine('-');
+    cout << COLOR_PROMPT << "Enter your choice" << COLOR_RESET << ": ";
 }
 
 bool LibrarySystem::loginLoop() {
     string username;
     string password;
 
-    cout << "\n================================= Login Page =================================\n";
-    cout << "Enter username (or type 'quit' to quit): ";
+    clearScreen();
+    printLine();
+    printCentered("Welcome to AUC Library System");
+    printLine();
+
+    cout << COLOR_DIM << "\n(Type 'quit' as username to exit the program)\n\n" << COLOR_RESET;
+
+    cout << COLOR_PROMPT << "Username" << COLOR_RESET << ": ";
     cin >> username;
 
     if (username == "quit") {
-        cout << "Exiting program.\n";
+        cout << "\n" << COLOR_DIM << "Exiting program..." << COLOR_RESET << "\n";
         return false;
     }
 
-    cout << "Enter password: ";
+    cout << COLOR_PROMPT << "Password" << COLOR_RESET << ": ";
     cin >> password;
 
     User *loggedIn = users.login(username, password);
     if (!loggedIn) {
-        cout << "Incorrect username or password. Try again.\n";
+        cout << "\n" << COLOR_ERROR << "Incorrect username or password. Try again."
+                << COLOR_RESET << "\n";
         currentUser = nullptr;
+        // short pause effect
+        cout << COLOR_DIM << "(Press Enter to continue...)" << COLOR_RESET;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.get();
         return true;
     }
 
     currentUser = loggedIn;
-    cout << "\nLogin successful! (" << (isCurrentUserAdmin() ? "admin" : "user") << ")\n";
+    cout << "\n" << COLOR_TITLE << "Login successful! "
+            << "(" << (isCurrentUserAdmin() ? "admin" : "user") << ")"
+            << COLOR_RESET << "\n";
+
+    // brief pause so user can see the message
+    cout << COLOR_DIM << "(Press Enter to continue...)" << COLOR_RESET;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.get();
+
     return true;
 }
 
@@ -95,10 +131,12 @@ void LibrarySystem::userSession() {
 
         if (inSession) {
             char again;
-            cout << "\n\nDo you want to perform another action? (y or n): ";
+            cout << "\n\n" << COLOR_PROMPT
+                    << "Do you want to perform another action? (y or n): "
+                    << COLOR_RESET;
             cin >> again;
             if (again == 'n' || again == 'N') {
-                cout << "\nLogging out...\n";
+                cout << "\n" << COLOR_DIM << "Logging out..." << COLOR_RESET << "\n";
                 inSession = false;
             }
         }

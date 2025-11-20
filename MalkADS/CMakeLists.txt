@@ -23,5 +23,6 @@ add_executable(MalkADS
         src/structures/IntervalTreeComplete.cpp
         src/structures/queue.cpp
         src/models/user.cpp
-        include/helpers/ResourceIO.h      # optional but you probably want it too
+        include/helpers/ResourceIO.h
+        include/helpers/UIHelpers.h      # optional but you probably want it too
 )

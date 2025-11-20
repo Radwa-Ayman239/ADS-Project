@@ -1,4 +1,5 @@
 #include "../../include/managers/LaptopsManager.h"
+#include "../../include/helpers/UIHelpers.h"
 #include <fstream>
 #include <iostream>
 
@@ -25,75 +26,81 @@ void LaptopsManager::loadLaptopsFromFile() {
 
 
 bool LaptopsManager::BorrowLaptop(User *user) {
+    printSectionHeader("Borrow a Laptop");
+
     int startperiod, endperiod;
-    cout << "\n\nEnter your desired borrowing period";
-    cout << "\nStart of borrowing period: ";
+    cout << COLOR_PROMPT << "Start of borrowing period: " << COLOR_RESET;
     cin >> startperiod;
-    cout << "End of borrowing period: ";
+    cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
     cin >> endperiod;
 
     if (!user->canBookLaptop(startperiod, endperiod)) {
-        cout << "\nYou already have a laptop booking during this period.\n";
+        printError("You already have a laptop booking during this period.");
         return false;
     }
 
-    // Iterate over all laptops in the map
-    //Data Structure Change
     bool booked = false;
+    cout << COLOR_MENU << "\nSearching for an available laptop...\n\n" << COLOR_RESET;
+
     laptopTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
         if (booked) return;
-
         if (!tree->searchOverlap(startperiod, endperiod, false)) {
             tree->insert(startperiod, endperiod, user->getUsername());
             user->addLaptopBooking(startperiod, endperiod);
-            cout << "Laptop " << id << " successfully booked from " << startperiod << " to " << endperiod << "!\n";
+            printSuccess("Laptop " + id + " successfully booked.");
+            cout << "  Period: [" << startperiod << ", " << endperiod << "]\n";
             booked = true;
         }
     });
 
-    // If we reach here, all laptops had conflicts
     if (!booked) {
-        cout << "No laptops available for the requested period.\n";
+        printError("No laptops available for the requested period.");
+    } else {
+        printHint("Collect your laptop from the help desk at the start of the booking period.");
     }
     return booked;
 }
 
 void LaptopsManager::addLaptopInteractive() {
+    printSectionHeader("Add Laptop");
+
     string id;
-    cout << "\nEnter new laptop ID: ";
+    cout << COLOR_PROMPT << "Enter new laptop ID: " << COLOR_RESET;
     cin >> id;
 
     if (laptopTable.contains(id)) {
-        cout << "A laptop with this ID already exists.\n";
+        printError("A laptop with this ID already exists.");
         return;
     }
 
     auto *tree = new RedBlackIntervalTree();
     if (!laptopTable.putNew(id, tree)) {
         delete tree;
-        cout << "Failed to add laptop.\n";
+        printError("Failed to add laptop.");
         return;
     }
 
-    cout << "Laptop " << id << " added successfully.\n";
+    printSuccess("Laptop " + id + " added successfully.");
 }
 
 void LaptopsManager::removeLaptopInteractive() {
+    printSectionHeader("Remove Laptop");
+
     string id;
-    cout << "\nEnter laptop ID to remove: ";
+    cout << COLOR_PROMPT << "Enter laptop ID to remove: " << COLOR_RESET;
     cin >> id;
 
     RedBlackIntervalTree **treePtr = laptopTable.get(id);
     if (!treePtr || !(*treePtr)) {
-        cout << "No laptop with this ID.\n";
+        printError("No laptop with this ID.");
         return;
     }
 
     delete *treePtr;
     *treePtr = nullptr;
-
     laptopTable.erase(id);
-    cout << "Laptop " << id << " removed.\n";
+
+    printSuccess("Laptop " + id + " removed.");
 }
 
 void LaptopsManager::saveLaptopsToFile() const {
@@ -110,21 +117,20 @@ void LaptopsManager::saveLaptopBookingsToFile() const {
 }
 
 void LaptopsManager::showUserBookings(const std::string &username) const {
-    bool any = false;
+    cout << COLOR_MENU << "\nYour laptop bookings:\n\n" << COLOR_RESET;
 
+    bool any = false;
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(laptopTable).forEach(
         [&](const string &id, RedBlackIntervalTree * &tree) {
             if (!tree) return;
-
             tree->forEachInterval([&](const int low, const int high, const string &user) {
                 if (user == username) {
-                    cout << "- Laptop " << id
+                    cout << "  - Laptop " << id
                             << " | Period: [" << low << ", " << high << "]\n";
                     any = true;
                 }
             });
         });
 
-    if (!any)
-        cout << "You have no laptop bookings.\n";
+    if (!any) printHint("You have no laptop bookings.");
 }

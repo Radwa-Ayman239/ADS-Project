@@ -1,4 +1,5 @@
 #include "../../include/managers/RoomsManager.h"
+#include "../../include/helpers/UIHelpers.h"
 #include <fstream>
 #include <iostream>
 
@@ -25,55 +26,49 @@ void RoomsManager::loadRoomsFromFile() {
 
 
 bool RoomsManager::bookRoom(User *user) {
-    //1.Displaying libaray rooms and having user pick which room they want to book:
+    printSectionHeader("Book a Study Room"); // NEW
 
-    //Data Structure Change
+    cout << COLOR_MENU << "\nAvailable rooms:\n\n" << COLOR_RESET;
+
     string roomchoice;
-
-    cout << "Library Study Rooms: \n";
-
     roomTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
-        cout << "- " << id << "\n";
+        cout << "  - " << id << "\n";
     });
 
-    cout << "\nEnter Room ID: ";
+    cout << "\n" << COLOR_PROMPT << "Enter Room ID" << COLOR_RESET << ": ";
     cin >> roomchoice;
     cout << "\n";
 
-
-    //2.Dislay the free intevals for the chosen room
-    //Data Structure Change
     RedBlackIntervalTree **treePtr = roomTable.get(roomchoice);
     if (!treePtr || !(*treePtr)) {
-        cout << "No such room.\n";
+        printError("No such room.");
         return false;
     }
 
     RedBlackIntervalTree *tree = *treePtr;
 
-    //3.Allow use to enter interval
     int startperiod;
     int endperiod;
-    cout << "\n\nNow enter your desired booking period";
-    cout << "\nStart of booking period: ";
+    cout << COLOR_PROMPT << "\nStart of booking period: " << COLOR_RESET;
     cin >> startperiod;
-    cout << "End of booking period: ";
+    cout << COLOR_PROMPT << "End of booking period: " << COLOR_RESET;
     cin >> endperiod;
-    //NEED TO CHANGE THIS TO ENTERING ACTUAL TIMEEEEE
 
-    //4.If no conflict - add to tree
-    //Data Structure Change
     if (!user->canBookRoom(startperiod, endperiod)) {
-        cout << "\nYou already have another room booked during this period.\n";
+        printError("You already have another room booked during this period.");
         return false;
     }
 
     if (tree->searchOverlap(startperiod, endperiod, true)) {
+        printError("Unable to book room - conflict in scheduling.");
         return false;
     }
 
     tree->insert(startperiod, endperiod, user->getUsername());
     user->addRoomBooking(startperiod, endperiod);
+
+    printSuccess("Room booked successfully!");
+    printHint("Go to the library help desk at the start of booking period with your ID.");
     return true;
 }
 
@@ -82,45 +77,49 @@ void RoomsManager::saveRoomsToFile() const {
 }
 
 void RoomsManager::addRoomInteractive() {
+    printSectionHeader("Add New Room");
+
     string id;
-    cout << "\nEnter new room ID: ";
+    cout << COLOR_PROMPT << "Enter new room ID: " << COLOR_RESET;
     cin >> id;
 
     if (roomTable.contains(id)) {
-        cout << "A room with this ID already exists.\n";
+        printError("A room with this ID already exists.");
         return;
     }
 
     auto *tree = new RedBlackIntervalTree();
     if (!roomTable.putNew(id, tree)) {
         delete tree;
-        cout << "Failed to add room.\n";
+        printError("Failed to add room.");
         return;
     }
 
-    cout << "Room " << id << " added successfully.\n";
+    printSuccess("Room " + id + " added successfully.");
 }
 
 void RoomsManager::removeRoomInteractive() {
+    printSectionHeader("Remove Room");
+
     string id;
-    cout << "\nEnter room ID to remove: ";
+    cout << COLOR_PROMPT << "Enter room ID to remove: " << COLOR_RESET;
     cin >> id;
 
     RedBlackIntervalTree **treePtr = roomTable.get(id);
     if (!treePtr || !(*treePtr)) {
-        cout << "No room with this ID.\n";
+        printError("No room with this ID.");
         return;
     }
 
     delete *treePtr;
     *treePtr = nullptr;
-
     roomTable.erase(id);
-    cout << "Room " << id << " removed.\n";
+
+    printSuccess("Room " + id + " removed.");
 }
 
 void RoomsManager::loadRoomBookingsFromFile() const {
-    loadBookingsFromFile("data/room_bookings.txt", const_cast<HashMap<string, RedBlackIntervalTree*>&>(roomTable));
+    loadBookingsFromFile("data/room_bookings.txt", const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable));
 }
 
 void RoomsManager::saveRoomBookingsToFile() const {
@@ -128,20 +127,20 @@ void RoomsManager::saveRoomBookingsToFile() const {
 }
 
 void RoomsManager::showUserBookings(const std::string &username) const {
-    bool any = false;
+    cout << COLOR_MENU << "\nYour room bookings:\n\n" << COLOR_RESET;
 
+    bool any = false;
     const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable).forEach(
         [&](const string &roomId, RedBlackIntervalTree * &tree) {
             if (!tree) return;
-
             tree->forEachInterval([&](const int low, const int high, const string &user) {
                 if (user == username) {
-                    cout << "- Room " << roomId
+                    cout << "  - Room " << roomId
                             << " | Period: [" << low << ", " << high << "]\n";
                     any = true;
                 }
             });
         });
 
-    if (!any) cout << "You have no room bookings.\n";
+    if (!any) printHint("You have no room bookings.");
 }
