@@ -125,7 +125,7 @@ void LibrarySystem::handleUserChoice(const int choice) {
         }
     } else if (choice == 3) {
         cout << "\n================================= Borrowing a Book =================================\n";
-        books.BorrowBook(currentUser->getUsername());
+        books.BorrowBook(currentUser);
     } else if (choice == 4) {
         cout << "\n================================= Your Bookings =================================\n";
         const string uname = currentUser->getUsername();
@@ -178,7 +178,7 @@ void LibrarySystem::handleAdminChoice(int choice) {
         }
     } else if (choice == 9) {
         cout << "\n================================= Borrowing a Book (Admin) =================================\n";
-        books.BorrowBook(currentUser->getUsername());
+        books.BorrowBook(currentUser);
     } else if (choice == 10) {
         cout << "Logging out...\n";
     } else {

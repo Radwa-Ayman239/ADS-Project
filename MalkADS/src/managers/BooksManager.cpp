@@ -77,7 +77,7 @@ void BooksManager::saveBooksToFile() {
 }
 
 
-void BooksManager::BorrowBook(const std::string &username) {
+void BooksManager::BorrowBook(User *user) {
     int searchmethod;
     cout << "\nYou can search for a book either \n\n1. By Title \nor \n2. By Author";
     cout << "\n\nHow would you like to search?: ";
@@ -124,6 +124,11 @@ void BooksManager::BorrowBook(const std::string &username) {
         cout << "End of borrowing period: ";
         cin >> endperiod;
 
+        if (!user->canBookBook(startperiod, endperiod)) {
+            cout << "\nYou already have 3 books borrowed during this period.\n";
+            return;
+        }
+
 
         //Data Structure Change
         RedBlackIntervalTree **treePtr = BookTable.get(foundbookID);
@@ -134,7 +139,8 @@ void BooksManager::BorrowBook(const std::string &username) {
 
         RedBlackIntervalTree *tree = *treePtr;
         if (!tree->searchOverlap(startperiod, endperiod, true)) {
-            tree->insert(startperiod, endperiod, username);
+            tree->insert(startperiod, endperiod, user->getUsername());
+            user->addBookBooking(startperiod, endperiod);
             cout << "\n\nBooking successful!";
             cout <<
                     "\nGo to the library desk at the start of booking period, give your details, and you will be given your desired book";
@@ -229,7 +235,7 @@ void BooksManager::BorrowBook(const std::string &username) {
             RedBlackIntervalTree *tree = *treePtr;
 
             if (!tree->searchOverlap(startperiod, endperiod, true)) {
-                tree->insert(startperiod, endperiod, username);
+                tree->insert(startperiod, endperiod, user->getUsername());
                 cout << "\n\nBooking successful!";
                 cout <<
                         "\nGo to the library help desk at the start of booking period, give your details, and you will be given your desired book";

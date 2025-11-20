@@ -3,6 +3,7 @@
 
 #include <string>
 #include "../models/book.h"
+#include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
 using namespace std;
@@ -25,7 +26,7 @@ public:
 
     ~BooksManager();
 
-    void BorrowBook(const std::string& username);
+    void BorrowBook(User* user);
 
     // admin operations
     void addBookInteractive();

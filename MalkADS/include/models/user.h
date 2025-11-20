@@ -13,6 +13,7 @@ private:
 
     RedBlackIntervalTree roomBookings;
     RedBlackIntervalTree laptopBookings;
+    RedBlackIntervalTree bookBookings;
 
 public:
     User();
@@ -39,6 +40,20 @@ public:
 
     void addLaptopBooking(const int start, const int end) {
         laptopBookings.insert(start, end, username);
+    }
+
+    bool canBookBook(const int start, const int end) {
+        int count = 0;
+        bookBookings.forEachInterval([&](const int low, const int high, const std::string &who) {
+            if (!(high < start || end < low)) {
+                ++count;
+            }
+        });
+        return count < 3;
+    }
+
+    void addBookBooking(const int start, const int end) {
+        bookBookings.insert(start, end, username);
     }
 };
 
