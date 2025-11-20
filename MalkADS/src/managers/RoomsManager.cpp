@@ -20,20 +20,7 @@ RoomsManager::~RoomsManager() {
 
 
 void RoomsManager::loadRoomsFromFile() {
-    ifstream file("data\\rooms.txt");
-    if (!file) {
-        cout << "Error opening rooms.txt\n";
-        return;
-    }
-
-    string roomID;
-    while (getline(file, roomID)) {
-        auto *tree = new RedBlackIntervalTree();
-        //Data Structure Change
-        roomTable.putNew(roomID, tree);
-    }
-
-    file.close();
+    loadResourceIDsFromFile("data/rooms.txt", roomTable);
 }
 
 
@@ -91,18 +78,7 @@ bool RoomsManager::bookRoom(User *user) {
 }
 
 void RoomsManager::saveRoomsToFile() const {
-    ofstream file("data/rooms.txt", ios::out | ios::trunc);
-    if (!file) {
-        cout << "Error opening rooms.txt for writing\n";
-        return;
-    }
-
-    const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable).forEach(
-        [&](const string &id, RedBlackIntervalTree * &tree) {
-            file << id << "\n";
-        });
-
-    file.close();
+    saveResourceIDsToFile("data/rooms.txt", roomTable);
 }
 
 void RoomsManager::addRoomInteractive() {
@@ -144,54 +120,11 @@ void RoomsManager::removeRoomInteractive() {
 }
 
 void RoomsManager::loadRoomBookingsFromFile() const {
-    ifstream file("data/room_bookings.txt");
-    if (!file) return;
-
-    string line;
-    while (getline(file, line)) {
-        if (line.empty()) continue;
-
-        const size_t c1 = line.find(',');
-        if (c1 == string::npos) continue;;
-        const size_t c2 = line.find(',', c1 + 1);
-        if (c2 == string::npos) continue;
-        const size_t c3 = line.find(',', c2 + 1);
-        if (c3 == string::npos) continue;
-
-        string roomID = line.substr(0, c1);
-        string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
-        string endStr = line.substr(c2 + 1);
-        string user = line.substr(c3 + 1);
-
-        int start = stoi(startStr);
-        int end = stoi(endStr);
-
-        RedBlackIntervalTree **treePtr = roomTable.get(roomID);
-        if (!treePtr || !(*treePtr)) continue;;
-
-        RedBlackIntervalTree *tree = *treePtr;
-        tree->insert(start, end, user);
-    }
-
-    file.close();
+    loadBookingsFromFile("data/room_bookings.txt", const_cast<HashMap<string, RedBlackIntervalTree*>&>(roomTable));
 }
 
-void RoomsManager::saveRoomBookingsToFile() {
-    ofstream file("data/room_bookings.txt", ios::out | ios::trunc);
-    if (!file) {
-        cout << "Error opening room_booking.txt for writing\n";
-        return;
-    }
-
-    const_cast<HashMap<string, RedBlackIntervalTree *> &>(roomTable).forEach(
-        [&](const string &id, RedBlackIntervalTree * &tree) {
-            if (!tree) return;
-            tree->forEachInterval([&](const int low, const int high, const std::string &user) {
-                file << id << "," << low << "," << high << "," << user << "\n";
-            });
-        });
-
-    file.close();
+void RoomsManager::saveRoomBookingsToFile() const {
+    saveBookingsToFile("data/room_bookings.txt", roomTable);
 }
 
 void RoomsManager::showUserBookings(const std::string &username) const {

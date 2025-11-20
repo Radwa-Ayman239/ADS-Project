@@ -1,0 +1,107 @@
+//
+// Created by hamdy on 11/20/2025.
+//
+
+#ifndef MALKADS_RESOURCEIO_H
+#define MALKADS_RESOURCEIO_H
+
+#include <fstream>
+#include <iostream>
+#include <string>
+#include "../structures/hash_map.h"
+#include "../structures//IntervalTreeComplete.h"
+using namespace std;
+
+//
+// Generic helpers for resources that are stored as:
+//   HashMap<string, RedBlackIntervalTree*>
+// and booking files that use lines like:
+//   id,start,end,username
+//
+
+// Load plain IDs (rooms.txt, laptops.txt, etc.)
+
+template<typename MapType>
+void loadResourceIDsFromFile(const string& path, MapType& table) {
+    ifstream file(path);
+    if (!file) {
+        cout << "Error opeing " << path << "\n";
+        return;
+    }
+
+    string id;
+    while (getline(file, id)) {
+        if (id.empty()) continue;
+        auto* tree = new RedBlackIntervalTree();
+        table.putNew(id, tree);
+    }
+}
+
+template <typename MapType>
+void saveResourceIDsToFile(const string& path, const MapType& table) {
+    ofstream file(path, ios::out | ios::trunc);
+    if (!file) {
+        std::cout << "Error opening " << path << " for writing\n";
+        return;
+    }
+
+    const_cast<MapType&>(table).forEach(
+        [&](const string& id, RedBlackIntervalTree*& tree) {
+            file << id << "\n";
+        }
+    );
+}
+
+template <typename MapType>
+void loadBookingsFromFile(const string& path, MapType& table) {
+    std::ifstream file(path);
+    if (!file) return;
+
+    string line;
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        size_t c1 = line.find(',');
+        if (c1 == string::npos) continue;
+        size_t c2 = line.find(',', c1 + 1);
+        if (c2 == string::npos) continue;
+        size_t c3 = line.find(',', c2 + 1);
+        if (c3 == string::npos) continue;
+
+        string id       = line.substr(0, c1);
+        string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
+        string endStr   = line.substr(c2 + 1, c3 - (c2 + 1));
+        string user     = line.substr(c3 + 1);
+
+        int start = std::stoi(startStr);
+        int end   = std::stoi(endStr);
+
+        RedBlackIntervalTree** treePtr = table.get(id);
+        if (!treePtr || !(*treePtr)) continue;
+
+        RedBlackIntervalTree* tree = *treePtr;
+        tree->insert(start, end, user);
+    }
+}
+
+template <typename MapType>
+void saveBookingsToFile(const string& path, const MapType& table) {
+    ofstream file(path, ios::out | ios::trunc);
+    if (!file) {
+        std::cout << "Error opening " << path << " for writing\n";
+        return;
+    }
+
+    const_cast<MapType&>(table).forEach(
+        [&](const string& id, RedBlackIntervalTree*& tree) {
+            if (!tree) return;
+            tree->forEachInterval(
+                [&](const int low, const int high, const string& username) {
+                    file << id << "," << low << "," << high << "," << username << "\n";
+                }
+            );
+        }
+    );
+}
+
+#endif //MALKADS_RESOURCEIO_H

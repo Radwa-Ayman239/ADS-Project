@@ -5,6 +5,7 @@
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
 #include "../models/user.h"
+#include "../helpers/ResourceIO.h"
 using namespace std;
 
 class RoomsManager {
@@ -16,7 +17,7 @@ private:
     void saveRoomsToFile() const;
 
     void loadRoomBookingsFromFile() const;
-    void saveRoomBookingsToFile();
+    void saveRoomBookingsToFile() const;
 public:
     RoomsManager();
 

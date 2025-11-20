@@ -6,6 +6,7 @@
 #include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
+#include "../helpers/ResourceIO.h"
 using namespace std;
 
 class BooksManager {

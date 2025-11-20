@@ -346,54 +346,11 @@ void BooksManager::removeBookInteractive() {
 }
 
 void BooksManager::loadBookBookingsFromFile() {
-    ifstream file("data/book_bookings.txt");
-    if (!file) return;
-
-    string line;
-    while (getline(file, line)) {
-        if (line.empty()) continue;
-
-        size_t c1 = line.find(',');
-        if (c1 == string::npos) continue;
-        size_t c2 = line.find(',', c1 + 1);
-        if (c2 == string::npos) continue;
-        size_t c3 = line.find(',', c2 + 1);
-        if (c3 == string::npos) continue;
-
-        string bookId = line.substr(0, c1);
-        string startStr = line.substr(c1 + 1, c2 - (c1 + 1));
-        string endStr = line.substr(c2 + 1, c3 - (c2 + 1));
-        string user = line.substr(c3 + 1);
-
-        int start = stoi(startStr);
-        int end = stoi(endStr);
-
-        RedBlackIntervalTree **treePtr = BookTable.get(bookId);
-        if (!treePtr || !(*treePtr)) continue;
-
-        RedBlackIntervalTree *tree = *treePtr;
-        tree->insert(start, end, user);
-    }
-
-    file.close();
+    loadBookingsFromFile("data/book_bookings.txt", BookTable);
 }
 
 void BooksManager::saveBookBookingsToFile() const {
-    ofstream file("data/book_bookings.txt", ios::out | ios::trunc);
-    if (!file) {
-        cout << "Error opening book_bookings.txt for writing\n";
-        return;
-    }
-
-    const_cast<HashMap<string, RedBlackIntervalTree *> &>(BookTable).forEach(
-        [&](const string &id, RedBlackIntervalTree * &tree) {
-            if (!tree) return;
-            tree->forEachInterval([&](const int low, const int high, const std::string &username) {
-                file << id << "," << low << "," << high << "," << username << "\n";
-            });
-        });
-
-    file.close();
+    saveBookingsToFile("data/book_bookings.txt", BookTable);
 }
 
 void BooksManager::showUserBookings(const std::string &username) const {
