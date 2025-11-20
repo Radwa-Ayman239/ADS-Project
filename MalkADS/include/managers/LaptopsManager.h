@@ -2,6 +2,8 @@
 #define LAPTOPS_H
 
 #include <string>
+
+#include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
 using namespace std;
@@ -22,7 +24,7 @@ public:
 
     ~LaptopsManager(); // delete all interval trees
 
-    bool BorrowLaptop(const std::string& username);
+    bool BorrowLaptop(User* user);
 
     // admin operations
     void addLaptopInteractive();

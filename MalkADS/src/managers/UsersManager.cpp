@@ -41,7 +41,7 @@ void UsersManager::loadUsersFromFile() {
 }
 
 //Check login using unordered_map
-const User *UsersManager::login(const string &uname, const string &pass) {
+User *UsersManager::login(const string &uname, const string &pass) {
     //Checks if username actually exists
 
     //Data Structure Change

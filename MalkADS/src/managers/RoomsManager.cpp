@@ -37,7 +37,7 @@ void RoomsManager::loadRoomsFromFile() {
 }
 
 
-bool RoomsManager::bookRoom(const std::string &username) {
+bool RoomsManager::bookRoom(User *user) {
     //1.Displaying libaray rooms and having user pick which room they want to book:
 
     //Data Structure Change
@@ -76,12 +76,18 @@ bool RoomsManager::bookRoom(const std::string &username) {
 
     //4.If no conflict - add to tree
     //Data Structure Change
+    if (!user->canBookRoom(startperiod, endperiod)) {
+        cout << "\nYou already have another room booked during this period.\n";
+        return false;
+    }
+
     if (tree->searchOverlap(startperiod, endperiod, true)) {
         return false;
-    } else {
-        tree->insert(startperiod, endperiod, username);
-        return true;
     }
+
+    tree->insert(startperiod, endperiod, user->getUsername());
+    user->addRoomBooking(startperiod, endperiod);
+    return true;
 }
 
 void RoomsManager::saveRoomsToFile() const {

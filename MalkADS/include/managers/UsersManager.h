@@ -16,7 +16,7 @@ public:
 
     void loadUsersFromFile(); //Reads user.txt, creates the user objects, adds them to the hashmap
 
-    const User *login(const string &username, const string &password);
+    User *login(const string &username, const string &password);
 
     //Checks entered username and password against hashmap
 };

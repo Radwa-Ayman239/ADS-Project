@@ -20,7 +20,7 @@ private:
     BooksManager books;
 
     // track currently logged-in user
-    const User *currentUser = nullptr;
+    User *currentUser = nullptr;
 
     void loadData();
 

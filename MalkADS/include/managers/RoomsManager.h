@@ -4,6 +4,7 @@
 #include <string>
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
+#include "../models/user.h"
 using namespace std;
 
 class RoomsManager {
@@ -21,7 +22,7 @@ public:
 
     ~RoomsManager();
 
-    bool bookRoom(const std::string& username);
+    bool bookRoom(User* user);
 
     // admin operations
     void addRoomInteractive();

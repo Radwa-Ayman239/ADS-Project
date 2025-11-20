@@ -58,9 +58,10 @@ bool LibrarySystem::loginLoop() {
     cout << "Enter password: ";
     cin >> password;
 
-    const User *loggedIn = users.login(username, password);
+    User *loggedIn = users.login(username, password);
     if (!loggedIn) {
         cout << "Incorrect username or password. Try again.\n";
+        currentUser = nullptr;
         return true;
     }
 
@@ -109,12 +110,12 @@ void LibrarySystem::userSession() {
 void LibrarySystem::handleUserChoice(const int choice) {
     if (choice == 1) {
         cout << "\n================================= Booking a Room =================================\n";
-        const bool ok = rooms.bookRoom(currentUser->getUsername());
+        const bool ok = rooms.bookRoom(currentUser);
         if (ok) cout << "\nRoom booked successfully!\n";
         else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 2) {
         cout << "\n================================= Borrowing a Laptop =================================\n";
-        const bool ok = laptops.BorrowLaptop(currentUser->getUsername());
+        const bool ok = laptops.BorrowLaptop(currentUser);
         if (ok) {
             cout << "\nFree Laptop available!\n";
             cout <<
@@ -134,8 +135,7 @@ void LibrarySystem::handleUserChoice(const int choice) {
         laptops.showUserBookings(uname);
         cout << "\nBooks:\n";
         books.showUserBookings(uname);
-    }
-    else if (choice == 5) {
+    } else if (choice == 5) {
         cout << "Logging out...\n";
     } else {
         cout << "Invalid choice. Try again.\n";
@@ -163,12 +163,12 @@ void LibrarySystem::handleAdminChoice(int choice) {
         rooms.removeRoomInteractive();
     } else if (choice == 7) {
         cout << "\n================================= Booking a Room (Admin) =================================\n";
-        bool ok = rooms.bookRoom(currentUser->getUsername());
+        bool ok = rooms.bookRoom(currentUser);
         if (ok) cout << "\nRoom booked successfully!\n";
         else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 8) {
         cout << "\n================================= Borrowing a Laptop (Admin) =================================\n";
-        bool ok = laptops.BorrowLaptop(currentUser->getUsername());
+        bool ok = laptops.BorrowLaptop(currentUser);
         if (ok) {
             cout << "\nFree Laptop available!\n";
             cout <<
@@ -196,6 +196,8 @@ void LibrarySystem::run() {
             running = false;
             break;
         }
+
+        if (!currentUser) continue;
 
         userSession();
     }

@@ -35,13 +35,18 @@ void LaptopsManager::loadLaptopsFromFile() {
 }
 
 
-bool LaptopsManager::BorrowLaptop(const std::string &username) {
+bool LaptopsManager::BorrowLaptop(User* user) {
     int startperiod, endperiod;
     cout << "\n\nEnter your desired borrowing period";
     cout << "\nStart of borrowing period: ";
     cin >> startperiod;
     cout << "End of borrowing period: ";
     cin >> endperiod;
+
+    if (!user->canBookLaptop(startperiod, endperiod)) {
+        cout << "\nYou already have a laptop booking during this period.\n";
+        return false;
+    }
 
     // Iterate over all laptops in the map
     //Data Structure Change
@@ -50,7 +55,8 @@ bool LaptopsManager::BorrowLaptop(const std::string &username) {
         if (booked) return;
 
         if (!tree->searchOverlap(startperiod, endperiod, false)) {
-            tree->insert(startperiod, endperiod, username);
+            tree->insert(startperiod, endperiod, user->getUsername());
+            user->addLaptopBooking(startperiod, endperiod);
             cout << "Laptop " << id << " successfully booked from " << startperiod << " to " << endperiod << "!\n";
             booked = true;
         }
