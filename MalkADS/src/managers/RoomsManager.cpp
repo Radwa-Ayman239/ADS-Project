@@ -28,12 +28,10 @@ void RoomsManager::loadRoomsFromFile() {
 bool RoomsManager::bookRoom(User *user) {
     printSectionHeader("Book a Study Room"); // NEW
 
-    cout << COLOR_MENU << "\nAvailable rooms:\n\n" << COLOR_RESET;
+    cout << COLOR_MENU << "\nAvailable rooms (with Available Time slots):\n\n" << COLOR_RESET;
+    showRoomsWithAvailableTimes(0, 23);
 
     string roomchoice;
-    roomTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
-        cout << "  - " << id << "\n";
-    });
 
     cout << "\n" << COLOR_PROMPT << "Enter Room ID" << COLOR_RESET << ": ";
     cin >> roomchoice;
@@ -143,4 +141,81 @@ void RoomsManager::showUserBookings(const std::string &username) const {
         });
 
     if (!any) printHint("You have no room bookings.");
+}
+
+int RoomsManager::collectBookedIntervals(RedBlackIntervalTree *tree, SimpleInterval *arr, int maxCount) {
+    int count = 0;
+    tree->forEachInterval([&](int low, int high, const string &) {
+        if (count < maxCount) {
+            arr[count].start = low;
+            arr[count].end = high;
+            count++;
+        }
+    });
+    return count;
+}
+
+void RoomsManager::sortIntervals(SimpleInterval *arr, int n) {
+    for (int i = 1; i < n; i++) {
+        const SimpleInterval key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j].start > key.start) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int RoomsManager::mergeIntervals(SimpleInterval *arr, int n) {
+    if (n == 0) return 0;
+    int idx = 0;
+    for (int i = 1; i < n; i++) {
+        if (arr[idx].end >= arr[i].start) {
+            if (arr[idx].end < arr[i].end) arr[idx].end = arr[i].end;
+        } else {
+            idx++;
+            arr[idx] = arr[i];
+        }
+    }
+
+    return (idx + 1);
+}
+
+void RoomsManager::showRoomsWithAvailableTimes(int openStart, int openEnd) {
+    roomTable.forEach([&](const string &roomId, RedBlackIntervalTree * &tree) {
+        SimpleInterval intervals[MAX_INTERVALS];
+
+        int count = collectBookedIntervals(tree, intervals, MAX_INTERVALS);
+        if (count > 1) sortIntervals(intervals, count);
+        count = mergeIntervals(intervals, count);
+
+        int last = openStart;
+        cout << COLOR_PROMPT << "Room " << roomId << COLOR_RESET << ": ";
+        bool any = false;
+        for (int i = 0; i < count; ++i) {
+            if (last < intervals[i].start) {
+                const int intervalStart = last;
+                const int intervalEnd = intervals[i].start - 1;
+                if (intervalStart == intervalEnd) {
+                    cout << "[" << intervalStart << ", " << (intervalEnd + 1) << "]";
+                } else {
+                    cout << "[" << intervalStart << ", " << intervalEnd << "] ";
+                }
+                any = true;
+            }
+            if (last <= intervals[i].end)
+                last = intervals[i].end + 1;
+        }
+        if (last <= openEnd) {
+            if (last == openEnd) {
+                cout << "[" << last << "] ";
+            } else {
+                cout << "[" << last << ", " << openEnd << "] ";
+            }
+            any = true;
+        }
+        if (!any) cout << COLOR_ERROR << "(No availability)" << COLOR_RESET;
+        cout << "\n";
+    });
 }

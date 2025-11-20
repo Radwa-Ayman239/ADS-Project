@@ -147,12 +147,10 @@ void LibrarySystem::userSession() {
 
 void LibrarySystem::handleUserChoice(const int choice) {
     if (choice == 1) {
-        cout << "\n================================= Booking a Room =================================\n";
         const bool ok = rooms.bookRoom(currentUser);
         if (ok) cout << "\nRoom booked successfully!\n";
         else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 2) {
-        cout << "\n================================= Borrowing a Laptop =================================\n";
         const bool ok = laptops.BorrowLaptop(currentUser);
         if (ok) {
             cout << "\nFree Laptop available!\n";
@@ -162,23 +160,32 @@ void LibrarySystem::handleUserChoice(const int choice) {
             cout << "Unable to borrow laptop at this time\n";
         }
     } else if (choice == 3) {
-        cout << "\n================================= Borrowing a Book =================================\n";
         books.BorrowBook(currentUser);
     } else if (choice == 4) {
-        cout << "\n================================= Your Bookings =================================\n";
+        // ENHANCED "Your Bookings" SCREEN
+        clearScreen();
+        printLine();
+        printCentered("Your Bookings", COLOR_TITLE);
+        printLine();
+
         const string uname = currentUser->getUsername();
-        cout << "\nRooms:\n";
+
+        // Style each section header with color (no extra newlines)
         rooms.showUserBookings(uname);
-        cout << "\nLaptops:\n";
+
         laptops.showUserBookings(uname);
-        cout << "\nBooks:\n";
+
         books.showUserBookings(uname);
+
+        printLine('-');
+        printHint("For details about periods, contact the help desk.");
     } else if (choice == 5) {
         cout << "Logging out...\n";
     } else {
         cout << "Invalid choice. Try again.\n";
     }
 }
+
 
 void LibrarySystem::handleAdminChoice(int choice) {
     if (choice == 1) {
