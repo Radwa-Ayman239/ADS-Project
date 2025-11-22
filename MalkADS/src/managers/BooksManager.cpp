@@ -354,6 +354,6 @@ void BooksManager::syncUserBookings(UsersManager &usersManager) {
         tree->forEachInterval([&](const int low, const int high, const string &username) {
             User *u = usersManager.getUser(username);
             if (u) u->addBookBooking(low, high);
-        })
-    })
+        });
+    });
 }

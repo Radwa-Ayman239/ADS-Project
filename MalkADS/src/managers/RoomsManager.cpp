@@ -159,7 +159,7 @@ void RoomsManager::sortIntervals(SimpleInterval *arr, int n) {
     for (int i = 1; i < n; i++) {
         const SimpleInterval key = arr[i];
         int j = i - 1;
-        while (j >= 0 && arr[j].start > key.start) {
+        while (j >= 0 and arr[j].start > key.start) {
             arr[j + 1] = arr[j];
             j--;
         }
