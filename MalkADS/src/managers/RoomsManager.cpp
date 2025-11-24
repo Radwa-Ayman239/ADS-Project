@@ -70,6 +70,34 @@ bool RoomsManager::bookRoom(User *user) {
     return true;
 }
 
+// Non-interactive version for Python API
+bool RoomsManager::bookRoomDirect(User *user, const string& roomId, int startTime, int endTime) {
+    if (!user) return false;
+    
+    RedBlackIntervalTree **treePtr = roomTable.get(roomId);
+    if (!treePtr || !(*treePtr)) {
+        return false; // Room doesn't exist
+    }
+    
+    RedBlackIntervalTree *tree = *treePtr;
+    
+    // Check if user already has a conflicting booking
+    if (!user->canBookRoom(startTime, endTime)) {
+        return false; // User conflict
+    }
+    
+    // Check if room is available
+    if (tree->searchOverlap(startTime, endTime, false)) {
+        return false; // Room conflict
+    }
+    
+    // Book the room
+    tree->insert(startTime, endTime, user->getUsername());
+    user->addRoomBooking(startTime, endTime);
+    
+    return true;
+}
+
 void RoomsManager::saveRoomsToFile() const {
     saveResourceIDsToFile("data/rooms.txt", roomTable);
 }
@@ -96,6 +124,21 @@ void RoomsManager::addRoomInteractive() {
     printSuccess("Room " + id + " added successfully.");
 }
 
+// Non-interactive version for Python API
+bool RoomsManager::addRoomDirect(const string& roomId) {
+    if (roomTable.contains(roomId)) {
+        return false; // Room already exists
+    }
+    
+    auto *tree = new RedBlackIntervalTree();
+    if (!roomTable.putNew(roomId, tree)) {
+        delete tree;
+        return false;
+    }
+    
+    return true;
+}
+
 void RoomsManager::removeRoomInteractive() {
     printSectionHeader("Remove Room");
 
@@ -114,6 +157,20 @@ void RoomsManager::removeRoomInteractive() {
     roomTable.erase(id);
 
     printSuccess("Room " + id + " removed.");
+}
+
+// Non-interactive version for Python API
+bool RoomsManager::removeRoomDirect(const string& roomId) {
+    RedBlackIntervalTree **treePtr = roomTable.get(roomId);
+    if (!treePtr || !(*treePtr)) {
+        return false; // Room doesn't exist
+    }
+    
+    delete *treePtr;
+    *treePtr = nullptr;
+    roomTable.erase(roomId);
+    
+    return true;
 }
 
 void RoomsManager::loadRoomBookingsFromFile() const {
@@ -159,7 +216,7 @@ void RoomsManager::sortIntervals(SimpleInterval *arr, int n) {
     for (int i = 1; i < n; i++) {
         const SimpleInterval key = arr[i];
         int j = i - 1;
-        while (j >= 0 and arr[j].start > key.start) {
+        while (j >= 0 && arr[j].start > key.start) {
             arr[j + 1] = arr[j];
             j--;
         }

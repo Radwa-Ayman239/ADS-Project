@@ -16,11 +16,8 @@ private:
     HashMap<string, RedBlackIntervalTree *> roomTable;
 
     void loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees
-    void saveRoomsToFile() const;
-
+    
     void loadRoomBookingsFromFile() const;
-
-    void saveRoomBookingsToFile() const;
 
     struct SimpleInterval {
         int start;
@@ -41,17 +38,60 @@ public:
     ~RoomsManager();
 
     bool bookRoom(User *user);
+    
+    // Non-interactive version for Python API
+    bool bookRoomDirect(User *user, const string& roomId, int startTime, int endTime);
 
     // admin operations
     void addRoomInteractive();
+    
+    // Non-interactive version for Python API
+    bool addRoomDirect(const string& roomId);
 
     void removeRoomInteractive();
+    
+    // Non-interactive version for Python API
+    bool removeRoomDirect(const string& roomId);
+    
+    // Save methods - made public for Python access
+    void saveRoomsToFile() const;
+    void saveRoomBookingsToFile() const;
 
     void showUserBookings(const std::string &username) const;
 
     void showRoomsWithAvailableTimes(int openStart, int openEnd);
 
     void syncUserBookings(UsersManager &usersManager);
+    
+    // Iterator for Python bindings - callback receives (roomId, start, end, username)
+    template<typename Func>
+    void forEachBooking(Func func) {
+        roomTable.forEach([&](const string& roomId, RedBlackIntervalTree*& tree) {
+            if (!tree) return;
+            tree->forEachInterval([&](int low, int high, const string& username) {
+                func(roomId, low, high, username);
+            });
+        });
+    }
+    
+    // Iterator for all rooms
+    template<typename Func>
+    void forEachRoom(Func func) {
+        roomTable.forEach([&](const string& roomId, RedBlackIntervalTree*& tree) {
+            func(roomId);
+        });
+    }
+    
+    // Get bookings for specific room
+    template<typename Func>
+    void getRoomBookings(const string& roomId, Func func) {
+        RedBlackIntervalTree** treePtr = roomTable.get(roomId);
+        if (!treePtr || !(*treePtr)) return;
+        
+        (*treePtr)->forEachInterval([&](int low, int high, const string& username) {
+            func(low, high, username);
+        });
+    }
 };
 
 #endif

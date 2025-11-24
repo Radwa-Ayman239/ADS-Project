@@ -61,6 +61,58 @@ bool LaptopsManager::BorrowLaptop(User *user) {
     return booked;
 }
 
+// Non-interactive version for Python API
+bool LaptopsManager::borrowLaptopDirect(User *user, const string& laptopId, int startTime, int endTime) {
+    if (!user) return false;
+    
+    // Check if user already has a conflicting booking
+    if (!user->canBookLaptop(startTime, endTime)) {
+        return false; // User conflict
+    }
+    
+    RedBlackIntervalTree **treePtr = laptopTable.get(laptopId);
+    if (!treePtr || !(*treePtr)) {
+        return false; // Laptop doesn't exist
+    }
+    
+    RedBlackIntervalTree *tree = *treePtr;
+    
+    // Check if laptop is available
+    if (tree->searchOverlap(startTime, endTime, false)) {
+        return false; // Laptop conflict
+    }
+    
+    // Book the laptop
+    tree->insert(startTime, endTime, user->getUsername());
+    user->addLaptopBooking(startTime, endTime);
+    
+    return true;
+}
+
+// Auto-assign available laptop
+string LaptopsManager::borrowAnyLaptopDirect(User *user, int startTime, int endTime) {
+    if (!user) return "";
+    
+    // Check if user already has a conflicting booking
+    if (!user->canBookLaptop(startTime, endTime)) {
+        return ""; // User conflict
+    }
+    
+    string bookedId = "";
+    
+    laptopTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
+        if (!bookedId.empty()) return;
+        
+        if (!tree->searchOverlap(startTime, endTime, false)) {
+            tree->insert(startTime, endTime, user->getUsername());
+            user->addLaptopBooking(startTime, endTime);
+            bookedId = id;
+        }
+    });
+    
+    return bookedId;
+}
+
 void LaptopsManager::addLaptopInteractive() {
     printSectionHeader("Add Laptop");
 
@@ -83,6 +135,21 @@ void LaptopsManager::addLaptopInteractive() {
     printSuccess("Laptop " + id + " added successfully.");
 }
 
+// Non-interactive version for Python API
+bool LaptopsManager::addLaptopDirect(const string& laptopId) {
+    if (laptopTable.contains(laptopId)) {
+        return false; // Laptop already exists
+    }
+    
+    auto *tree = new RedBlackIntervalTree();
+    if (!laptopTable.putNew(laptopId, tree)) {
+        delete tree;
+        return false;
+    }
+    
+    return true;
+}
+
 void LaptopsManager::removeLaptopInteractive() {
     printSectionHeader("Remove Laptop");
 
@@ -101,6 +168,20 @@ void LaptopsManager::removeLaptopInteractive() {
     laptopTable.erase(id);
 
     printSuccess("Laptop " + id + " removed.");
+}
+
+// Non-interactive version for Python API
+bool LaptopsManager::removeLaptopDirect(const string& laptopId) {
+    RedBlackIntervalTree **treePtr = laptopTable.get(laptopId);
+    if (!treePtr || !(*treePtr)) {
+        return false; // Laptop doesn't exist
+    }
+    
+    delete *treePtr;
+    *treePtr = nullptr;
+    laptopTable.erase(laptopId);
+    
+    return true;
 }
 
 void LaptopsManager::saveLaptopsToFile() const {

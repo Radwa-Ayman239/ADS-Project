@@ -254,7 +254,34 @@ void BooksManager::BorrowBook(User *user) {
     }
 }
 
-
+// Non-interactive version for Python API
+bool BooksManager::borrowBookDirect(User *user, const string& bookId, int startTime, int endTime) {
+    if (!user) return false;
+    
+    // Check if user's book limit
+    if (!user->canBookBook(startTime, endTime)) {
+        return false; // User already has 3 concurrent books
+    }
+    
+    // Check if book exists
+    RedBlackIntervalTree **treePtr = BookTable.get(bookId);
+    if (!treePtr || !(*treePtr)) {
+        return false; // Book doesn't exist
+    }
+    
+    RedBlackIntervalTree *tree = *treePtr;
+    
+    // Check if book is available
+    if (tree->searchOverlap(startTime, endTime, false)) {
+        return false; // Book conflict
+    }
+    
+    // Borrow the book
+    tree->insert(startTime, endTime, user->getUsername());
+    user->addBookBooking(startTime, endTime);
+    
+    return true;
+}
 //Borrow a book
 //-Asks if user wants to search by author, or search by name - call respective function
 //-Ask for interval
@@ -290,6 +317,22 @@ void BooksManager::addBookInteractive() {
     printSuccess("Book added successfully.");
 }
 
+// Non-interactive version for Python API
+bool BooksManager::addBookDirect(const string& bookId) {
+    if (ID_To_BookTable.contains(bookId)) {
+        return false; // Book already exists
+    }
+    
+    // Create a simple book entry with just ID
+    Book b(bookId, "Imported Book", "Unknown");
+    ID_To_BookTable.putNew(bookId, b);
+    
+    auto *tree = new RedBlackIntervalTree();
+    BookTable.putNew(bookId, tree);
+    
+    return true;
+}
+
 void BooksManager::removeBookInteractive() {
     printSectionHeader("Remove Book");
 
@@ -312,6 +355,28 @@ void BooksManager::removeBookInteractive() {
     ID_To_BookTable.erase(id);
 
     printSuccess("Book removed.");
+}
+
+// Non-interactive version for Python API
+bool BooksManager::removeBookDirect(const string& bookId) {
+    if (!ID_To_BookTable.contains(bookId)) {
+        return false; // Book doesn't exist
+    }
+    
+    RedBlackIntervalTree **treePtr = BookTable.get(bookId);
+    if (treePtr && *treePtr) {
+        delete *treePtr;
+        *treePtr = nullptr;
+    }
+    
+    BookTable.erase(bookId);
+    ID_To_BookTable.erase(bookId);
+    
+    return true;
+}
+
+Book* BooksManager::getBook(const string& bookId) {
+    return ID_To_BookTable.get(bookId);
 }
 
 void BooksManager::loadBookBookingsFromFile() {

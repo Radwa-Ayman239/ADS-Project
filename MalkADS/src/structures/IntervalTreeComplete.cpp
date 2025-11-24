@@ -207,7 +207,7 @@ void RedBlackIntervalTree::deleteTree(Node *node) {
 }
 
 bool RedBlackIntervalTree::doOverlap(int low1, int high1, int low2, int high2) {
-    return (low1 <= high2 && low2 <= high1);
+    return (low1 < high2 && low2 < high1);
 }
 
 RedBlackIntervalTree::Node *RedBlackIntervalTree::overlapSearch(Node *root, int low, int high) {
