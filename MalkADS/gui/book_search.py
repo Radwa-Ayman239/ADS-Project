@@ -21,15 +21,12 @@ except ImportError:
 class BookSearchDialog(ctk.CTkToplevel):
     """Live search dialog for books with real-time filtering"""
     
-    def __init__(self, parent, on_book_selected=None):
+    def __init__(self, parent, lib_system=None, on_book_selected=None):
         super().__init__(parent)
         self.on_book_selected = on_book_selected
         
-        # Initialize library system
-        if LIBRARY_AVAILABLE:
-            self.lib_system = library_system.LibrarySystem()
-        else:
-            self.lib_system = None
+        # Use the shared library system instance
+        self.lib_system = lib_system
         
         # Window configuration
         self.title("Search Books")
@@ -221,5 +218,5 @@ class BookSearchDialog(ctk.CTkToplevel):
     def select_book(self, book):
         """Handle book selection"""
         if self.on_book_selected:
-            self.on_book_selected(book)
+            self.on_book_selected(book["id"], book["title"], book["author"])
         self.destroy()
