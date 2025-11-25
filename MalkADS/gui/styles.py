@@ -2,77 +2,77 @@
 Centralized styling and color themes for the GUI
 """
 
-# Color Palette - Modern and Professional
+# Color Palette - Dual Theme (Light, Dark)
+# Format: (Light Mode Color, Dark Mode Color)
 COLORS = {
     # Primary colors
-    "primary": "#1f538d",  # Deep blue
-    "primary_hover": "#2d6db5",
-    "primary_dark": "#14365e",
-    
+    "primary": ("#0984e3", "#00a8ff"),  # Slightly darker blue for light mode
+    "primary_hover": ("#74b9ff", "#0097e6"),
+    "primary_dark": ("#005a8d", "#005a8d"),
     # Secondary colors
-    "secondary": "#e74c3c",  # Vibrant red
-    "secondary_hover": "#c0392b",
-    
+    "secondary": ("#d63031", "#e84118"),  # Red
+    "secondary_hover": ("#ff7675", "#c23616"),
     # Success/Error/Warning
-    "success": "#27ae60",
-    "success_hover": "#229954",
-    "error": "#e74c3c",
-    "error_hover": "#c0392b",
-    "warning": "#f39c12",
-    "warning_hover": "#e67e22",
-    
-    # Neutral colors
-    "bg_dark": "#1a1a1a",
-    "bg_medium": "#2b2b2b",
-    "bg_light": "#3a3a3a",
-    "bg_card": "#2d2d2d",
-    "text_primary": "#ffffff",
-    "text_secondary": "#b0b0b0",
-    "text_dim": "#808080",
-    
+    "success": ("#00b894", "#4cd137"),  # Green
+    "success_hover": ("#55efc4", "#44bd32"),
+    "error": ("#d63031", "#e84118"),  # Red
+    "error_hover": ("#ff7675", "#c23616"),
+    "warning": ("#fdcb6e", "#fbc531"),  # Yellow
+    "warning_hover": ("#ffeaa7", "#e1b12c"),
+    # Backgrounds
+    "bg_dark": ("#f5f6fa", "#1e272e"),  # Main Background (Light Grey / Dark Blue-Grey)
+    "bg_medium": ("#dfe6e9", "#2f3640"),  # Secondary Background
+    "bg_light": ("#b2bec3", "#353b48"),  # Tertiary
+    "bg_card": ("#ffffff", "#2f3640"),  # Card Background (White / Dark Grey)
+    # Text
+    "text_primary": ("#2d3436", "#f5f6fa"),  # Dark Grey / White
+    "text_secondary": ("#636e72", "#dcdde1"),  # Grey / Light Grey
+    "text_dim": ("#b2bec3", "#7f8fa6"),  # Light Grey / Dim Grey
     # Accent colors
-    "accent_blue": "#3498db",
-    "accent_purple": "#9b59b6",
-    "accent_green": "#2ecc71",
-    "accent_orange": "#e67e22",
-    
-    # Gradients (for future use)
-    "gradient_start": "#667eea",
-    "gradient_end": "#764ba2",
+    "accent_blue": ("#0984e3", "#00a8ff"),
+    "accent_purple": ("#6c5ce7", "#9c88ff"),
+    "accent_green": ("#00b894", "#4cd137"),
+    "accent_orange": ("#e17055", "#fbc531"),
+    "accent_cyan": ("#00cec9", "#00d2d3"),
+    # Gradients (simulated)
+    "gradient_start": ("#0984e3", "#00a8ff"),
+    "gradient_end": ("#6c5ce7", "#9c88ff"),
 }
 
 # Font Configuration
 FONTS = {
-    "title": ("Segoe UI", 32, "bold"),
-    "heading": ("Segoe UI", 24, "bold"),
-    "subheading": ("Segoe UI", 18, "bold"),
-    "body": ("Segoe UI", 14),
-    "body_large": ("Segoe UI", 16),
-    "button": ("Segoe UI", 14, "bold"),
-    "small": ("Segoe UI", 12),
-    "tiny": ("Segoe UI", 10),
+    "title": ("Roboto", 32, "bold"),
+    "heading": ("Roboto", 24, "bold"),
+    "subheading": ("Roboto", 18, "bold"),
+    "body": ("Roboto", 14),
+    "body_large": ("Roboto", 16),
+    "button": ("Roboto", 14, "bold"),
+    "small": ("Roboto", 12),
+    "tiny": ("Roboto", 10),
 }
 
 # Spacing and sizing
 SPACING = {
-    "xs": 5,
-    "sm": 10,
-    "md": 20,
-    "lg": 30,
-    "xl": 40,
+    "xs": 8,
+    "sm": 16,
+    "md": 24,
+    "lg": 32,
+    "xl": 48,
 }
 
 SIZES = {
-    "button_height": 45,
-    "input_height": 40,
-    "card_corner": 15,
-    "button_corner": 10,
-    "input_corner": 8,
+    "button_height": 50,
+    "input_height": 45,
+    "card_corner": 20,
+    "button_corner": 12,
+    "input_corner": 10,
 }
 
-# Animation timings (in milliseconds)
+# Animation constants
 ANIMATIONS = {
     "fast": 150,
     "medium": 300,
     "slow": 500,
+    "hover_scale": 1.02,
+    "slide_distance": 20,
 }

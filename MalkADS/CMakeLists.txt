@@ -35,7 +35,18 @@ if(Python_FOUND)
     find_package(pybind11 CONFIG QUIET)
     
     if(pybind11_FOUND)
-        pybind11_add_module(library_system bindings.cpp)
+        pybind11_add_module(library_system 
+            bindings.cpp
+            src/managers/LibrarySystem.cpp
+            src/managers/UsersManager.cpp
+            src/managers/RoomsManager.cpp
+            src/managers/LaptopsManager.cpp
+            src/managers/BooksManager.cpp
+            src/models/user.cpp
+            src/models/book.cpp
+            src/structures/IntervalTreeComplete.cpp
+            src/structures/queue.cpp
+        )
         
         # Set the output directory to the project root for easy import
         set_target_properties(library_system PROPERTIES
