@@ -91,6 +91,20 @@ class LoginScreen(ctk.CTkFrame):
         )
         self.password_entry.pack(fill="x", pady=(0, SPACING["md"]))
 
+        # Password visibility toggle
+        self.show_password = False
+        self.toggle_btn = ctk.CTkButton(
+            self.password_entry,
+            text="👁️",
+            width=30,
+            height=30,
+            fg_color="transparent",
+            hover_color=COLORS["bg_medium"],
+            text_color=COLORS["text_secondary"],
+            command=self.toggle_password_visibility,
+        )
+        self.toggle_btn.place(relx=0.95, rely=0.5, anchor="e")
+
         # Bind Enter key to login
         self.password_entry.bind("<Return>", lambda e: self.handle_login())
         self.username_entry.bind("<Return>", lambda e: self.password_entry.focus())
@@ -165,6 +179,16 @@ class LoginScreen(ctk.CTkFrame):
                 self.main_card.place(relx=0.5, rely=end_y, anchor="center")
 
         step(0)
+
+    def toggle_password_visibility(self):
+        """Toggle password visibility"""
+        self.show_password = not self.show_password
+        if self.show_password:
+            self.password_entry.configure(show="")
+            self.toggle_btn.configure(text="🔒")  # Icon for hiding
+        else:
+            self.password_entry.configure(show="•")
+            self.toggle_btn.configure(text="👁️")  # Icon for showing
 
     def show_error(self, message):
         """Display error message"""
