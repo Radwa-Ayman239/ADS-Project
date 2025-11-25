@@ -82,15 +82,8 @@ public:
     // Get list of laptops
     py::list getLaptops() {
         py::list laptopsList;
-        laptops.forEachBooking([&](const std::string& id, int, int, const std::string&) {
-            bool found = false;
-            for (size_t i = 0; i < py::len(laptopsList); i++) {
-                if (py::str(laptopsList[i]).cast<std::string>() == id) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) laptopsList.append(id);
+        laptops.forEachLaptop([&](const std::string& id) {
+            laptopsList.append(id);
         });
         return laptopsList;
     }

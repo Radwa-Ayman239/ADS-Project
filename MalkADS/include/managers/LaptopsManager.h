@@ -62,6 +62,14 @@ public:
             });
         });
     }
+
+    // Get list of all laptop IDs
+    template<typename Func>
+    void forEachLaptop(Func func) {
+        laptopTable.forEach([&](const string& laptopId, RedBlackIntervalTree*& tree) {
+            func(laptopId);
+        });
+    }
 };
 
 #endif
