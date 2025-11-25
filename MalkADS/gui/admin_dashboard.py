@@ -4,7 +4,7 @@ Admin dashboard with management capabilities
 
 import customtkinter as ctk
 from styles import COLORS, FONTS, SPACING, SIZES, ANIMATIONS
-from widgets import AnimatedButton, StyledLabel, ModernCard
+from widgets import AnimatedButton, StyledLabel, ModernCard, ScrollableFrame
 from booking_forms import BookingDialog
 from admin_forms import ManagementDialog
 from bookings_view import BookingsView
@@ -88,12 +88,16 @@ class AdminDashboard(ctk.CTkFrame):
 
     def create_booking_section(self, parent):
         """Create booking actions section"""
+        # Scrollable container
+        scroll_frame = ScrollableFrame(parent, fg_color="transparent")
+        scroll_frame.pack(expand=True, fill="both")
+
         # Grid layout
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_columnconfigure(1, weight=1)
+        scroll_frame.grid_columnconfigure(0, weight=1)
+        scroll_frame.grid_columnconfigure(1, weight=1)
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "🏛️ Book a Room",
             "Reserve a study room",
             COLORS["accent_blue"],
@@ -103,7 +107,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "💻 Borrow Laptop",
             "Borrow a laptop",
             COLORS["accent_purple"],
@@ -113,7 +117,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "📚 Borrow Book",
             "Borrow a book",
             COLORS["accent_green"],
@@ -123,7 +127,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "📋 My Bookings",
             "View your reservations",
             COLORS["accent_orange"],
@@ -134,14 +138,18 @@ class AdminDashboard(ctk.CTkFrame):
 
     def create_management_section(self, parent):
         """Create resource management section"""
+        # Scrollable container
+        scroll_frame = ScrollableFrame(parent, fg_color="transparent")
+        scroll_frame.pack(expand=True, fill="both")
+
         # Grid layout
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_columnconfigure(1, weight=1)
-        parent.grid_columnconfigure(2, weight=1)
+        scroll_frame.grid_columnconfigure(0, weight=1)
+        scroll_frame.grid_columnconfigure(1, weight=1)
+        scroll_frame.grid_columnconfigure(2, weight=1)
 
         # Books management
         self.create_action_card(
-            parent,
+            scroll_frame,
             "📚 Add Book",
             "Add a new book to library",
             COLORS["success"],
@@ -151,7 +159,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "📚 Remove Book",
             "Remove a book",
             COLORS["error"],
@@ -162,7 +170,7 @@ class AdminDashboard(ctk.CTkFrame):
 
         # Laptops management
         self.create_action_card(
-            parent,
+            scroll_frame,
             "💻 Add Laptop",
             "Add a new laptop",
             COLORS["success"],
@@ -172,7 +180,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "💻 Remove Laptop",
             "Remove a laptop",
             COLORS["error"],
@@ -183,7 +191,7 @@ class AdminDashboard(ctk.CTkFrame):
 
         # Rooms management
         self.create_action_card(
-            parent,
+            scroll_frame,
             "🏛️ Add Room",
             "Add a new room",
             COLORS["success"],
@@ -193,7 +201,7 @@ class AdminDashboard(ctk.CTkFrame):
         )
 
         self.create_action_card(
-            parent,
+            scroll_frame,
             "🏛️ Remove Room",
             "Remove a room",
             COLORS["error"],
@@ -256,7 +264,7 @@ class AdminDashboard(ctk.CTkFrame):
 
     def open_management_dialog(self, action_type):
         """Open management dialog"""
-        dialog = ManagementDialog(self, action_type)
+        dialog = ManagementDialog(self, action_type, self.controller.lib_system)
         dialog.grab_set()
 
     def view_my_bookings(self):

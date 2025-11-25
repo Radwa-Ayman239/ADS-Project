@@ -4,7 +4,7 @@ User dashboard for regular library users
 
 import customtkinter as ctk
 from styles import COLORS, FONTS, SPACING, SIZES, ANIMATIONS
-from widgets import AnimatedButton, StyledLabel, ModernCard
+from widgets import AnimatedButton, StyledLabel, ModernCard, ScrollableFrame
 from booking_forms import BookingDialog
 from bookings_view import BookingsView
 
@@ -55,7 +55,7 @@ class UserDashboard(ctk.CTkFrame):
         ).pack(side="right", padx=SPACING["sm"])
 
         # Main content area
-        content = ctk.CTkFrame(self, fg_color="transparent")
+        content = ScrollableFrame(self, fg_color="transparent")
         content.pack(expand=True, fill="both", padx=SPACING["xl"], pady=SPACING["xl"])
 
         # Grid layout for cards

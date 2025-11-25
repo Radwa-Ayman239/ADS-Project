@@ -6,7 +6,14 @@ import customtkinter as ctk
 import sys
 import os
 from styles import COLORS, FONTS, SPACING, SIZES
-from widgets import StyledButton, StyledEntry, StyledLabel, Card, NotificationBanner
+from widgets import (
+    StyledButton,
+    StyledEntry,
+    StyledLabel,
+    Card,
+    NotificationBanner,
+    ScrollableFrame,
+)
 
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -22,15 +29,15 @@ except ImportError:
 class ManagementDialog(ctk.CTkToplevel):
     """Dialog for admin resource management"""
 
-    def __init__(self, parent, action_type):
+    def __init__(self, parent, action_type, lib_system=None):
         super().__init__(parent)
         self.action_type = action_type
 
-        # Initialize library system
-        if LIBRARY_AVAILABLE:
+        # Use shared library system instance
+        self.lib_system = lib_system
+        if self.lib_system is None and LIBRARY_AVAILABLE:
+            # Fallback if not passed (shouldn't happen in normal flow)
             self.lib_system = library_system.LibrarySystem()
-        else:
-            self.lib_system = None
 
         # Parse action
         parts = action_type.split("_")
@@ -41,7 +48,7 @@ class ManagementDialog(ctk.CTkToplevel):
         title = f"{self.action.title()} {self.resource_type.title()}"
         self.title(title)
         self.geometry("550x500")
-        self.resizable(False, False)
+        self.resizable(True, True)  # Enable resizing
 
         # Center window
         self.update_idletasks()
@@ -71,7 +78,7 @@ class ManagementDialog(ctk.CTkToplevel):
         ).pack(pady=SPACING["md"])
 
         # Form section
-        form_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        form_frame = ScrollableFrame(main_frame, fg_color="transparent")
         form_frame.pack(fill="both", expand=True, padx=SPACING["md"])
 
         if self.action == "add":
@@ -261,7 +268,7 @@ class ManagementDialog(ctk.CTkToplevel):
                 elif self.resource_type == "laptop":
                     self.lib_system.add_laptop(resource_id)
                 else:
-                    self.lib_system.add_book(resource_id)
+                    self.lib_system.add_book(resource_id, title, author)
 
                 self.show_notification(
                     f"{self.resource_type.title()} added successfully!", "success"

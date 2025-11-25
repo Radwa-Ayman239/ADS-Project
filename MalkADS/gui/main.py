@@ -68,9 +68,6 @@ class LibraryApp(ctk.CTk):
 
     def on_closing(self):
         """Handle application closing"""
-        if self.lib_system:
-            print("Saving data before exit...")
-            self.lib_system.save()
         self.destroy()
 
     def create_screens(self):

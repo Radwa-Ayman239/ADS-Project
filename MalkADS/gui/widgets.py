@@ -159,9 +159,12 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
     """Scrollable frame with consistent styling"""
 
     def __init__(self, master, **kwargs):
+        # Set default fg_color if not provided
+        if "fg_color" not in kwargs:
+            kwargs["fg_color"] = COLORS["bg_card"]
+
         super().__init__(
             master,
-            fg_color=COLORS["bg_card"],
             corner_radius=SIZES["card_corner"],
             scrollbar_button_color=COLORS["primary"],
             scrollbar_button_hover_color=COLORS["primary_hover"],

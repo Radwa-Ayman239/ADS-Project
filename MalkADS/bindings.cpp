@@ -266,8 +266,8 @@ public:
         laptops.removeLaptopDirect(laptopId);
     }
     
-    void addBook(const char* bookId) {
-        books.addBookDirect(bookId);
+    void addBook(const char* bookId, const char* title, const char* author) {
+        books.addBookDirect(bookId, title, author);
     }
     
     void removeBook(const char* bookId) {

@@ -12,7 +12,9 @@ BooksManager::BooksManager() {
 
 
 BooksManager::~BooksManager() {
+    cout << "Saving books data...\n";
     saveBooksToFile();
+    cout << "Saving book bookings data...\n";
     saveBookBookingsToFile();
     //Data Structure Change
     BookTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {
@@ -318,13 +320,14 @@ void BooksManager::addBookInteractive() {
 }
 
 // Non-interactive version for Python API
-bool BooksManager::addBookDirect(const string& bookId) {
+// Non-interactive version for Python API
+bool BooksManager::addBookDirect(const string& bookId, const string& title, const string& author) {
     if (ID_To_BookTable.contains(bookId)) {
         return false; // Book already exists
     }
     
-    // Create a simple book entry with just ID
-    Book b(bookId, "Imported Book", "Unknown");
+    // Create book with provided details
+    Book b(bookId, title, author);
     ID_To_BookTable.putNew(bookId, b);
     
     auto *tree = new RedBlackIntervalTree();

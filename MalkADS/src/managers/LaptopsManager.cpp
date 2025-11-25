@@ -9,7 +9,9 @@ LaptopsManager::LaptopsManager() {
 }
 
 LaptopsManager::~LaptopsManager() {
+    std::cout << "Saving Laptop Data...\n";
     saveLaptopsToFile();
+    std::cout << "Saving Laptop Booking Data...\n";
     saveLaptopBookingsToFile();
     //Data Structure Change
     laptopTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {

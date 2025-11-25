@@ -9,7 +9,9 @@ RoomsManager::RoomsManager() {
 }
 
 RoomsManager::~RoomsManager() {
+    std::cout << "Saving Rooms Data...\n";
     saveRoomsToFile();
+    std::cout << "Saving Rooms Booking Data...\n";
     saveRoomBookingsToFile();
     //Data Structure Change
     roomTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {

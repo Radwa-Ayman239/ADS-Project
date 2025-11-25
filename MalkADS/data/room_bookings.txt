@@ -1,2 +1,4 @@
 R104,1,4,Hamdy
+R104,4,6,admin
+R104,7,10,admin
 R104,14,17,Hamdy

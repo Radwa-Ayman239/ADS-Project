@@ -36,7 +36,7 @@ public:
     void addBookInteractive();
     
     // Non-interactive version for Python API
-    bool addBookDirect(const string& bookId);
+    bool addBookDirect(const string& bookId, const string& title, const string& author);
 
     void removeBookInteractive();
     
