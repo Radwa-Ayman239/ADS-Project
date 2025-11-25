@@ -12,9 +12,7 @@ BooksManager::BooksManager() {
 
 
 BooksManager::~BooksManager() {
-    cout << "Saving books data...\n";
     saveBooksToFile();
-    cout << "Saving book bookings data...\n";
     saveBookBookingsToFile();
     //Data Structure Change
     BookTable.forEach([](const string &id, RedBlackIntervalTree * &tree) {
