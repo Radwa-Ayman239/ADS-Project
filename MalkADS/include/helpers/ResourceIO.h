@@ -8,6 +8,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <ctime>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 #include "../structures/hash_map.h"
 #include "../structures//IntervalTreeComplete.h"
 using namespace std;
@@ -125,6 +129,33 @@ inline void parseTime(string stringTime, int &hour, int &minute) {
 
     hour = stoi(hourStr);
     minute = stoi(minuteStr);
+}
+
+inline time_t getStartOfYearTimestamp() {
+    auto now = std::chrono::system_clock::now();
+    std::time_t t_c = std::chrono::system_clock::to_time_t(now);
+    tm local_tm = *std::localtime(&t_c);
+    
+    tm ref = {};
+    ref.tm_year = local_tm.tm_year;
+    ref.tm_mon = 0;
+    ref.tm_mday = 1;
+    ref.tm_hour = 0;
+    ref.tm_min = 0;
+    ref.tm_sec = 0;
+    
+    return mktime(&ref);
+}
+
+inline string formatTimestamp(long long offsetSeconds) {
+    time_t refStamp = getStartOfYearTimestamp();
+    time_t targetStamp = refStamp + offsetSeconds;
+    
+    tm targetTm = *std::localtime(&targetStamp);
+    
+    std::stringstream ss;
+    ss << std::put_time(&targetTm, "%d/%m/%Y %H:%M");
+    return ss.str();
 }
 
 #endif //MALKADS_RESOURCEIO_H

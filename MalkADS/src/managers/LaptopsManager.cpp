@@ -3,9 +3,7 @@
 #include "../../include/helpers/ResourceIO.h"
 
 #include <iostream>
-#include <chrono>
 #include <ctime>
-#include <iomanip>
 
 LaptopsManager::LaptopsManager() {
     loadLaptopsFromFile();
@@ -226,7 +224,7 @@ void LaptopsManager::showUserBookings(const std::string &username) const {
             tree->forEachInterval([&](const int low, const int high, const string &user) {
                 if (user == username) {
                     cout << "  - Laptop " << id
-                            << " | Period: [" << low << ", " << high << "]\n";
+                            << " | Period: " << formatTimestamp(low) << " to " << formatTimestamp(high) << "\n";
                     any = true;
                 }
             });
@@ -266,20 +264,7 @@ long long LaptopsManager::getUserDateAsSeconds(int &day, int &month, int &hour, 
     
     time_t userStamp = mktime(&userTime);
     
-    tm ref = {};
-    const auto now = std::chrono::system_clock::now();
-    const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
-    tm local_tm = *std::localtime(&t_c);
-    int currentYear = local_tm.tm_year + 1900;
-
-    ref.tm_year = currentYear - 1900;
-    ref.tm_mon = 0;
-    ref.tm_mday = 1;
-    ref.tm_hour = 0;
-    ref.tm_min = 0;
-    ref.tm_sec = 0;
-    
-    time_t refStamp = mktime(&ref);
+    time_t refStamp = getStartOfYearTimestamp();
     double diff = difftime(userStamp, refStamp);
     
     return static_cast<long long>(diff);
