@@ -14,9 +14,11 @@ from widgets import (
     NotificationBanner,
     TimeSlotEntry,
     ScrollableFrame,
+    DateEntry,
 )
 from book_search import BookSearchDialog
 from time_slot_grid import TimeSlotGrid
+from utils import datetime_to_seconds, get_seconds_from_start_of_year_for_date
 
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -48,15 +50,15 @@ class BookingDialog(ctk.CTkToplevel):
         if booking_type == "book":
             self.geometry("600x750")
         else:
-            self.geometry("600x700")
+            self.geometry("600x750")
 
         self.resizable(True, True)
 
         # Center window
         self.update_idletasks()
         x = (self.winfo_screenwidth() // 2) - (600 // 2)
-        y = (self.winfo_screenheight() // 2) - (700 // 2)
-        self.geometry(f"600x700+{x}+{y}")
+        y = (self.winfo_screenheight() // 2) - (750 // 2)
+        self.geometry(f"600x750+{x}+{y}")
 
         # Main container
         main_frame = Card(self, fg_color=COLORS["bg_dark"])
@@ -157,6 +159,25 @@ class BookingDialog(ctk.CTkToplevel):
 
         # Time selection
         if booking_type == "room":
+            # Date Selection for Rooms (Restricted to Today/Tomorrow)
+            StyledLabel(form_frame, text="Select Date:", size="body_large").pack(
+                anchor="w", pady=(0, 5)
+            )
+
+            self.date_var = ctk.StringVar(value="Today")
+            self.date_selection = ctk.CTkSegmentedButton(
+                form_frame,
+                values=["Today", "Tomorrow"],
+                variable=self.date_var,
+                command=self.on_date_change,
+                selected_color=COLORS["primary"],
+                selected_hover_color=COLORS["primary_hover"],
+                unselected_color=COLORS["bg_medium"],
+                unselected_hover_color=COLORS["bg_light"],
+                text_color=COLORS["text_primary"],
+            )
+            self.date_selection.pack(fill="x", pady=(0, SPACING["md"]))
+
             StyledLabel(form_frame, text="Select Time Slot:", size="body_large").pack(
                 anchor="w", pady=(0, 5)
             )
@@ -169,7 +190,8 @@ class BookingDialog(ctk.CTkToplevel):
                 self.on_resource_change(resources[0])
 
         else:
-            StyledLabel(form_frame, text="Booking Time:", size="body_large").pack(
+            # Laptops and Books use full DateTime entry
+            StyledLabel(form_frame, text="Booking Period:", size="body_large").pack(
                 anchor="w", pady=(0, 5)
             )
 
@@ -203,6 +225,11 @@ class BookingDialog(ctk.CTkToplevel):
             command=self.confirm_booking,
         ).pack(side="right")
 
+    def on_date_change(self, value):
+        """Handle date selection change"""
+        # Refresh bookings for the new date
+        self.on_resource_change(self.resource_var.get())
+
     def on_resource_change(self, choice):
         """Handle resource selection change"""
         if (
@@ -213,7 +240,37 @@ class BookingDialog(ctk.CTkToplevel):
             # Fetch bookings for selected room
             try:
                 bookings = self.lib_system.get_room_bookings(choice)
-                self.time_slots.set_booked_slots(bookings)
+
+                # Determine date based on selection
+                import datetime
+
+                today = datetime.datetime.now()
+                if hasattr(self, "date_var") and self.date_var.get() == "Tomorrow":
+                    target_date = today + datetime.timedelta(days=1)
+                else:
+                    target_date = today
+
+                d, m, y = target_date.day, target_date.month, target_date.year
+
+                day_start_sec = get_seconds_from_start_of_year_for_date(d, m, y)
+                day_end_sec = day_start_sec + (24 * 3600)
+
+                day_bookings = []
+                for b in bookings:
+                    # Check overlap with the day
+                    b_start = b["start"]
+                    b_end = b["end"]
+
+                    if b_end > day_start_sec and b_start < day_end_sec:
+                        # Map to hours 0-23
+                        # Start hour
+                        start_h = max(0, int((b_start - day_start_sec) / 3600))
+                        # End hour (ceil)
+                        end_h = min(24, int((b_end - day_start_sec + 3599) / 3600))
+
+                        day_bookings.append({"start": start_h, "end": end_h})
+
+                self.time_slots.set_booked_slots(day_bookings)
             except Exception as e:
                 print(f"Error fetching bookings: {e}")
 
@@ -251,16 +308,34 @@ class BookingDialog(ctk.CTkToplevel):
             return
 
         if self.booking_type == "room":
-            start = self.time_slots.selected_start
-            end = self.time_slots.selected_end
-            if start is None or end is None:
+            start_h = self.time_slots.selected_start
+            end_h = self.time_slots.selected_end
+
+            if start_h is None or end_h is None:
                 self.show_notification("Please select a time slot", "error")
                 return
+
+            # Determine date based on selection
+            import datetime
+
+            today = datetime.datetime.now()
+            if hasattr(self, "date_var") and self.date_var.get() == "Tomorrow":
+                target_date = today + datetime.timedelta(days=1)
+            else:
+                target_date = today
+
+            d, m, y = target_date.day, target_date.month, target_date.year
+
+            # Convert to seconds
+            start = datetime_to_seconds(d, m, y, start_h, 0)
+            end = datetime_to_seconds(d, m, y, end_h, 0)
+
         else:
+            # Laptops/Books use DateTimeEntry which returns seconds directly
             start, end = self.time_slots.get_times()
             if start is None or end is None:
                 self.show_notification(
-                    "Please enter valid start and end times", "error"
+                    "Please enter valid start and end dates/times", "error"
                 )
                 return
 

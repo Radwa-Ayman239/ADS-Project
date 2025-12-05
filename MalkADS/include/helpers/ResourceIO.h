@@ -139,12 +139,8 @@ inline void parseTime(string stringTime, int &hour, int &minute) {
 }
 
 inline time_t getStartOfYearTimestamp() {
-  auto now = std::chrono::system_clock::now();
-  std::time_t t_c = std::chrono::system_clock::to_time_t(now);
-  tm local_tm = *std::localtime(&t_c);
-
   tm ref = {};
-  ref.tm_year = local_tm.tm_year;
+  ref.tm_year = 2025 - 1900;
   ref.tm_mon = 0;
   ref.tm_mday = 1;
   ref.tm_hour = 0;

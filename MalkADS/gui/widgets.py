@@ -3,6 +3,7 @@ Custom reusable widgets with consistent styling and animations
 """
 
 import customtkinter as ctk
+import datetime
 from styles import COLORS, FONTS, SIZES, SPACING, ANIMATIONS
 
 
@@ -172,39 +173,132 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         )
 
 
-class TimeSlotEntry(ctk.CTkFrame):
-    """Time slot entry widget for start and end times"""
+class DateEntry(ctk.CTkFrame):
+    """Date entry widget with Day, Month, Year fields"""
 
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
 
-        # Start time
-        StyledLabel(self, text="Start Time (0-23):", size="body").pack(
-            anchor="w", pady=(0, 5)
-        )
-        self.start_entry = StyledEntry(self, placeholder="e.g., 9")
-        self.start_entry.pack(fill="x", pady=(0, SPACING["md"]))
+        # Grid layout
+        self.grid_columnconfigure((0, 1, 2), weight=1)
 
-        # End time
-        StyledLabel(self, text="End Time (1-24):", size="body").pack(
-            anchor="w", pady=(0, 5)
-        )
-        self.end_entry = StyledEntry(self, placeholder="e.g., 17")
-        self.end_entry.pack(fill="x", pady=(0, SPACING["md"]))
+        # Labels
+        StyledLabel(
+            self, text="Day", size="small", text_color=COLORS["text_secondary"]
+        ).grid(row=0, column=0, pady=(0, 2))
+        StyledLabel(
+            self, text="Month", size="small", text_color=COLORS["text_secondary"]
+        ).grid(row=0, column=1, pady=(0, 2))
+        StyledLabel(
+            self, text="Year", size="small", text_color=COLORS["text_secondary"]
+        ).grid(row=0, column=2, pady=(0, 2))
+
+        # Day
+        self.day_entry = StyledEntry(self, placeholder="DD", width=50)
+        self.day_entry.grid(row=1, column=0, padx=(0, 5))
+
+        # Month
+        self.month_entry = StyledEntry(self, placeholder="MM", width=50)
+        self.month_entry.grid(row=1, column=1, padx=5)
+
+        # Year
+        self.year_entry = StyledEntry(self, placeholder="YYYY", width=70)
+        self.year_entry.grid(row=1, column=2, padx=(5, 0))
+
+        # Set default to today
+        today = datetime.datetime.now()
+        self.day_entry.insert(0, str(today.day))
+        self.month_entry.insert(0, str(today.month))
+        self.year_entry.insert(0, str(today.year))
+
+    def get_date(self):
+        """Get date components as integers (day, month, year)"""
+        try:
+            day = int(self.day_entry.get())
+            month = int(self.month_entry.get())
+            year = int(self.year_entry.get())
+            return day, month, year
+        except ValueError:
+            return None, None, None
+
+
+class DateTimeEntry(ctk.CTkFrame):
+    """Combined Date and Time entry widget"""
+
+    def __init__(self, master, label_text="Start Time", **kwargs):
+        super().__init__(master, fg_color="transparent", **kwargs)
+
+        StyledLabel(self, text=label_text, size="body").pack(anchor="w", pady=(0, 5))
+
+        # Container for date and time
+        container = ctk.CTkFrame(self, fg_color="transparent")
+        container.pack(fill="x")
+
+        # Date
+        self.date_entry = DateEntry(container)
+        self.date_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
+
+        # Time Frame (to align with DateEntry)
+        time_frame = ctk.CTkFrame(container, fg_color="transparent")
+        time_frame.pack(side="right", fill="y")
+
+        StyledLabel(
+            time_frame, text="Time", size="small", text_color=COLORS["text_secondary"]
+        ).pack(anchor="w", pady=(0, 2))
+        self.time_entry = StyledEntry(time_frame, placeholder="HH:MM", width=80)
+        self.time_entry.pack(fill="x")
+
+    def get_datetime(self):
+        """Get date and time components"""
+        d, m, y = self.date_entry.get_date()
+
+        try:
+            time_str = self.time_entry.get()
+            if ":" in time_str:
+                hour, minute = map(int, time_str.split(":"))
+            else:
+                hour = int(time_str)
+                minute = 0
+
+            return d, m, y, hour, minute
+        except ValueError:
+            return None, None, None, None, None
+
+
+class TimeSlotEntry(ctk.CTkFrame):
+    """Time slot entry widget for start and end times (Refactored for Date+Time)"""
+
+    def __init__(self, master, **kwargs):
+        super().__init__(master, fg_color="transparent", **kwargs)
+
+        # Start Date/Time
+        self.start_dt = DateTimeEntry(self, label_text="Start Date & Time:")
+        self.start_dt.pack(fill="x", pady=(0, SPACING["md"]))
+
+        # End Date/Time
+        self.end_dt = DateTimeEntry(self, label_text="End Date & Time:")
+        self.end_dt.pack(fill="x", pady=(0, SPACING["md"]))
 
     def get_times(self):
-        """Get start and end times as integers"""
-        try:
-            start = int(self.start_entry.get())
-            end = int(self.end_entry.get())
-            return start, end
-        except ValueError:
+        """Get start and end times as seconds from start of year"""
+        # Import here to avoid circular imports if any
+        from utils import datetime_to_seconds
+
+        sd, sm, sy, sh, smin = self.start_dt.get_datetime()
+        ed, em, ey, eh, emin = self.end_dt.get_datetime()
+
+        if None in (sd, sm, sy, sh, smin, ed, em, ey, eh, emin):
             return None, None
+
+        start_seconds = datetime_to_seconds(sd, sm, sy, sh, smin)
+        end_seconds = datetime_to_seconds(ed, em, ey, eh, emin)
+
+        return start_seconds, end_seconds
 
     def clear(self):
         """Clear the time entries"""
-        self.start_entry.delete(0, "end")
-        self.end_entry.delete(0, "end")
+        # Reset to today? Or just clear?
+        pass
 
 
 # Alias for backward compatibility
