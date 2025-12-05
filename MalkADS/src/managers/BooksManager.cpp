@@ -121,14 +121,17 @@ void BooksManager::BorrowBook(User *user) {
             return;
         }
 
-        int startperiod;
-        int endperiod;
-        cout << COLOR_PROMPT << "\nStart of borrowing period: " << COLOR_RESET;
-        cin >> startperiod;
-        cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
-        cin >> endperiod;
+        int sDay, sMonth, sYear, sHour, sMinute;
+        int eDay, eMonth, eYear, eHour, eMinute;
 
-        if (!user->canBookBook(startperiod, endperiod)) {
+        cout << COLOR_PROMPT << "\nStart of borrowing period: " << COLOR_RESET;
+        long long startSec = getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
+
+        cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
+        long long endSec = getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
+
+
+        if (!user->canBookBook(startSec, endSec)) {
             printError("You already have 3 books borrowed during this period.");
             return;
         }
@@ -140,9 +143,9 @@ void BooksManager::BorrowBook(User *user) {
         }
 
         RedBlackIntervalTree *tree = *treePtr;
-        if (!tree->searchOverlap(startperiod, endperiod, true)) {
-            tree->insert(startperiod, endperiod, user->getUsername());
-            user->addBookBooking(startperiod, endperiod);
+        if (!tree->searchOverlap(startSec, endSec, true)) {
+            tree->insert(startSec, endSec, user->getUsername());
+            user->addBookBooking(startSec, endSec);
             printSuccess("Booking successful!");
             printHint("Go to the library desk at the start of the booking period "
                 "and you will be given your book.");
@@ -356,4 +359,81 @@ void BooksManager::syncUserBookings(UsersManager &usersManager) {
             if (u) u->addBookBooking(low, high);
         });
     });
+}
+
+long long BooksManager::getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute) {
+
+    // ---------- USER INPUT ----------
+    string startDateStr, startTimeStr;
+    cout << "Enter start date (dd/mm/yyyy): ";
+    cin >> startDateStr;
+    cout << "Enter start time (hh:mm): ";
+    cin >> startTimeStr;
+
+
+    // ---------- PARSE USER ENTERED DATA ----------
+    parseDate(startDateStr, day, month, year);
+    parseTime(startTimeStr, hour, minute);
+
+
+    // ---------- CREATE tm STRUCT ----------
+    tm userTime = {};
+    userTime.tm_year = year - 1900;   // tm_year = years since 1900
+    userTime.tm_mon  = month - 1;     // tm_mon  = 0–11
+    userTime.tm_mday = day;
+    userTime.tm_hour = hour;
+    userTime.tm_min  = minute;
+    userTime.tm_sec  = 0;
+
+    // Convert user time → timestamp (seconds since 1970)
+    time_t userStamp = mktime(&userTime);
+
+    // ---------- REFERENCE DATE ----------
+    tm ref = {};
+    ref.tm_year = 2025 - 1900;
+    ref.tm_mon  = 0;     // January
+    ref.tm_mday = 1;     // 1st
+    ref.tm_hour = 0;
+    ref.tm_min  = 0;
+    ref.tm_sec  = 0;
+
+    time_t refStamp = mktime(&ref);
+
+    // ---------- DIFF IN SECONDS ----------
+    double diff = difftime(userStamp, refStamp);
+
+    return static_cast<long long>(diff);
+}
+
+
+
+void BooksManager::parseDate(string stringdate, int &day, int &month, int &year) {
+    // Find first and second slash
+    int first = stringdate.find('/');
+    int second = stringdate.find('/', first + 1);
+
+
+    // Extract substrings
+    string dayStr = stringdate.substr(0, first);
+    string monthStr = stringdate.substr(first + 1, second - first - 1);
+    string yearStr = stringdate.substr(second + 1);
+
+    // Convert to integers
+    day = stoi(dayStr);
+    month = stoi(monthStr);
+    year = stoi(yearStr);
+
+}
+
+
+
+void BooksManager::parseTime(string stringtime, int &hour, int &minute) {
+    int colon = stringtime.find(':');
+
+    string hourStr = stringtime.substr(0, colon);
+    string minStr  = stringtime.substr(colon + 1);
+
+    hour = stoi(hourStr);
+    minute = stoi(minStr);
+
 }

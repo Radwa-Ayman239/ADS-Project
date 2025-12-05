@@ -28,13 +28,19 @@ void LaptopsManager::loadLaptopsFromFile() {
 bool LaptopsManager::BorrowLaptop(User *user) {
     printSectionHeader("Borrow a Laptop");
 
-    int startperiod, endperiod;
-    cout << COLOR_PROMPT << "Start of borrowing period: " << COLOR_RESET;
-    cin >> startperiod;
-    cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
-    cin >> endperiod;
 
-    if (!user->canBookLaptop(startperiod, endperiod)) {
+    int sDay, sMonth, sYear, sHour, sMinute;
+    int eDay, eMonth, eYear, eHour, eMinute;
+
+    cout << COLOR_PROMPT << "Enter start date and time: " <<  COLOR_RESET;
+    long long startSec = getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
+
+    cout << COLOR_PROMPT << "Enter end date and time: " << COLOR_RESET;
+    long long endSec = getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
+
+
+
+    if (!user->canBookLaptop(startSec, endSec)) {
         printError("You already have a laptop booking during this period.");
         return false;
     }
@@ -44,11 +50,25 @@ bool LaptopsManager::BorrowLaptop(User *user) {
 
     laptopTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
         if (booked) return;
-        if (!tree->searchOverlap(startperiod, endperiod, false)) {
-            tree->insert(startperiod, endperiod, user->getUsername());
-            user->addLaptopBooking(startperiod, endperiod);
+        if (!tree->searchOverlap(startSec, endSec, false)) {
+            tree->insert(startSec, endSec, user->getUsername());
+            user->addLaptopBooking(startSec, endSec);
             printSuccess("Laptop " + id + " successfully booked.");
-            cout << "  Period: [" << startperiod << ", " << endperiod << "]\n";
+
+            cout << "Period: "
+            << setw(2) << setfill('0') << sDay << "/"
+            << setw(2) << setfill('0') << sMonth << "/"
+            << sYear << " "
+            << setw(2) << setfill('0') << sHour << ":"
+            << setw(2) << setfill('0') << sMinute
+            << " to "
+            << setw(2) << setfill('0') << eDay << "/"
+            << setw(2) << setfill('0') << eMonth << "/"
+            << eYear << " "
+            << setw(2) << setfill('0') << eHour << ":"
+            << setw(2) << setfill('0') << eMinute;
+
+            //cout << "  Period: [" << startperiod << ", " << endperiod << "]\n";
             booked = true;
         }
     });
@@ -145,3 +165,80 @@ void LaptopsManager::syncUserBookings(UsersManager &usersManager) {
         });
     });
 }
+
+long long LaptopsManager::getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute) {
+
+        // ---------- USER INPUT ----------
+    string startDateStr, startTimeStr;
+    cout << "Enter start date (dd/mm/yyyy): ";
+    cin >> startDateStr;
+    cout << "Enter start time (hh:mm): ";
+    cin >> startTimeStr;
+
+
+    // ---------- PARSE USER ENTERED DATA ----------
+    parseDate(startDateStr, day, month, year);
+    parseTime(startTimeStr, hour, minute);
+
+
+    // ---------- CREATE tm STRUCT ----------
+    tm userTime = {};
+    userTime.tm_year = year - 1900;   // tm_year = years since 1900
+    userTime.tm_mon  = month - 1;     // tm_mon  = 0–11
+    userTime.tm_mday = day;
+    userTime.tm_hour = hour;
+    userTime.tm_min  = minute;
+    userTime.tm_sec  = 0;
+
+    // Convert user time → timestamp (seconds since 1970)
+    time_t userStamp = mktime(&userTime);
+
+    // ---------- REFERENCE DATE ----------
+    tm ref = {};
+    ref.tm_year = 2025 - 1900;
+    ref.tm_mon  = 0;     // January
+    ref.tm_mday = 1;     // 1st
+    ref.tm_hour = 0;
+    ref.tm_min  = 0;
+    ref.tm_sec  = 0;
+
+    time_t refStamp = mktime(&ref);
+
+    // ---------- DIFF IN SECONDS ----------
+    double diff = difftime(userStamp, refStamp);
+
+    return static_cast<long long>(diff);
+}
+
+
+
+void LaptopsManager::parseDate(string stringdate, int &day, int &month, int &year) {
+    // Find first and second slash
+    int first = stringdate.find('/');
+    int second = stringdate.find('/', first + 1);
+
+
+    // Extract substrings
+    string dayStr = stringdate.substr(0, first);
+    string monthStr = stringdate.substr(first + 1, second - first - 1);
+    string yearStr = stringdate.substr(second + 1);
+
+    // Convert to integers
+    day = stoi(dayStr);
+    month = stoi(monthStr);
+    year = stoi(yearStr);
+
+}
+
+
+void LaptopsManager::parseTime(string stringtime, int &hour, int &minute) {
+    int colon = stringtime.find(':');
+
+    string hourStr = stringtime.substr(0, colon);
+    string minStr  = stringtime.substr(colon + 1);
+
+    hour = stoi(hourStr);
+    minute = stoi(minStr);
+
+}
+

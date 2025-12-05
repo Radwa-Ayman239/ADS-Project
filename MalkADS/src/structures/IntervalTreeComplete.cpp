@@ -1,5 +1,6 @@
 #include "../../include/structures/IntervalTreeComplete.h"
 using namespace std;
+#include <iomanip>
 
 // ===================== Node constructor =====================
 RedBlackIntervalTree::Node::Node(int l, int h, const std::string& user) {
@@ -239,25 +240,51 @@ RedBlackIntervalTree::Node *RedBlackIntervalTree::overlapSearch(Node *root, int 
 //         listAvailableIntervalsHelper(node->right, StartLooking, EndLooking, currenttime, availabletimes);
 // }
 
-void RedBlackIntervalTree::listAvailableIntervalsHelper(Node *node, int StartLooking, int EndLooking, int &currenttime,
-                                                        int &counter) {
+void RedBlackIntervalTree::listAvailableIntervalsHelper(Node* node, int StartLooking, int EndLooking, int &currenttime, int& counter ) {
     if (node == nullptr) return;
 
     if (node->left != nullptr && node->left->max >= StartLooking)
         listAvailableIntervalsHelper(node->left, StartLooking, EndLooking, currenttime, counter);
 
     if (currenttime < node->low) {
-        int startFree = currenttime;
-        int endFree = node->low;
-        if (startFree < endFree)
-            cout << counter << ". [ " << startFree << ", " << endFree << " ]\n";
-        counter++;
+        int startFree = max(currenttime, StartLooking);
+        int endFree   = min(node->low, EndLooking);
+        if (startFree < endFree) {
+
+            tm startT = secondsToTime(startFree);
+            tm endT   = secondsToTime(endFree);
+
+            cout << counter << ". [ "
+            << setw(2) << setfill('0') << startT.tm_hour << ":"
+            << setw(2) << setfill('0') << startT.tm_min << " - "
+            << setw(2) << setfill('0') << endT.tm_hour << ":"
+            << setw(2) << setfill('0') << endT.tm_min
+            << " ]\n";
+
+            counter++;
+        }
+
     }
 
     if (currenttime < node->high) currenttime = node->high;
 
     if (node->right != nullptr && node->right->low < EndLooking)
         listAvailableIntervalsHelper(node->right, StartLooking, EndLooking, currenttime, counter);
+}
+
+tm RedBlackIntervalTree::secondsToTime(int seconds) {
+    tm ref = {};
+    ref.tm_year = 2025 - 1900;  // reference point Jan 1, 2025
+    ref.tm_mon  = 0;
+    ref.tm_mday = 1;
+    ref.tm_hour = 0;
+    ref.tm_min  = 0;
+    ref.tm_sec  = 0;
+
+    time_t refTime = mktime(&ref);
+    time_t totalTime = refTime + seconds;
+    tm *t = localtime(&totalTime);  // converts seconds → broken down time
+    return *t;
 }
 
 // ===================== Public methods =====================
@@ -369,23 +396,28 @@ bool RedBlackIntervalTree::searchOverlap(int low, int high, bool announce) {
 }
 
 
-// std::vector<std::pair<int,int> > RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
-//     std::vector<std::pair<int,int> > available;
-//     int current = StartHere;
-//     listAvailableIntervalsHelper(root, StartHere, EndHere, current, available);
-//     if (current <= EndHere) //available.push_back(std::make_pair(current, EndHere));
-//     //return available;
-//     cout << "[ " << current << ", " << EndHere << " ]";
-// }
 
-// void RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
-//     std::vector<std::pair<int, int> > available;
-//     int current = StartHere;
-//     int counter = 1;
-//     listAvailableIntervalsHelper(root, StartHere, EndHere, current, counter);
-//     if (current <= EndHere)
-//         cout << counter << ". [ " << current << ", " << EndHere << " ]";
-// }
+void RedBlackIntervalTree::listAvailableIntervals(int StartHere, int EndHere) {
+    int current = StartHere;
+    int counter = 1;
+    listAvailableIntervalsHelper(root, StartHere, EndHere, current, counter);
+    if (current <= EndHere) {
+
+        tm startT = secondsToTime(current);
+        tm endT   = secondsToTime(EndHere);
+
+        cout << counter << ". [ "
+        << setw(2) << setfill('0') << startT.tm_hour << ":"
+        << setw(2) << setfill('0') << startT.tm_min << " - "
+        << setw(2) << setfill('0') << endT.tm_hour << ":"
+        << setw(2) << setfill('0') << endT.tm_min
+        << " ]\n";
+    }
+
+
+}
+
+
 
 void RedBlackIntervalTree::printTree() {
     if (root == nullptr) std::cout << "Tree is empty.\n";

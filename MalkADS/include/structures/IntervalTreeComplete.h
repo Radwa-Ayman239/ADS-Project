@@ -58,6 +58,8 @@ private:
         forEachIntervalHelper(node->right, func);
     }
 
+    tm secondsToTime(int seconds);
+
 public:
     RedBlackIntervalTree();
 
@@ -70,7 +72,7 @@ public:
 
     bool searchOverlap(int low, int high, bool announce);
 
-    // void listAvailableIntervals(int StartHere, int EndHere);
+    void listAvailableIntervals(int StartHere, int EndHere);
 
     void printTree();
 

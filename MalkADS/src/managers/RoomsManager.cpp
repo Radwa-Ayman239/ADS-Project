@@ -230,3 +230,80 @@ void RoomsManager::syncUserBookings(UsersManager &usersManager) {
         });
     });
 }
+
+long long RoomsManager::getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute) {
+
+    tm t = {};  // broken-down time struct
+
+    // ---------- USER INPUT ----------
+    string dateStr, timeStr;
+    cout << "Enter date (dd/mm/yyyy): ";
+    cin >> dateStr;
+    cout << "Enter time (hh:mm): ";
+    cin >> timeStr;
+
+    parseDate(dateStr, day, month, year);
+    parseTime(timeStr, hour, minute);
+
+    t.tm_mday = day;
+    t.tm_mon  = month - 1;
+    t.tm_year = year - 1900;
+    t.tm_hour = hour;
+    t.tm_min  = minute;
+    t.tm_sec  = 0;
+
+    // ---------- CONVERT TO SECONDS SINCE REF ----------
+    time_t currentStamp = mktime(&t);
+
+    tm ref = {};
+    ref.tm_year = 2025 - 1900;
+    ref.tm_mon  = 0;  // January
+    ref.tm_mday = 1;
+    ref.tm_hour = 0;
+    ref.tm_min  = 0;
+    ref.tm_sec  = 0;
+
+    time_t refStamp = mktime(&ref);
+
+    //Calculate difference
+    double diff = difftime(currentStamp, refStamp);
+    return static_cast<long long>(diff);
+}
+
+
+
+void RoomsManager::parseDate(string stringdate, int &day, int &month, int &year) {
+    // Find first and second slash
+    int first = stringdate.find('/');
+    int second = stringdate.find('/', first + 1);
+
+
+    // Extract substrings
+    string dayStr = stringdate.substr(0, first);
+    string monthStr = stringdate.substr(first + 1, second - first - 1);
+    string yearStr = stringdate.substr(second + 1);
+
+    // Convert to integers
+    day = stoi(dayStr);
+    month = stoi(monthStr);
+    year = stoi(yearStr);
+
+}
+
+
+
+void RoomsManager::parseTime(string stringtime, int &hour, int &minute) {
+    //Find colon
+    int colon = stringtime.find(':');
+
+    // Extract substrings
+    string hourStr = stringtime.substr(0, colon);
+    string minStr  = stringtime.substr(colon + 1);
+
+    // Convert to integers
+    hour = stoi(hourStr);
+    minute = stoi(minStr);
+
+}
+
+

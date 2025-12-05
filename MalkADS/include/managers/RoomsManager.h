@@ -52,6 +52,12 @@ public:
     void showRoomsWithAvailableTimes(int openStart, int openEnd);
 
     void syncUserBookings(UsersManager &usersManager);
+
+    void parseDate(string stringdate, int &day, int &month, int &year);
+    void parseTime(string stringdate, int &hour, int &minute);
+
+    // Converts a date/time into seconds since Jan 1 2025, 00:00
+    long long getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute);
 };
 
 #endif
