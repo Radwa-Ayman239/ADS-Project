@@ -30,10 +30,10 @@ bool LaptopsManager::BorrowLaptop(User *user) {
 
   printSectionHeader("Borrow a Laptop");
 
-  cout << "\nEnter start date and time: ";
+  cout << "\nEnter start date and time: \n\n";
   long long startSec =
       getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
-  cout << "\nEnter end date and time: ";
+  cout << "\nEnter end date and time: \n\n";
   long long endSec = getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
 
   if (!user->canBookLaptop(startSec, endSec)) {
