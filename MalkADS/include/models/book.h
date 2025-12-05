@@ -5,20 +5,20 @@ using namespace std;
 
 class Book {
 private:
-    string bookid;
-    string title;
-    string author;
+  string bookid;
+  string title;
+  string author;
 
 public:
-    Book();
+  Book();
 
-    Book(const string &bookid, const string &title, const string &author);
+  Book(const string &bookid, const string &title, const string &author);
 
-    string getID();
+  string getID();
 
-    string getAuthor();
+  string getAuthor();
 
-    string getTitle();
+  string getTitle();
 };
 
 #endif

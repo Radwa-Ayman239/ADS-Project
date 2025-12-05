@@ -3,75 +3,74 @@
 
 #include <string>
 
-#include "UsersManager.h"
+#include "../helpers/ResourceIO.h"
 #include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
-#include "../helpers/ResourceIO.h"
+#include "UsersManager.h"
+
 using namespace std;
 
 class LaptopsManager {
 private:
-    //Data Structure Change
-    HashMap<string, RedBlackIntervalTree *> laptopTable;
+  // Data Structure Change
+  HashMap<string, RedBlackIntervalTree *> laptopTable;
 
-    void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
-    
-    void loadLaptopBookingsFromFile() const;
+  void loadLaptopsFromFile(); // read laptop IDs from "laptop.txt"
 
-    long long getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute);
+  void loadLaptopBookingsFromFile() const;
 
 public:
-    LaptopsManager();
+  LaptopsManager();
 
-    ~LaptopsManager(); // delete all interval trees
+  ~LaptopsManager(); // delete all interval trees
 
-    bool BorrowLaptop(User *user);
-    
-    // Non-interactive version for Python API
-    // Non-interactive version for Python API
-    bool borrowLaptopDirect(User *user, const string& laptopId, int startTime, int endTime);
-    
-    // Auto-assign available laptop
-    string borrowAnyLaptopDirect(User *user, int startTime, int endTime);
+  bool BorrowLaptop(User *user);
 
-    // admin operations
-    void addLaptopInteractive();
-    
-    // Non-interactive version for Python API
-    bool addLaptopDirect(const string& laptopId);
+  // Non-interactive version for Python API
+  // Non-interactive version for Python API
+  bool borrowLaptopDirect(User *user, const string &laptopId, int startTime,
+                          int endTime);
 
-    void removeLaptopInteractive();
-    
-    // Non-interactive version for Python API
-    bool removeLaptopDirect(const string& laptopId);
-    
-    // Save methods - made public for Python access
-    void saveLaptopsToFile() const;
-    void saveLaptopBookingsToFile() const;
+  // Auto-assign available laptop
+  string borrowAnyLaptopDirect(User *user, int startTime, int endTime);
 
-    void showUserBookings(const std::string &username) const;
+  // admin operations
+  void addLaptopInteractive();
 
-    void syncUserBookings(UsersManager &usersManager);
-    
-    // Iterator for Python bindings
-    template<typename Func>
-    void forEachBooking(Func func) {
-        laptopTable.forEach([&](const string& laptopId, RedBlackIntervalTree*& tree) {
-            if (!tree) return;
-            tree->forEachInterval([&](int low, int high, const string& username) {
-                func(laptopId, low, high, username);
-            });
+  // Non-interactive version for Python API
+  bool addLaptopDirect(const string &laptopId);
+
+  void removeLaptopInteractive();
+
+  // Non-interactive version for Python API
+  bool removeLaptopDirect(const string &laptopId);
+
+  // Save methods - made public for Python access
+  void saveLaptopsToFile() const;
+  void saveLaptopBookingsToFile() const;
+
+  void showUserBookings(const std::string &username) const;
+
+  void syncUserBookings(UsersManager &usersManager);
+
+  // Iterator for Python bindings
+  template <typename Func> void forEachBooking(Func func) {
+    laptopTable.forEach(
+        [&](const string &laptopId, RedBlackIntervalTree *&tree) {
+          if (!tree)
+            return;
+          tree->forEachInterval([&](int low, int high, const string &username) {
+            func(laptopId, low, high, username);
+          });
         });
-    }
+  }
 
-    // Get list of all laptop IDs
-    template<typename Func>
-    void forEachLaptop(Func func) {
-        laptopTable.forEach([&](const string& laptopId, RedBlackIntervalTree*& tree) {
-            func(laptopId);
-        });
-    }
+  // Get list of all laptop IDs
+  template <typename Func> void forEachLaptop(Func func) {
+    laptopTable.forEach([&](const string &laptopId,
+                            RedBlackIntervalTree *&tree) { func(laptopId); });
+  }
 };
 
 #endif

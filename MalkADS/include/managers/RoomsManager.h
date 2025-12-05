@@ -3,95 +3,100 @@
 
 #include <string>
 
-#include "UsersManager.h"
+#include "../helpers/ResourceIO.h"
+#include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
-#include "../models/user.h"
-#include "../helpers/ResourceIO.h"
+#include "UsersManager.h"
+
 using namespace std;
 
 class RoomsManager {
 private:
-    //Data Structure Change
-    HashMap<string, RedBlackIntervalTree *> roomTable;
+  // Data Structure Change
+  HashMap<string, RedBlackIntervalTree *> roomTable;
 
-    void loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees
-    
-    void loadRoomBookingsFromFile() const;
+  void
+  loadRoomsFromFile(); // read room IDs from rooms.txt and create interval trees
 
-    struct SimpleInterval {
-        int start;
-        int end;
-    };
+  void loadRoomBookingsFromFile() const;
 
-    static constexpr int MAX_INTERVALS = 64;
+  struct SimpleInterval {
+    int start;
+    int end;
+  };
 
-    static int collectBookedIntervals(RedBlackIntervalTree *tree, SimpleInterval *arr, int maxCount);
+  static constexpr int MAX_INTERVALS = 64;
 
-    static void sortIntervals(SimpleInterval *arr, int n);
+  static int collectBookedIntervals(RedBlackIntervalTree *tree,
+                                    SimpleInterval *arr, int maxCount);
 
-    static int mergeIntervals(SimpleInterval *arr, int n);
+  static void sortIntervals(SimpleInterval *arr, int n);
+
+  static int mergeIntervals(SimpleInterval *arr, int n);
 
 public:
-    RoomsManager();
+  RoomsManager();
 
-    ~RoomsManager();
+  ~RoomsManager();
 
-    bool bookRoom(User *user);
-    
-    // Non-interactive version for Python API
-    bool bookRoomDirect(User *user, const string& roomId, int startTime, int endTime);
+  bool bookRoom(User *user);
 
-    // admin operations
-    void addRoomInteractive();
-    
-    // Non-interactive version for Python API
-    bool addRoomDirect(const string& roomId);
+  // Non-interactive version for Python API
+  bool bookRoomDirect(User *user, const string &roomId, int startTime,
+                      int endTime);
 
-    void removeRoomInteractive();
-    
-    // Non-interactive version for Python API
-    bool removeRoomDirect(const string& roomId);
-    
-    // Save methods - made public for Python access
-    void saveRoomsToFile() const;
-    void saveRoomBookingsToFile() const;
+  // admin operations
+  void addRoomInteractive();
 
-    void showUserBookings(const std::string &username) const;
+  // Non-interactive version for Python API
+  bool addRoomDirect(const string &roomId);
 
-    void showRoomsWithAvailableTimes(int openStart, int openEnd);
+  void removeRoomInteractive();
 
-    void syncUserBookings(UsersManager &usersManager);
-    
-    // Iterator for Python bindings - callback receives (roomId, start, end, username)
-    template<typename Func>
-    void forEachBooking(Func func) {
-        roomTable.forEach([&](const string& roomId, RedBlackIntervalTree*& tree) {
-            if (!tree) return;
-            tree->forEachInterval([&](int low, int high, const string& username) {
-                func(roomId, low, high, username);
-            });
-        });
-    }
-    
-    // Iterator for all rooms
-    template<typename Func>
-    void forEachRoom(Func func) {
-        roomTable.forEach([&](const string& roomId, RedBlackIntervalTree*& tree) {
-            func(roomId);
-        });
-    }
-    
-    // Get bookings for specific room
-    template<typename Func>
-    void getRoomBookings(const string& roomId, Func func) {
-        RedBlackIntervalTree** treePtr = roomTable.get(roomId);
-        if (!treePtr || !(*treePtr)) return;
-        
-        (*treePtr)->forEachInterval([&](int low, int high, const string& username) {
-            func(low, high, username);
-        });
-    }
+  // Non-interactive version for Python API
+  bool removeRoomDirect(const string &roomId);
+
+  // Save methods - made public for Python access
+  void saveRoomsToFile() const;
+  void saveRoomBookingsToFile() const;
+
+  void showUserBookings(const std::string &username) const;
+
+  void showRoomsWithAvailableTimes(int openStart, int openEnd);
+
+  void syncUserBookings(UsersManager &usersManager);
+
+  // Iterator for Python bindings - callback receives (roomId, start, end,
+  // username)
+  template <typename Func> void forEachBooking(Func func) {
+    roomTable.forEach([&](const string &roomId, RedBlackIntervalTree *&tree) {
+      if (!tree)
+        return;
+      tree->forEachInterval([&](int low, int high, const string &username) {
+        func(roomId, low, high, username);
+      });
+    });
+  }
+
+  // Iterator for all rooms
+  template <typename Func> void forEachRoom(Func func) {
+    roomTable.forEach([&](const string &roomId, RedBlackIntervalTree *&tree) {
+      func(roomId);
+    });
+  }
+
+  // Get bookings for specific room
+  template <typename Func>
+  void getRoomBookings(const string &roomId, Func func) {
+    RedBlackIntervalTree **treePtr = roomTable.get(roomId);
+    if (!treePtr || !(*treePtr))
+      return;
+
+    (*treePtr)->forEachInterval([&](int low, int high, const string &username) {
+      func(low, high, username);
+    });
+  }
 };
 
 #endif

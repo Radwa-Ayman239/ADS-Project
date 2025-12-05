@@ -1,83 +1,86 @@
 #ifndef REDBLACKINTERVALTREE_H
 #define REDBLACKINTERVALTREE_H
 
-#include <iostream>
 #include <climits>
+#include <iostream>
 #include <vector>
 
 enum Color { RED, BLACK };
 
 class RedBlackIntervalTree {
 private:
-    struct Node {
-        int low;
-        int high;
-        int max;
-        Color color;
-        Node *parent;
-        Node *left;
-        Node *right;
-        std::string bookedBy;
+  struct Node {
+    int low;
+    int high;
+    int max;
+    Color color;
+    Node *parent;
+    Node *left;
+    Node *right;
+    std::string bookedBy;
 
-        Node(int l, int h, const std::string& user);
-    };
+    Node(int l, int h, const std::string &user);
+  };
 
-    Node *root;
+  Node *root;
 
-    //Private functions
-    void updateMax(Node *node);
+  // Private functions
+  void updateMax(Node *node);
 
-    void rotateLeft(Node *&node);
+  void rotateLeft(Node *&node);
 
-    void rotateRight(Node *&node);
+  void rotateRight(Node *&node);
 
-    void fixInsert(Node *&node);
+  void fixInsert(Node *&node);
 
-    void fixDelete(Node *&node);
+  void fixDelete(Node *&node);
 
-    Node *minValueNode(Node *&node);
+  Node *minValueNode(Node *&node);
 
-    void transplant(Node *&root, Node *&u, Node *&v);
+  void transplant(Node *&root, Node *&u, Node *&v);
 
-    void printHelper(Node *root, std::string indent, bool last);
+  void printHelper(Node *root, std::string indent, bool last);
 
-    void deleteTree(Node *node);
+  void deleteTree(Node *node);
 
-    bool doOverlap(int low1, int high1, int low2, int high2);
+  bool doOverlap(int low1, int high1, int low2, int high2);
 
-    Node *overlapSearch(Node *root, int low, int high);
+  Node *overlapSearch(Node *root, int low, int high);
 
-    //void listAvailableIntervalsHelper(Node* node, int StartLooking, int EndLooking, int &currenttime, std::vector<std::pair<int,int> > &availabletimes);
-    void listAvailableIntervalsHelper(Node *node, int StartLooking, int EndLooking, int &currenttime, int &counter);
+  // void listAvailableIntervalsHelper(Node* node, int StartLooking, int
+  // EndLooking, int &currenttime, std::vector<std::pair<int,int> >
+  // &availabletimes);
+  void listAvailableIntervalsHelper(Node *node, int StartLooking,
+                                    int EndLooking, int &currenttime,
+                                    int &counter);
 
-    template<typename Func>
-    void forEachIntervalHelper(Node* node, Func func) {
-        if (!node) return;
-        forEachIntervalHelper(node->left, func);
-        func(node->low, node->high, node->bookedBy);
-        forEachIntervalHelper(node->right, func);
-    }
+  template <typename Func> void forEachIntervalHelper(Node *node, Func func) {
+    if (!node)
+      return;
+    forEachIntervalHelper(node->left, func);
+    func(node->low, node->high, node->bookedBy);
+    forEachIntervalHelper(node->right, func);
+  }
 
 public:
-    RedBlackIntervalTree();
+  RedBlackIntervalTree();
 
-    ~RedBlackIntervalTree();
+  ~RedBlackIntervalTree();
 
-    //Public functions
-    void insert(int low, int high, const std::string &user);
+  // Public functions
+  void insert(int low, int high, const std::string &user);
 
-    void remove(int low, int high);
+  void remove(int low, int high);
 
-    bool searchOverlap(int low, int high, bool announce);
+  bool searchOverlap(int low, int high, bool announce);
 
-    // void listAvailableIntervals(int StartHere, int EndHere);
+  void listAvailableIntervals(int StartHere, int EndHere);
 
-    void printTree();
+  void printTree();
 
-    template<typename Func>
-    void forEachInterval(Func func) {
-        forEachIntervalHelper(root, func);
-    }
+  template <typename Func> void forEachInterval(Func func) {
+    forEachIntervalHelper(root, func);
+  }
 };
 
 #endif
