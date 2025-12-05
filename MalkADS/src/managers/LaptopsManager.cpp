@@ -1,7 +1,11 @@
 #include "../../include/managers/LaptopsManager.h"
 #include "../../include/helpers/UIHelpers.h"
-#include <fstream>
+#include "../../include/helpers/ResourceIO.h"
+
 #include <iostream>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 
 LaptopsManager::LaptopsManager() {
     loadLaptopsFromFile();
@@ -26,15 +30,17 @@ void LaptopsManager::loadLaptopsFromFile() {
 
 
 bool LaptopsManager::BorrowLaptop(User *user) {
+    int sDay, sMonth, sYear, sHour, sMinute;
+    int eDay, eMonth, eYear, eHour, eMinute;
+
     printSectionHeader("Borrow a Laptop");
 
-    int startperiod, endperiod;
-    cout << COLOR_PROMPT << "Start of borrowing period: " << COLOR_RESET;
-    cin >> startperiod;
-    cout << COLOR_PROMPT << "End of borrowing period: " << COLOR_RESET;
-    cin >> endperiod;
+    cout << "\nEnter start date and time: ";
+    long long startSec = getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
+    cout << "\nEnter end date and time: ";
+    long long endSec = getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
 
-    if (!user->canBookLaptop(startperiod, endperiod)) {
+    if (!user->canBookLaptop(startSec, endSec)) {
         printError("You already have a laptop booking during this period.");
         return false;
     }
@@ -44,11 +50,23 @@ bool LaptopsManager::BorrowLaptop(User *user) {
 
     laptopTable.forEach([&](const string &id, RedBlackIntervalTree * &tree) {
         if (booked) return;
-        if (!tree->searchOverlap(startperiod, endperiod, false)) {
-            tree->insert(startperiod, endperiod, user->getUsername());
-            user->addLaptopBooking(startperiod, endperiod);
-            printSuccess("Laptop " + id + " successfully booked.");
-            cout << "  Period: [" << startperiod << ", " << endperiod << "]\n";
+        if (!tree->searchOverlap(startSec, endSec, false)) {
+            tree->insert(startSec, endSec, user->getUsername());
+            user->addLaptopBooking(startSec, endSec);
+            
+            cout << COLOR_PROMPT << "Laptop " << id << " successfully booked from: " << COLOR_RESET
+                 << setw(2) << setfill('0') << sDay << "/"
+                 << setw(2) << setfill('0') << sMonth << "/"
+                 << sYear << " "
+                 << setw(2) << setfill('0') << sHour << ":"
+                 << setw(2) << setfill('0') << sMinute
+                 << " to "
+                 << setw(2) << setfill('0') << eDay << "/"
+                 << setw(2) << setfill('0') << eMonth << "/"
+                 << eYear << " "
+                 << setw(2) << setfill('0') << eHour << ":"
+                 << setw(2) << setfill('0') << eMinute << endl;
+
             booked = true;
         }
     });
@@ -58,6 +76,7 @@ bool LaptopsManager::BorrowLaptop(User *user) {
     } else {
         printHint("Collect your laptop from the help desk at the start of the booking period.");
     }
+    
     return booked;
 }
 
@@ -226,3 +245,43 @@ void LaptopsManager::syncUserBookings(UsersManager &usersManager) {
         });
     });
 }
+
+long long LaptopsManager::getUserDateAsSeconds(int &day, int &month, int &hour, int &year, int &minute) {
+    string startDateStr, startTimeStr;
+    cout << "Enter start date (dd/mm/yyyy): ";
+    cin >> startDateStr;
+    cout << "Enter start time (hh:mm): ";
+    cin >> startTimeStr;
+    
+    parseDate(startDateStr, day, month, year);
+    parseTime(startTimeStr, hour, minute);
+    
+    tm userTime = {};
+    userTime.tm_year = year - 1900;
+    userTime.tm_mon = month - 1;
+    userTime.tm_mday = day;
+    userTime.tm_hour = hour;
+    userTime.tm_min = minute;
+    userTime.tm_sec = 0;
+    
+    time_t userStamp = mktime(&userTime);
+    
+    tm ref = {};
+    const auto now = std::chrono::system_clock::now();
+    const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
+    tm local_tm = *std::localtime(&t_c);
+    int currentYear = local_tm.tm_year + 1900;
+
+    ref.tm_year = currentYear - 1900;
+    ref.tm_mon = 0;
+    ref.tm_mday = 1;
+    ref.tm_hour = 0;
+    ref.tm_min = 0;
+    ref.tm_sec = 0;
+    
+    time_t refStamp = mktime(&ref);
+    double diff = difftime(userStamp, refStamp);
+    
+    return static_cast<long long>(diff);
+}
+

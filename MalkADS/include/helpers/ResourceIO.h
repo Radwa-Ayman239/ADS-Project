@@ -104,4 +104,27 @@ void saveBookingsToFile(const string& path, const MapType& table) {
     );
 }
 
+inline void parseDate(string stringDate, int &day, int &month, int &year) {
+    int first = stringDate.find("/");
+    int second = stringDate.find("/", first + 1);
+
+    string dayStr = stringDate.substr(0, first);
+    string monthStr = stringDate.substr(first + 1, second - first - 1);
+    string yearStr = stringDate.substr(second + 1);
+
+    day = stoi(dayStr);
+    month = stoi(monthStr);
+    year = stoi(yearStr);
+}
+
+inline void parseTime(string stringTime, int &hour, int &minute) {
+    int colon = stringTime.find(":");
+
+    string hourStr = stringTime.substr(0, colon);
+    string minuteStr = stringTime.substr(colon + 1);
+
+    hour = stoi(hourStr);
+    minute = stoi(minuteStr);
+}
+
 #endif //MALKADS_RESOURCEIO_H

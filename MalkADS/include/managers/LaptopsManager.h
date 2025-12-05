@@ -19,6 +19,8 @@ private:
     
     void loadLaptopBookingsFromFile() const;
 
+    long long getUserDateAsSeconds(int &day, int &month, int &year, int &hour, int &minute);
+
 public:
     LaptopsManager();
 
