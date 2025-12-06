@@ -1,0 +1,63 @@
+Start testing: Dec 06 15:44 Egypt Standard Time
+----------------------------------------------------------
+1/4 Testing: Add and get book
+1/4 Test: Add and get book
+Command: "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe" "Add and get book"
+Directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests
+"Add and get book" start time: Dec 06 15:44 Egypt Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"Add and get book" end time: Dec 06 15:44 Egypt Standard Time
+"Add and get book" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/4 Testing: Remove book
+2/4 Test: Remove book
+Command: "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe" "Remove book"
+Directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests
+"Remove book" start time: Dec 06 15:44 Egypt Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"Remove book" end time: Dec 06 15:44 Egypt Standard Time
+"Remove book" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/4 Testing: Borrow book non-interactive
+3/4 Test: Borrow book non-interactive
+Command: "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe" "Borrow book non-interactive"
+Directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests
+"Borrow book non-interactive" start time: Dec 06 15:44 Egypt Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"Borrow book non-interactive" end time: Dec 06 15:44 Egypt Standard Time
+"Borrow book non-interactive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/4 Testing: Sync user bookings
+4/4 Test: Sync user bookings
+Command: "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe" "Sync user bookings"
+Directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests
+"Sync user bookings" start time: Dec 06 15:44 Egypt Standard Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"Sync user bookings" end time: Dec 06 15:44 Egypt Standard Time
+"Sync user bookings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 06 15:44 Egypt Standard Time

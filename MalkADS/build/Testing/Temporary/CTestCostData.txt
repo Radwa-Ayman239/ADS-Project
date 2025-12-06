@@ -1,0 +1,9 @@
+Add and get book 2 0
+Remove book 2 0
+Borrow book non-interactive 2 0
+Sync user bookings 0 0
+---
+Add and get book
+Remove book
+Borrow book non-interactive
+Sync user bookings

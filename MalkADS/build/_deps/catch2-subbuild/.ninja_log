@@ -1,0 +1,37 @@
+# ninja log v7
+3	132	7867309868917940	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir	4c5d6680704d23a4
+3	132	7867309868917940	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir	4c5d6680704d23a4
+132	37351	7867310241057282	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download	8df9dd3ab7f4e48d
+132	37351	7867310241057282	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download	8df9dd3ab7f4e48d
+37352	37701	7867310241199278	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	588fbed1c2326fd6
+37352	37701	7867310241199278	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	588fbed1c2326fd6
+37701	37864	7867310246170640	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	d0616de5c76593c0
+37701	37864	7867310246170640	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	d0616de5c76593c0
+37865	38043	7867310247962938	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	d275cf9c940ec56b
+37865	38043	7867310247962938	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	d275cf9c940ec56b
+38044	38200	7867310249538796	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4a526a9863238811
+38044	38200	7867310249538796	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4a526a9863238811
+38201	38346	7867310250986213	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	5d051fd98d4e927e
+38201	38346	7867310250986213	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	5d051fd98d4e927e
+38346	38471	7867310252271199	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	7e9673f6e85dbdc1
+38346	38471	7867310252271199	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	7e9673f6e85dbdc1
+38471	38671	7867310254310612	CMakeFiles/catch2-populate-complete	1d3e581dffee9318
+38471	38671	7867310254310612	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1d3e581dffee9318
+38471	38671	7867310254310612	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/CMakeFiles/catch2-populate-complete	1d3e581dffee9318
+38471	38671	7867310254310612	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1d3e581dffee9318
+3	174	7867312279197110	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	588fbed1c2326fd6
+3	174	7867312279197110	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update	588fbed1c2326fd6
+174	252	7867312281663163	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	d0616de5c76593c0
+174	252	7867312281663163	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch	d0616de5c76593c0
+252	327	7867312282365247	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	d275cf9c940ec56b
+252	327	7867312282365247	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure	d275cf9c940ec56b
+327	404	7867312283190180	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4a526a9863238811
+327	404	7867312283190180	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build	4a526a9863238811
+404	477	7867312283849771	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	5d051fd98d4e927e
+404	477	7867312283849771	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install	5d051fd98d4e927e
+478	552	7867312284659824	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	7e9673f6e85dbdc1
+478	552	7867312284659824	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test	7e9673f6e85dbdc1
+552	655	7867312285681627	CMakeFiles/catch2-populate-complete	1d3e581dffee9318
+552	655	7867312285681627	catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1d3e581dffee9318
+552	655	7867312285681627	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/CMakeFiles/catch2-populate-complete	1d3e581dffee9318
+552	655	7867312285681627	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-done	1d3e581dffee9318

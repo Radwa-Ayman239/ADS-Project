@@ -1,0 +1,7 @@
+add_test( [==[Add and get book]==] [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe]==] [==[Add and get book]==]  )
+set_tests_properties( [==[Add and get book]==] PROPERTIES WORKING_DIRECTORY [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests]==])
+add_test( [==[Remove book]==] [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe]==] [==[Remove book]==]  )
+set_tests_properties( [==[Remove book]==] PROPERTIES WORKING_DIRECTORY [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests]==])
+add_test( [==[Borrow book non-interactive]==] [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests.exe]==] [==[Borrow book non-interactive]==]  )
+set_tests_properties( [==[Borrow book non-interactive]==] PROPERTIES WORKING_DIRECTORY [==[C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests]==])
+set( tests_TESTS [==[Add and get book]==] [==[Remove book]==] [==[Borrow book non-interactive]==])

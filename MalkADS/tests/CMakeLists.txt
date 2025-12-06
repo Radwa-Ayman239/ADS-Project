@@ -9,14 +9,14 @@ FetchContent_Declare(
     GIT_TAG v3.5.2
 )
 FetchContent_MakeAvailable(catch2)
-target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
 # Add your test executable
 add_executable(tests
     BooksManagerTester.cpp
     RoomsManagerTester.cpp
     LaptopsManagerTester.cpp
 )
+
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # Link libraries
 target_link_libraries(tests
