@@ -5,10 +5,10 @@ project(MalkADS)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Original executable
-add_executable(MalkADS
-        main.cpp
-
+# ---------------------------------------
+# Library with core source files
+# ---------------------------------------
+add_library(MalkADS_lib
         # managers
         src/managers/LibrarySystem.cpp
         src/managers/UsersManager.cpp
@@ -23,43 +23,48 @@ add_executable(MalkADS
         # structures
         src/structures/IntervalTreeComplete.cpp
         src/structures/queue.cpp
-        src/models/user.cpp
-        include/helpers/ResourceIO.h
-        include/helpers/UIHelpers.h      # optional but you probably want it too
 )
 
+# Include headers
+target_include_directories(MalkADS_lib PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+# ---------------------------------------
+# Main executable
+# ---------------------------------------
+add_executable(MalkADS main.cpp)
+target_link_libraries(MalkADS PRIVATE MalkADS_lib)
+
+# ---------------------------------------
 # Python module using pybind11
+# ---------------------------------------
 find_package(Python COMPONENTS Interpreter Development)
+find_package(pybind11 CONFIG QUIET)
+
 if(Python_FOUND)
-    # Try to find pybind11
-    find_package(pybind11 CONFIG QUIET)
     
+
     if(pybind11_FOUND)
-        pybind11_add_module(library_system 
-            bindings.cpp
-            src/managers/LibrarySystem.cpp
-            src/managers/UsersManager.cpp
-            src/managers/RoomsManager.cpp
-            src/managers/LaptopsManager.cpp
-            src/managers/BooksManager.cpp
-            src/models/user.cpp
-            src/models/book.cpp
-            src/structures/IntervalTreeComplete.cpp
-            src/structures/queue.cpp
-        )
-        
-        # Set the output directory to the project root for easy import
+        pybind11_add_module(library_system bindings.cpp)
+        target_link_libraries(library_system PRIVATE MalkADS_lib)
+
         set_target_properties(library_system PROPERTIES
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
             LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}"
             LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}"
         )
-        
+
         message(STATUS "Python module will be built")
+
     else()
-        message(WARNING "pybind11 not found. Python module will not be built. Install with: pip install pybind11")
+        message(WARNING "pybind11 not found. Python module will not be built.")
     endif()
+
 else()
     message(WARNING "Python development files not found. Python module will not be built.")
 endif()
 
+# ---------------------------------------
+# Testing
+# ---------------------------------------
+enable_testing()
+add_subdirectory(tests)

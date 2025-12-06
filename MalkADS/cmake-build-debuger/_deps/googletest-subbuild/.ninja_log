@@ -1,0 +1,21 @@
+# ninja log v6
+1	66	7867244361302116	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	5c861668f705785a
+1	66	7867244361302116	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	5c861668f705785a
+67	3060	7867244391351212	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	4d2fee31d92a71e7
+67	3060	7867244391351212	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	4d2fee31d92a71e7
+3060	3116	7867244391784020	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	29f9f31b77cf73bd
+3060	3116	7867244391784020	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	29f9f31b77cf73bd
+3116	3172	7867244392475724	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	6f95a64a3afa879e
+3116	3172	7867244392475724	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	6f95a64a3afa879e
+3172	3228	7867244392980497	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	d8fdf8481c83721b
+3172	3228	7867244392980497	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	d8fdf8481c83721b
+3228	3285	7867244393604243	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	ad5a526c367ba19a
+3228	3285	7867244393604243	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	ad5a526c367ba19a
+3286	3341	7867244394128574	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	b911a5301345999
+3286	3341	7867244394128574	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	b911a5301345999
+3341	3396	7867244394721182	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	1745f2146d8853d1
+3341	3396	7867244394721182	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	1745f2146d8853d1
+3397	3480	7867244395541904	CMakeFiles/googletest-populate-complete	a8a0ecc7dbbfcb03
+3397	3480	7867244395541904	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	a8a0ecc7dbbfcb03
+3397	3480	7867244395541904	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	a8a0ecc7dbbfcb03
+3397	3480	7867244395541904	E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	a8a0ecc7dbbfcb03

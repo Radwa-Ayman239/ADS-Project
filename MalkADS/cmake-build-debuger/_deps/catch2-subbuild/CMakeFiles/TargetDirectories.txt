@@ -1,0 +1,3 @@
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/catch2-populate.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/edit_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/rebuild_cache.dir

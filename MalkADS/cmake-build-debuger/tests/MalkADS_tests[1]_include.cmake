@@ -1,0 +1,5 @@
+if(EXISTS "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/tests/MalkADS_tests[1]_tests.cmake")
+  include("E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/tests/MalkADS_tests[1]_tests.cmake")
+else()
+  add_test(MalkADS_tests_NOT_BUILT MalkADS_tests_NOT_BUILT)
+endif()

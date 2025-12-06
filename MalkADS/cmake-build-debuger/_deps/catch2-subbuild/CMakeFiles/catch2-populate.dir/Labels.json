@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/catch2-populate"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/catch2-populate.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/CMakeFiles/catch2-populate-complete.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"catch2-populate"
+		],
+		"name" : "catch2-populate"
+	}
+}

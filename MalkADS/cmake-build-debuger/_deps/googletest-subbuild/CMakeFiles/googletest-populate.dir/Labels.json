@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/CMakeFiles/googletest-populate"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/CMakeFiles/googletest-populate.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test.rule"
+		},
+		{
+			"file" : "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/cmake-build-debuger/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"googletest-populate"
+		],
+		"name" : "googletest-populate"
+	}
+}
