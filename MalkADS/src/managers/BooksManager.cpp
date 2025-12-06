@@ -269,6 +269,11 @@ void BooksManager::BorrowBook(User *user) {
         continue;
       }
 
+      if ((endperiod - startperiod) > 30 * 24 * 3600) {
+        printError("Maximum booking duration is 30 days.");
+        continue;
+      }
+
       if (!user->canBookBook(startperiod, endperiod)) {
         printError("You already have 3 books borrowed during this period.");
         continue;
@@ -315,6 +320,11 @@ bool BooksManager::borrowBookDirect(User *user, const string &bookId,
   // Check if user's book limit
   if (!user->canBookBook(startTime, endTime)) {
     return false; // User already has 3 concurrent books
+  }
+
+  // Check max duration (30 days)
+  if ((endTime - startTime) > 30 * 24 * 3600) {
+    return false;
   }
 
   // Check if book exists

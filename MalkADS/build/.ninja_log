@@ -231,3 +231,10 @@
 1538	3192	7867600220207858	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
 61	6541	7867600189096206	CMakeFiles/library_system.dir/bindings.cpp.obj	5330723aab94940
 6541	7113	7867600253890439	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+104	2678	7867606960334456	CMakeFiles/MalkADS_lib.dir/src/managers/BooksManager.cpp.obj	ec6af8100b20b506
+2696	3476	7867606986378636	libMalkADS_lib.a	7f6870002b942bb2
+3476	4911	7867606994036146	MalkADS.exe	27c9c587a0ca1906
+3500	6271	7867606994280516	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+3529	8734	7867607044856498	tests/tests.exe	feb1c6439e2e28fc
+3529	8734	7867607044856498	tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+3529	8734	7867607044856498	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc

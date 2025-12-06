@@ -437,6 +437,11 @@ class BookingDialog(ctk.CTkToplevel):
             )
             return
 
+        # Check max duration for books (30 days)
+        if self.booking_type == "book" and (end - start) > 30 * 24 * 3600:
+            self.show_notification("Maximum book booking duration is 30 days", "error")
+            return
+
         # Attempt booking
         success = False
         message = ""
