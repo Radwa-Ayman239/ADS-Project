@@ -1,9 +1,16 @@
-Add and get book 2 0
-Remove book 2 0
-Borrow book non-interactive 2 0
-Sync user bookings 0 0
+Add and get book 8 0.00410346
+Remove book 8 0.00413381
+Borrow book non-interactive 8 0.00414195
+RoomsManager add and book room 0 0
+RoomsManager remove room 7 0.00463587
+RoomsManager add and book room with mock user 5 0.0065008
+Booking conflict for mock user 5 0.00645772
+LaptopsManager add and remove laptop 4 0.00805363
+LaptopsManager borrowLaptopDirect 4 0.00842585
+LaptopsManager borrowAnyLaptopDirect 4 0.00826298
+LaptopsManager overlapping bookings for same user 4 0.0080281
+UsersManager login using users.txt 0 0
+UsersManager admin and normal users 0 0
+UsersManager login and mock users 1 0.0321928
+UsersManager admin and normal user 1 0.0326062
 ---
-Add and get book
-Remove book
-Borrow book non-interactive
-Sync user bookings

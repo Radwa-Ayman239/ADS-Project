@@ -1,18 +1,17 @@
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/MalkADS_lib.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/MalkADS.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/library_system.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/test.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/edit_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/CMakeFiles/rebuild_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/CMakeFiles/tests.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/CMakeFiles/test.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/CMakeFiles/edit_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/CMakeFiles/rebuild_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/test.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/edit_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/rebuild_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/Catch2.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/Catch2WithMain.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/test.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/edit_cache.dir
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/rebuild_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/CMakeFiles/MalkADS_lib.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/CMakeFiles/MalkADS.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/CMakeFiles/test.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/CMakeFiles/edit_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/CMakeFiles/rebuild_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/CMakeFiles/tests.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/CMakeFiles/test.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/CMakeFiles/edit_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/CMakeFiles/rebuild_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/test.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/edit_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/CMakeFiles/rebuild_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/Catch2.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/Catch2WithMain.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/test.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/edit_cache.dir
+E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/CMakeFiles/rebuild_cache.dir

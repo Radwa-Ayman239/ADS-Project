@@ -8,7 +8,8 @@
 using namespace std;
 
 class UsersManager {
-private:
+//private:
+protected:
   // Data Structure Change
   HashMap<string, User> userTable;
 

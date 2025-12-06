@@ -1,4 +1,4 @@
-# Install script for directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src/src
+# Install script for directory: E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,12 +34,12 @@ endif()
 
 # Set path to fallback-tool for dependency-resolution.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "C:/msys64/ucrt64/bin/objdump.exe")
+  set(CMAKE_OBJDUMP "C:/msys64/mingw64/bin/objdump.exe")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/install_local_manifest.txt"
+  file(WRITE "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

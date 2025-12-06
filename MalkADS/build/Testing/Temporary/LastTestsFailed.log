@@ -1,4 +1,2 @@
-1:Add and get book
-2:Remove book
-3:Borrow book non-interactive
-4:Sync user bookings
+1:UsersManager login using users.txt
+2:UsersManager admin and normal users

@@ -3,11 +3,11 @@
 
 cmake_minimum_required(VERSION ${CMAKE_VERSION}) # this file comes with cmake
 
-if(EXISTS "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt" AND EXISTS "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt" AND
-  "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt" IS_NEWER_THAN "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt")
+if(EXISTS "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt" AND EXISTS "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt" AND
+  "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt" IS_NEWER_THAN "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt")
   message(VERBOSE
     "Avoiding repeated git clone, stamp file is up to date: "
-    "'C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt'"
+    "'E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt'"
   )
   return()
 endif()
@@ -22,12 +22,12 @@ else()
 endif()
 
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E rm -rf "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src"
+  COMMAND ${CMAKE_COMMAND} -E rm -rf "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src"
   RESULT_VARIABLE error_code
   ${maybe_show_command}
 )
 if(error_code)
-  message(FATAL_ERROR "Failed to remove directory: 'C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src'")
+  message(FATAL_ERROR "Failed to remove directory: 'E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src'")
 endif()
 
 # try the clone 3 times in case there is an odd git clone issue
@@ -35,9 +35,9 @@ set(error_code 1)
 set(number_of_tries 0)
 while(error_code AND number_of_tries LESS 3)
   execute_process(
-    COMMAND "C:/Program Files/Git/cmd/git.exe"
+    COMMAND "C:/Program Files/Git/mingw64/bin/git.exe"
             clone --no-checkout --config "advice.detachedHead=false" "https://github.com/catchorg/Catch2.git" "catch2-src"
-    WORKING_DIRECTORY "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps"
+    WORKING_DIRECTORY "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps"
     RESULT_VARIABLE error_code
     ${maybe_show_command}
   )
@@ -51,9 +51,9 @@ if(error_code)
 endif()
 
 execute_process(
-  COMMAND "C:/Program Files/Git/cmd/git.exe"
+  COMMAND "C:/Program Files/Git/mingw64/bin/git.exe"
           checkout "v3.5.2" --
-  WORKING_DIRECTORY "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src"
+  WORKING_DIRECTORY "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src"
   RESULT_VARIABLE error_code
   ${maybe_show_command}
 )
@@ -64,24 +64,24 @@ endif()
 set(init_submodules TRUE)
 if(init_submodules)
   execute_process(
-    COMMAND "C:/Program Files/Git/cmd/git.exe" 
+    COMMAND "C:/Program Files/Git/mingw64/bin/git.exe" 
             submodule update --recursive --init 
-    WORKING_DIRECTORY "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src"
+    WORKING_DIRECTORY "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src"
     RESULT_VARIABLE error_code
     ${maybe_show_command}
   )
 endif()
 if(error_code)
-  message(FATAL_ERROR "Failed to update submodules in: 'C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src'")
+  message(FATAL_ERROR "Failed to update submodules in: 'E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-src'")
 endif()
 
 # Complete success, update the script-last-run stamp file:
 #
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -E copy "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt" "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt"
+  COMMAND ${CMAKE_COMMAND} -E copy "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitinfo.txt" "E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt"
   RESULT_VARIABLE error_code
   ${maybe_show_command}
 )
 if(error_code)
-  message(FATAL_ERROR "Failed to copy script-last-run stamp file: 'C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt'")
+  message(FATAL_ERROR "Failed to copy script-last-run stamp file: 'E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-gitclone-lastrun.txt'")
 endif()

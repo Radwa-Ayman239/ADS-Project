@@ -1,8 +1,0 @@
-﻿[1/2] Building CXX object tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj
-FAILED: [code=1] tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj 
-C:\msys64\ucrt64\bin\c++.exe  -I"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/include" -I"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-src/src/catch2/.." -I"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/generated-includes" -std=gnu++14 -MD -MT tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj -MF tests\CMakeFiles\tests.dir\BooksManagerTester.cpp.obj.d -o tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj -c "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/tests/BooksManagerTester.cpp"
-C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/tests/BooksManagerTester.cpp:6:10: fatal error: BooksManager.h: No such file or directory
-    6 | #include "BooksManager.h"
-      |          ^~~~~~~~~~~~~~~~
-compilation terminated.
-ninja: build stopped: subcommand failed.

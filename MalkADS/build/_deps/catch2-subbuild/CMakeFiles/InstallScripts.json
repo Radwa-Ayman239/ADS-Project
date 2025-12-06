@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-subbuild/cmake_install.cmake"
+		"E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-subbuild/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

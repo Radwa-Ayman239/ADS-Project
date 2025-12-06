@@ -14,6 +14,7 @@ add_executable(tests
     BooksManagerTester.cpp
     RoomsManagerTester.cpp
     LaptopsManagerTester.cpp
+    UserManagerTester.cpp
 )
 
 target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
