@@ -1,13 +1,13 @@
-9780451524935,1984,George Orwell
-B002,Data Structures and Algorithms,Mark Allen Weiss
-B012,Advanced Python Projects,Eric Matthes
-B011,Python Fundamentals,Eric Matthes
-B007,Java Puzzlers,Joshua Bloch
-B003,Effective Java,Joshua Bloch
-B001,Introduction to C++,Bjarne Stroustrup
-B004,Python Crash Course,Eric Matthes
-B005,The C++ Programming Language,Bjarne Stroustrup
-B010,Object-Oriented Data Structures Using Java,Mark Allen Weiss
-B008,Java Concurrency in Practice,Joshua Bloch
-B009,More Data Structures and Problem Solving,Mark Allen Weiss
-B006,Programming: Principles and Practice Using C++,Bjarne Stroustrup
+the c++ programming language,the c++ programming language,Bjarne Stroustrup
+java puzzlers,java puzzlers,Joshua Bloch
+python crash course,python crash course,Eric Matthes
+data structures and algorithms,data structures and algorithms,Mark Allen Weiss
+advanced python projects,advanced python projects,Eric Matthes
+introduction to c++,introduction to c++,Bjarne Stroustrup
+programming: principles and practice using c++,programming: principles and practice using c++,Bjarne Stroustrup
+python fundamentals,python fundamentals,Eric Matthes
+1984,1984,George Orwell
+java concurrency in practice,java concurrency in practice,Joshua Bloch
+object-oriented data structures using java,object-oriented data structures using java,Mark Allen Weiss
+effective java,effective java,Joshua Bloch
+more data structures and problem solving,more data structures and problem solving,Mark Allen Weiss

@@ -28,12 +28,8 @@ public:
   bool BorrowLaptop(User *user);
 
   // Non-interactive version for Python API
-  // Non-interactive version for Python API
   bool borrowLaptopDirect(User *user, const string &laptopId, int startTime,
                           int endTime);
-
-  // Auto-assign available laptop
-  string borrowAnyLaptopDirect(User *user, int startTime, int endTime);
 
   // admin operations
   void addLaptopInteractive();

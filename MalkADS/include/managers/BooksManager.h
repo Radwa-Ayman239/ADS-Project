@@ -8,6 +8,7 @@
 #include "../models/user.h"
 #include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
+#include "../structures/linked_list.h"
 #include "UsersManager.h"
 
 using namespace std;
@@ -18,6 +19,8 @@ private:
   HashMap<string, Book> ID_To_BookTable;
   // Data Structure Change
   HashMap<string, RedBlackIntervalTree *> BookTable;
+  // Secondary Index for O(1) Author Search
+  HashMap<string, LinkedList<string> *> Author_To_BooksTable;
 
   void loadBooksFromFile(); // read book IDs from "books.txt" and create
                             // interval tree

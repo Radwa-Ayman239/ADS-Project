@@ -23,6 +23,14 @@ BooksManager::~BooksManager() {
     tree = nullptr;
   });
   BookTable.clear();
+
+  // Clear Author Table
+  Author_To_BooksTable.forEach(
+      [](const string &author, LinkedList<string> *&list) {
+        delete list;
+        list = nullptr;
+      });
+  Author_To_BooksTable.clear();
 }
 
 void BooksManager::loadBooksFromFile() {
@@ -62,6 +70,20 @@ void BooksManager::loadBooksFromFile() {
     auto *tree = new RedBlackIntervalTree();
     // Data Structure Change
     BookTable.putNew(bookTitle, tree);
+
+    // Update Secondary Index
+    string authorLower = bookAuthor;
+    for (char &c : authorLower)
+      c = tolower(c);
+
+    LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
+    if (listPtr && *listPtr) {
+      (*listPtr)->push_back(bookTitle);
+    } else {
+      auto *newList = new LinkedList<string>();
+      newList->push_back(bookTitle);
+      Author_To_BooksTable.putNew(authorLower, newList);
+    }
   }
 
   file.close();
@@ -148,15 +170,13 @@ void BooksManager::BorrowBook(User *user) {
       cout << COLOR_MENU << "\nHere are the books we have by this author:\n\n"
            << COLOR_RESET;
 
-      ID_To_BookTable.forEach([&](const string &id, Book &book) {
-        string temp = book.getAuthor();
-        for (char &c : temp)
-          c = tolower(c);
-        if (temp == searchAuthorLower) {
-          cout << "  - " << book.getTitle() << "\n";
-          authorfound = true;
-        }
-      });
+      LinkedList<string> **listPtr =
+          Author_To_BooksTable.get(searchAuthorLower);
+      if (listPtr && *listPtr) {
+        authorfound = true;
+        (*listPtr)->forEach(
+            [&](const string &title) { cout << "  - " << title << "\n"; });
+      }
 
       if (!authorfound) {
         printError("Sorry, we do not have any books by this author.");
@@ -321,6 +341,20 @@ void BooksManager::addBookInteractive() {
   auto *tree = new RedBlackIntervalTree();
   BookTable.putNew(id, tree);
 
+  // Update Secondary Index
+  string authorLower = author;
+  for (char &c : authorLower)
+    c = tolower(c);
+
+  LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
+  if (listPtr && *listPtr) {
+    (*listPtr)->push_back(title);
+  } else {
+    auto *newList = new LinkedList<string>();
+    newList->push_back(title);
+    Author_To_BooksTable.putNew(authorLower, newList);
+  }
+
   printSuccess("Book added successfully.");
 }
 
@@ -337,6 +371,20 @@ bool BooksManager::addBookDirect(const string &bookId, const string &title,
 
   auto *tree = new RedBlackIntervalTree();
   BookTable.putNew(bookId, tree);
+
+  // Update Secondary Index
+  string authorLower = author;
+  for (char &c : authorLower)
+    c = tolower(c);
+
+  LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
+  if (listPtr && *listPtr) {
+    (*listPtr)->push_back(title);
+  } else {
+    auto *newList = new LinkedList<string>();
+    newList->push_back(title);
+    Author_To_BooksTable.putNew(authorLower, newList);
+  }
 
   return true;
 }
@@ -359,6 +407,27 @@ void BooksManager::removeBookInteractive() {
     *treePtr = nullptr;
   }
 
+  // Remove data from secondary index
+  Book *b = ID_To_BookTable.get(id);
+  if (b) {
+    string author = b->getAuthor();
+    string title = b->getTitle();
+    string authorLower = author;
+    for (char &c : authorLower)
+      c = tolower(c);
+
+    LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
+    if (listPtr && *listPtr) {
+      (*listPtr)->remove(title);
+      // Optional: if list empty, remove author from map (not strictly necessary
+      // but cleaner)
+      if ((*listPtr)->empty()) {
+        delete *listPtr;
+        Author_To_BooksTable.erase(authorLower);
+      }
+    }
+  }
+
   BookTable.erase(id);
   ID_To_BookTable.erase(id);
 
@@ -375,6 +444,25 @@ bool BooksManager::removeBookDirect(const string &bookId) {
   if (treePtr && *treePtr) {
     delete *treePtr;
     *treePtr = nullptr;
+  }
+
+  // Remove data from secondary index
+  Book *b = ID_To_BookTable.get(bookId);
+  if (b) {
+    string author = b->getAuthor();
+    string title = b->getTitle();
+    string authorLower = author;
+    for (char &c : authorLower)
+      c = tolower(c);
+
+    LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
+    if (listPtr && *listPtr) {
+      (*listPtr)->remove(title);
+      if ((*listPtr)->empty()) {
+        delete *listPtr;
+        Author_To_BooksTable.erase(authorLower);
+      }
+    }
   }
 
   BookTable.erase(bookId);

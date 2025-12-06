@@ -105,33 +105,6 @@ bool LaptopsManager::borrowLaptopDirect(User *user, const string &laptopId,
   return true;
 }
 
-// Auto-assign available laptop
-string LaptopsManager::borrowAnyLaptopDirect(User *user, int startTime,
-                                             int endTime) {
-  if (!user)
-    return "";
-
-  // Check if user already has a conflicting booking
-  if (!user->canBookLaptop(startTime, endTime)) {
-    return ""; // User conflict
-  }
-
-  string bookedId = "";
-
-  laptopTable.forEach([&](const string &id, RedBlackIntervalTree *&tree) {
-    if (!bookedId.empty())
-      return;
-
-    if (!tree->searchOverlap(startTime, endTime, false)) {
-      tree->insert(startTime, endTime, user->getUsername());
-      user->addLaptopBooking(startTime, endTime);
-      bookedId = id;
-    }
-  });
-
-  return bookedId;
-}
-
 void LaptopsManager::addLaptopInteractive() {
   printSectionHeader("Add Laptop");
 
