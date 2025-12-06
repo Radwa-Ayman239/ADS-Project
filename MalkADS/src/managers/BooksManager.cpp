@@ -248,7 +248,13 @@ void BooksManager::BorrowBook(User *user) {
 
       cout << "\nEnter end date and time: \n\n";
       long long endperiod =
-          getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
+          getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute, "end");
+
+      if (startperiod >= endperiod) {
+        printError(
+            "Invalid interval: End time must be strictly after start time.");
+        continue;
+      }
 
       if (!user->canBookBook(startperiod, endperiod)) {
         printError("You already have 3 books borrowed during this period.");

@@ -182,8 +182,31 @@ class BookingDialog(ctk.CTkToplevel):
                 anchor="w", pady=(0, 5)
             )
 
-            self.time_slots = TimeSlotGrid(form_frame)
-            self.time_slots.pack(fill="x", pady=(0, SPACING["lg"]))
+            self.time_slots = TimeSlotGrid(form_frame, on_select=self.on_grid_select)
+            self.time_slots.pack(fill="x", pady=(0, SPACING["md"]))
+
+            # Custom Time Input
+            time_input_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+            time_input_frame.pack(fill="x", pady=(0, SPACING["lg"]))
+
+            StyledLabel(
+                time_input_frame, text="Or enter custom time (HH:MM):", size="body"
+            ).pack(anchor="w", pady=(0, 5))
+
+            input_row = ctk.CTkFrame(time_input_frame, fg_color="transparent")
+            input_row.pack(fill="x")
+
+            self.start_input = StyledEntry(
+                input_row, placeholder="Start HH:MM", width=100
+            )
+            self.start_input.pack(side="left", padx=(0, 10))
+
+            StyledLabel(input_row, text="to", size="body").pack(
+                side="left", padx=(0, 10)
+            )
+
+            self.end_input = StyledEntry(input_row, placeholder="End HH:MM", width=100)
+            self.end_input.pack(side="left")
 
             # Trigger initial load if resources exist
             if resources:
@@ -224,6 +247,15 @@ class BookingDialog(ctk.CTkToplevel):
             width=100,
             command=self.confirm_booking,
         ).pack(side="right")
+
+    def on_grid_select(self, start_h, end_h):
+        """Callback when grid selection changes"""
+        if hasattr(self, "start_input") and hasattr(self, "end_input"):
+            self.start_input.delete(0, "end")
+            self.start_input.insert(0, f"{start_h:02d}:00")
+
+            self.end_input.delete(0, "end")
+            self.end_input.insert(0, f"{end_h:02d}:00")
 
     def on_date_change(self, value):
         """Handle date selection change"""
@@ -308,11 +340,26 @@ class BookingDialog(ctk.CTkToplevel):
             return
 
         if self.booking_type == "room":
-            start_h = self.time_slots.selected_start
-            end_h = self.time_slots.selected_end
+            start_str = self.start_input.get()
+            end_str = self.end_input.get()
 
-            if start_h is None or end_h is None:
-                self.show_notification("Please select a time slot", "error")
+            if not start_str or not end_str:
+                self.show_notification("Please enter or select a time slot", "error")
+                return
+
+            try:
+                # Parse HH:MM
+                if ":" in start_str:
+                    sh, sm = map(int, start_str.split(":"))
+                else:
+                    sh, sm = int(start_str), 0
+
+                if ":" in end_str:
+                    eh, em = map(int, end_str.split(":"))
+                else:
+                    eh, em = int(end_str), 0
+            except ValueError:
+                self.show_notification("Invalid time format. Use HH:MM", "error")
                 return
 
             # Determine date based on selection
@@ -327,8 +374,16 @@ class BookingDialog(ctk.CTkToplevel):
             d, m, y = target_date.day, target_date.month, target_date.year
 
             # Convert to seconds
-            start = datetime_to_seconds(d, m, y, start_h, 0)
-            end = datetime_to_seconds(d, m, y, end_h, 0)
+            # Import datetime_to_seconds (ensure it's available or imported at top)
+            # It is imported at top of file, so we can use it.
+            # But confirm_booking used logic below. Let's reuse datetime_to_seconds.
+
+            start = datetime_to_seconds(d, m, y, sh, sm)
+            end = datetime_to_seconds(d, m, y, eh, em)
+
+            if (end - start) > 3 * 3600:
+                self.show_notification("Maximum booking duration is 3 hours", "error")
+                return
 
         else:
             # Laptops/Books use DateTimeEntry which returns seconds directly

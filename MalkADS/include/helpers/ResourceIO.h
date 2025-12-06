@@ -5,7 +5,7 @@
 #ifndef MALKADS_RESOURCEIO_H
 #define MALKADS_RESOURCEIO_H
 
-#include "../structures//IntervalTreeComplete.h"
+#include "../structures/IntervalTreeComplete.h"
 #include "../structures/hash_map.h"
 #include "UIHelpers.h"
 #include <chrono>
@@ -221,10 +221,12 @@ inline string formatTimestamp(long long offsetSeconds) {
 }
 
 inline long long getUserDateAsSeconds(int &day, int &month, int &year,
-                                      int &hour, int &minute) {
+                                      int &hour, int &minute,
+                                      const string &label = "start") {
   while (true) {
     string startDateStr, startTimeStr;
-    cout << COLOR_PROMPT << "\tEnter start date (dd/mm/yyyy): " << COLOR_RESET;
+    cout << COLOR_PROMPT << "\tEnter " << label
+         << " date (dd/mm/yyyy): " << COLOR_RESET;
     cin >> startDateStr;
 
     // Clear failure state/buffer if bad input led to this
@@ -234,7 +236,8 @@ inline long long getUserDateAsSeconds(int &day, int &month, int &year,
       continue;
     }
 
-    cout << COLOR_PROMPT << "\tEnter start time (hh:mm): " << COLOR_RESET;
+    cout << COLOR_PROMPT << "\tEnter " << label
+         << " time (hh:mm): " << COLOR_RESET;
     cin >> startTimeStr;
 
     if (cin.fail()) {
@@ -262,7 +265,7 @@ inline long long getUserDateAsSeconds(int &day, int &month, int &year,
     userTime.tm_hour = hour;
     userTime.tm_min = minute;
     userTime.tm_sec = 0;
-    userTime.tm_isdst = -1;
+    userTime.tm_isdst = -1; // Let system determine DST
 
     time_t userStamp = mktime(&userTime);
     if (userStamp == -1) {
@@ -271,10 +274,6 @@ inline long long getUserDateAsSeconds(int &day, int &month, int &year,
     }
 
     // Check against current time (past check)
-    // Note: Project metadata says "now" is Dec 6 2025.
-    // We want to prevent booking in the past relative to REAL TIME execution.
-    // If the simulation is fixed to 2025, we should check against that.
-    // Assuming standard behavior: don't book in past.
     time_t now = time(nullptr);
     if (difftime(userStamp, now) < 0) {
       printError("You cannot select a date/time in the past.");

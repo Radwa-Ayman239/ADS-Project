@@ -138,7 +138,7 @@ bool RoomsManager::bookRoom(User *user) {
       getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
   cout << "\nEnter end date and time: \n\n";
   long long endperiod =
-      getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
+      getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute, "end");
 
   if (startperiod >= endperiod) {
     printError("Invalid interval: End time must be strictly after start time.");
@@ -222,6 +222,33 @@ bool RoomsManager::bookRoomDirect(User *user, const string &roomId,
   }
 
   RedBlackIntervalTree *tree = *treePtr;
+
+  // Validation Checks matching interactive mode
+  time_t refStamp = getStartOfYearTimestamp();
+  time_t actualNow = time(nullptr);
+  double diffNow = difftime(actualNow, refStamp);
+  long long nowSec = static_cast<long long>(diffNow);
+
+  // Recompute end of tomorrow
+  tm t = *localtime(&actualNow);
+  t.tm_mday += 1;
+  t.tm_hour = 23;
+  t.tm_min = 59;
+  t.tm_sec = 59;
+  time_t endTomorrow = mktime(&t);
+  long long endTomorrowSec =
+      static_cast<long long>(difftime(endTomorrow, refStamp));
+
+  if (startTime < nowSec)
+    return false;
+  if (startTime > endTomorrowSec || endTime > endTomorrowSec)
+    return false;
+
+  if (startTime >= endTime)
+    return false;
+
+  if ((endTime - startTime) > 3 * 3600)
+    return false;
 
   // Check if user already has a conflicting booking
   if (!user->canBookRoom(startTime, endTime)) {

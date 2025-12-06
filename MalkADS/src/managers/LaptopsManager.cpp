@@ -34,7 +34,13 @@ bool LaptopsManager::BorrowLaptop(User *user) {
   long long startSec =
       getUserDateAsSeconds(sDay, sMonth, sYear, sHour, sMinute);
   cout << "\nEnter end date and time: \n\n";
-  long long endSec = getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
+  long long endSec =
+      getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute, "end");
+
+  if (startSec >= endSec) {
+    printError("Invalid interval: End time must be strictly after start time.");
+    return false;
+  }
 
   if (!user->canBookLaptop(startSec, endSec)) {
     printError("You already have a laptop booking during this period.");
