@@ -1,5 +1,0 @@
-if(EXISTS "C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake")
-  include("C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake")
-else()
-  add_test(tests_NOT_BUILT-b12d07c tests_NOT_BUILT-b12d07c)
-endif()
