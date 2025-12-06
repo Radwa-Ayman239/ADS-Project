@@ -145,6 +145,46 @@ public:
     return success;
   }
 
+  // Borrow any available laptop
+  py::dict borrowAnyLaptop(int start, int end, const std::string &username) {
+    py::dict result;
+    User *user = users.getUser(username);
+    if (!user) {
+      result["success"] = false;
+      result["message"] = "User not found";
+      return result;
+    }
+
+    if (!user->canBookLaptop(start, end)) {
+      result["success"] = false;
+      result["message"] = "Limit reached: You already have a laptop borrowed "
+                          "during this period.";
+      return result;
+    }
+
+    bool success = false;
+    std::string bookedId = "";
+
+    laptops.forEachLaptop([&](const std::string &id) {
+      if (!success) {
+        // Try to book this laptop
+        if (laptops.borrowLaptopDirect(user, id, start, end)) {
+          success = true;
+          bookedId = id;
+        }
+      }
+    });
+
+    result["success"] = success;
+    if (success) {
+      saveAll();
+      result["message"] = "Laptop " + bookedId + " assigned successfully!";
+    } else {
+      result["message"] = "No laptops available for the selected time.";
+    }
+    return result;
+  }
+
   // Borrow a book
   py::dict borrowBook(const char *bookId, int start, int end,
                       const char *username) {
@@ -259,6 +299,7 @@ PYBIND11_MODULE(library_system, m) {
       .def("search_books", &PyLibraryWrapper::searchBooks)
       .def("book_room", &PyLibraryWrapper::bookRoom)
       .def("borrow_laptop", &PyLibraryWrapper::borrowLaptop)
+      .def("borrow_any_laptop", &PyLibraryWrapper::borrowAnyLaptop)
       .def("borrow_book", &PyLibraryWrapper::borrowBook)
       .def("get_user_bookings", &PyLibraryWrapper::getUserBookings)
       .def("add_room", &PyLibraryWrapper::addRoom)
