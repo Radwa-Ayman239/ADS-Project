@@ -21,7 +21,7 @@ def datetime_to_seconds(day, month, year, hour, minute):
         dt_day = datetime.datetime(year, month, day)
         dt = dt_day + datetime.timedelta(hours=hour, minutes=minute)
 
-        start_of_year = datetime.datetime(year, 1, 1, 0, 0, 0)
+        start_of_year = datetime.datetime(get_current_year(), 1, 1, 0, 0, 0)
 
         # Calculate difference in seconds
         delta = dt - start_of_year

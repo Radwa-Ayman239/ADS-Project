@@ -430,6 +430,13 @@ class BookingDialog(ctk.CTkToplevel):
             self.show_notification("End time must be after start time", "error")
             return
 
+        # Check max duration for laptops (30 days)
+        if self.booking_type == "laptop" and (end - start) > 30 * 24 * 3600:
+            self.show_notification(
+                "Maximum laptop booking duration is 30 days", "error"
+            )
+            return
+
         # Attempt booking
         success = False
         message = ""

@@ -42,6 +42,11 @@ bool LaptopsManager::BorrowLaptop(User *user) {
     return false;
   }
 
+  if ((endSec - startSec) > 30 * 24 * 3600) {
+    printError("Maximum booking duration is 30 days.");
+    return false;
+  }
+
   if (!user->canBookLaptop(startSec, endSec)) {
     printError("You already have a laptop booking during this period.");
     return false;
@@ -90,6 +95,10 @@ bool LaptopsManager::borrowLaptopDirect(User *user, const string &laptopId,
   // Check if user already has a conflicting booking
   if (!user->canBookLaptop(startTime, endTime)) {
     return false; // User conflict
+  }
+
+  if ((endTime - startTime) > 30 * 24 * 3600) {
+    return false;
   }
 
   RedBlackIntervalTree **treePtr = laptopTable.get(laptopId);

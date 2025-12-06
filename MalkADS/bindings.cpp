@@ -308,5 +308,5 @@ PYBIND11_MODULE(library_system, m) {
       .def("remove_laptop", &PyLibraryWrapper::removeLaptop)
       .def("add_book", &PyLibraryWrapper::addBook)
       .def("remove_book", &PyLibraryWrapper::removeBook)
-      .def("save", &PyLibraryWrapper::saveAll); // Explicit save method
+      .def("save", &PyLibraryWrapper::saveAll);
 }
