@@ -151,7 +151,6 @@ void LibrarySystem::handleUserChoice(const int choice) {
     if (choice == 1) {
         const bool ok = rooms.bookRoom(currentUser);
         if (ok) cout << "\nRoom booked successfully!\n";
-        else cout << "\nUnable to book room - conflict in scheduling\n";
     } else if (choice == 2) {
         const bool ok = laptops.BorrowLaptop(currentUser);
         if (ok) {

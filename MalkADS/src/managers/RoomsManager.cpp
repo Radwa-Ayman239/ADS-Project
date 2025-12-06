@@ -140,6 +140,48 @@ bool RoomsManager::bookRoom(User *user) {
   long long endperiod =
       getUserDateAsSeconds(eDay, eMonth, eYear, eHour, eMinute);
 
+  if (startperiod >= endperiod) {
+    printError("Invalid interval: End time must be strictly after start time.");
+    return false;
+  }
+
+  /*
+   * Check 1: Today/Tomorrow Only
+   * We use the previously calculated 'nowSec' and 'endTomorrowSec'
+   * Note: 'nowSec' is the beginning of the next hour from 'now' in the existing
+   * logic locally, but strictly speaking 'today' includes now. For strict
+   * validation, we should probably allow booking from actual 'now' onwards, but
+   * using 'nowSec' (which is start of next hour usually) is safer for
+   * alignment, or we can relax it. However, the constraint is "today or
+   * tomorrow only". So start must be >= start of today and <= end of tomorrow.
+   * Recomputing start of today to be safe, or just use nowSec/endTomorrowSec as
+   * boundaries. To avoid confusion with the "rounded up" nowSec, let's use the
+   * actual current time offset.
+   */
+
+  time_t actualNow = time(nullptr);
+  double diffNow = difftime(actualNow, refStamp);
+  long long actualNowSec = static_cast<long long>(diffNow);
+
+  // Check 1: Past Booking Forbidden
+  if (startperiod < actualNowSec) {
+    printError("Cannot book in the past.");
+    return false;
+  }
+
+  // Check 2: Today/Tomorrow Only
+  if (startperiod > endTomorrowSec || endperiod > endTomorrowSec) {
+    printError("You can only book for today or tomorrow.");
+    return false;
+  }
+
+  // Check 3: Max 3 Hours
+  long long duration = endperiod - startperiod;
+  if (duration > 3 * 3600) {
+    printError("Maximum booking duration is 3 hours.");
+    return false;
+  }
+
   if (!user->canBookRoom(startperiod, endperiod)) {
     printError("You already have another room booked during this period.");
     return false;
