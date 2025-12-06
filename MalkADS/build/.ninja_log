@@ -129,3 +129,19 @@
 12010	13363	7867464008212813	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
 7560	14411	7867463950328246	CMakeFiles/library_system.dir/bindings.cpp.obj	5330723aab94940
 14413	14921	7867464018797161	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+95	886	7867470609679004	CMakeFiles/MalkADS.dir/main.cpp.obj	4483bf883ea54d0b
+56	907	7867470609302038	CMakeFiles/MalkADS_lib.dir/src/managers/LibrarySystem.cpp.obj	b4452397d0746104
+90	972	7867470609635210	CMakeFiles/MalkADS_lib.dir/src/structures/IntervalTreeComplete.cpp.obj	8ab32e1d84039efe
+72	1095	7867470609479935	CMakeFiles/MalkADS_lib.dir/src/managers/LaptopsManager.cpp.obj	59ee16943bc2e6f5
+62	1130	7867470609362283	CMakeFiles/MalkADS_lib.dir/src/managers/RoomsManager.cpp.obj	7a977aac98ab24c
+79	1225	7867470609564198	CMakeFiles/MalkADS_lib.dir/src/managers/BooksManager.cpp.obj	ec6af8100b20b506
+116	1382	7867470609897849	tests/CMakeFiles/tests.dir/RoomsManagerTester.cpp.obj	bda6d6c59671c452
+136	1409	7867470610107014	tests/CMakeFiles/tests.dir/LaptopsManagerTester.cpp.obj	7d91e33a45bfa92d
+1226	1422	7867470620958399	libMalkADS_lib.a	7f6870002b942bb2
+106	1436	7867470609797281	tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj	5d29f827cbd774ae
+1422	1589	7867470622960041	MalkADS.exe	27c9c587a0ca1906
+1436	2834	7867470636981580	tests/tests.exe	feb1c6439e2e28fc
+1436	2834	7867470636981580	tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+1436	2834	7867470636981580	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+100	6649	7867470609745958	CMakeFiles/library_system.dir/bindings.cpp.obj	5330723aab94940
+6650	7311	7867470675210012	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0

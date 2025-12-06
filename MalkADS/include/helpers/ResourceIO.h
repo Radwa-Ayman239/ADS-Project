@@ -115,27 +115,86 @@ void saveBookingsToFile(const string &path, const MapType &table) {
       });
 }
 
-inline void parseDate(string stringDate, int &day, int &month, int &year) {
-  int first = stringDate.find("/");
-  int second = stringDate.find("/", first + 1);
-
-  string dayStr = stringDate.substr(0, first);
-  string monthStr = stringDate.substr(first + 1, second - first - 1);
-  string yearStr = stringDate.substr(second + 1);
-
-  day = stoi(dayStr);
-  month = stoi(monthStr);
-  year = stoi(yearStr);
+inline bool isLeapYear(int year) {
+  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
-inline void parseTime(string stringTime, int &hour, int &minute) {
-  int colon = stringTime.find(":");
+inline bool isValidDate(int d, int m, int y) {
+  if (y < 2025 || y > 2100)
+    return false;
+  if (m < 1 || m > 12)
+    return false;
+  if (d < 1)
+    return false;
 
-  string hourStr = stringTime.substr(0, colon);
-  string minuteStr = stringTime.substr(colon + 1);
+  int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  if (isLeapYear(y))
+    daysInMonth[2] = 29;
 
-  hour = stoi(hourStr);
-  minute = stoi(minuteStr);
+  return d <= daysInMonth[m];
+}
+
+inline bool isValidTime(int h, int m) {
+  return (h >= 0 && h <= 23) && (m >= 0 && m <= 59);
+}
+
+inline bool parseDate(const string &stringDate, int &day, int &month,
+                      int &year) {
+  if (stringDate.empty())
+    return false;
+  size_t first = stringDate.find("/");
+  if (first == string::npos)
+    return false;
+  size_t second = stringDate.find("/", first + 1);
+  if (second == string::npos)
+    return false;
+
+  try {
+    string dayStr = stringDate.substr(0, first);
+    string monthStr = stringDate.substr(first + 1, second - first - 1);
+    string yearStr = stringDate.substr(second + 1);
+
+    // Check if numeric
+    if (dayStr.find_first_not_of("0123456789") != string::npos)
+      return false;
+    if (monthStr.find_first_not_of("0123456789") != string::npos)
+      return false;
+    if (yearStr.find_first_not_of("0123456789") != string::npos)
+      return false;
+
+    day = stoi(dayStr);
+    month = stoi(monthStr);
+    year = stoi(yearStr);
+
+    return isValidDate(day, month, year);
+  } catch (...) {
+    return false;
+  }
+}
+
+inline bool parseTime(const string &stringTime, int &hour, int &minute) {
+  if (stringTime.empty())
+    return false;
+  size_t colon = stringTime.find(":");
+  if (colon == string::npos)
+    return false;
+
+  try {
+    string hourStr = stringTime.substr(0, colon);
+    string minuteStr = stringTime.substr(colon + 1);
+
+    if (hourStr.find_first_not_of("0123456789") != string::npos)
+      return false;
+    if (minuteStr.find_first_not_of("0123456789") != string::npos)
+      return false;
+
+    hour = stoi(hourStr);
+    minute = stoi(minuteStr);
+
+    return isValidTime(hour, minute);
+  } catch (...) {
+    return false;
+  }
 }
 
 inline time_t getStartOfYearTimestamp() {
@@ -156,36 +215,83 @@ inline string formatTimestamp(long long offsetSeconds) {
 
   tm targetTm = *std::localtime(&targetStamp);
 
-  std::stringstream ss;
-  ss << std::put_time(&targetTm, "%d/%m/%Y %H:%M");
+  stringstream ss;
+  ss << put_time(&targetTm, "%d/%m/%Y %H:%M");
   return ss.str();
 }
 
 inline long long getUserDateAsSeconds(int &day, int &month, int &year,
                                       int &hour, int &minute) {
-  string startDateStr, startTimeStr;
-  cout << COLOR_PROMPT << "\tEnter start date (dd/mm/yyyy): " << COLOR_RESET;
-  cin >> startDateStr;
-  cout << COLOR_PROMPT << "\tEnter start time (hh:mm): " << COLOR_RESET;
-  cin >> startTimeStr;
+  while (true) {
+    string startDateStr, startTimeStr;
+    cout << COLOR_PROMPT << "\tEnter start date (dd/mm/yyyy): " << COLOR_RESET;
+    cin >> startDateStr;
 
-  parseDate(startDateStr, day, month, year);
-  parseTime(startTimeStr, hour, minute);
+    // Clear failure state/buffer if bad input led to this
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore(10000, '\n');
+      continue;
+    }
 
-  tm userTime = {};
-  userTime.tm_year = year - 1900;
-  userTime.tm_mon = month - 1;
-  userTime.tm_mday = day;
-  userTime.tm_hour = hour;
-  userTime.tm_min = minute;
-  userTime.tm_sec = 0;
+    cout << COLOR_PROMPT << "\tEnter start time (hh:mm): " << COLOR_RESET;
+    cin >> startTimeStr;
 
-  time_t userStamp = mktime(&userTime);
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore(10000, '\n');
+      continue;
+    }
 
-  time_t refStamp = getStartOfYearTimestamp();
-  double diff = difftime(userStamp, refStamp);
+    if (!parseDate(startDateStr, day, month, year)) {
+      printError("Invalid date format or value. Please use dd/mm/yyyy (e.g. "
+                 "15/05/2025).");
+      continue;
+    }
 
-  return static_cast<long long>(diff);
+    if (!parseTime(startTimeStr, hour, minute)) {
+      printError(
+          "Invalid time format or value. Please use hh:mm (00:00 to 23:59).");
+      continue;
+    }
+
+    tm userTime = {};
+    userTime.tm_year = year - 1900;
+    userTime.tm_mon = month - 1;
+    userTime.tm_mday = day;
+    userTime.tm_hour = hour;
+    userTime.tm_min = minute;
+    userTime.tm_sec = 0;
+    userTime.tm_isdst = -1;
+
+    time_t userStamp = mktime(&userTime);
+    if (userStamp == -1) {
+      printError("Could not convert date/time.");
+      continue;
+    }
+
+    // Check against current time (past check)
+    // Note: Project metadata says "now" is Dec 6 2025.
+    // We want to prevent booking in the past relative to REAL TIME execution.
+    // If the simulation is fixed to 2025, we should check against that.
+    // Assuming standard behavior: don't book in past.
+    time_t now = time(nullptr);
+    if (difftime(userStamp, now) < 0) {
+      printError("You cannot select a date/time in the past.");
+      continue;
+    }
+
+    time_t refStamp = getStartOfYearTimestamp();
+    double diff = difftime(userStamp, refStamp);
+
+    if (diff < 0) {
+      printError(
+          "Date cannot be before the start of the simulation year (2025).");
+      continue;
+    }
+
+    return static_cast<long long>(diff);
+  }
 }
 
 #endif // MALKADS_RESOURCEIO_H
