@@ -1,8 +1,8 @@
 # CMake generated Testfile for 
-# Source directory: E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/tests
-# Build directory: E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests
+# Source directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/tests
+# Build directory: C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
-include("E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/tests-b12d07c_include.cmake")
+include("C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_include.cmake")
 subdirs("../_deps/catch2-build")

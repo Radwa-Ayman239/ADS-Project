@@ -1,6 +1,7 @@
 #include "../../include/managers/BooksManager.h"
 #include "../../include/helpers/UIHelpers.h"
 // #include "book.h"
+#include <cctype>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -51,13 +52,16 @@ void BooksManager::loadBooksFromFile() {
       }
     }
 
+    for (char &c : bookTitle)
+      c = tolower(c);
+
     auto newBook = Book(bookID, bookTitle, bookAuthor);
     // Data Structure Change
-    ID_To_BookTable.putNew(bookID, newBook);
+    ID_To_BookTable.putNew(bookTitle, newBook);
 
     auto *tree = new RedBlackIntervalTree();
     // Data Structure Change
-    BookTable.putNew(bookID, tree);
+    BookTable.putNew(bookTitle, tree);
   }
 
   file.close();
@@ -116,22 +120,17 @@ void BooksManager::BorrowBook(User *user) {
       for (char &c : titlesearchLower)
         c = tolower(c);
 
-      ID_To_BookTable.forEach([&](const string &id, Book &book) {
-        string temp = book.getTitle();
-        for (char &c : temp)
-          c = tolower(c);
-        if (!bookfound && temp == titlesearchLower) {
-          bookfound = true;
-          foundbookID = id;
-          foundBookTitle = book.getTitle();
-          foundBookAuthor = book.getAuthor();
-        }
-      });
+      Book *foundBook = ID_To_BookTable.get(titlesearchLower);
 
-      if (!bookfound) {
+      if (foundBook == nullptr) {
         printError("Sorry, the library does not have this book.");
         continue;
-      }
+      } else
+        bookfound = true;
+
+      foundbookID = foundBook->getID();
+      foundBookTitle = foundBook->getTitle();
+      foundBookAuthor = foundBook->getAuthor();
 
     } else if (searchmethod == 2) {
       // Search by Author

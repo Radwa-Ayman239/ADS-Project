@@ -1,10 +1,10 @@
 {
 	"InstallScripts" : 
 	[
-		"E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/cmake_install.cmake",
-		"E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/tests/cmake_install.cmake",
-		"E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/cmake_install.cmake",
-		"E:/AUC/Fall2025/AppliedDataStructure/ADSProject/ADS-Project/MalkADS/build/_deps/catch2-build/src/cmake_install.cmake"
+		"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/cmake_install.cmake",
+		"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/cmake_install.cmake",
+		"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/cmake_install.cmake",
+		"C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/_deps/catch2-build/src/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
