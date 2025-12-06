@@ -65,11 +65,11 @@ void BooksManager::loadBooksFromFile() {
 
     auto newBook = Book(bookID, bookTitle, bookAuthor);
     // Data Structure Change
-    ID_To_BookTable.putNew(bookTitle, newBook);
+    ID_To_BookTable.putNew(bookID, newBook);
 
     auto *tree = new RedBlackIntervalTree();
     // Data Structure Change
-    BookTable.putNew(bookTitle, tree);
+    BookTable.putNew(bookID, tree);
 
     // Update Secondary Index
     string authorLower = bookAuthor;
@@ -142,13 +142,26 @@ void BooksManager::BorrowBook(User *user) {
       for (char &c : titlesearchLower)
         c = tolower(c);
 
-      Book *foundBook = ID_To_BookTable.get(titlesearchLower);
+      Book *foundBook = nullptr;
 
-      if (foundBook == nullptr) {
+      ID_To_BookTable.forEach([&](const string &id, Book &book) {
+        if (bookfound)
+          return;
+
+        string temp = book.getTitle();
+        for (char &c : temp)
+          c = tolower(c);
+
+        if (temp == titlesearchLower) {
+          bookfound = true;
+          foundBook = &book;
+        }
+      });
+
+      if (!bookfound) {
         printError("Sorry, the library does not have this book.");
         continue;
-      } else
-        bookfound = true;
+      }
 
       foundbookID = foundBook->getID();
       foundBookTitle = foundBook->getTitle();

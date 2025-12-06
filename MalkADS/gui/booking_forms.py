@@ -17,7 +17,7 @@ from widgets import (
     DateEntry,
 )
 from book_search import BookSearchDialog
-from time_slot_grid import TimeSlotGrid
+from time_slider import TimeSlider
 from utils import datetime_to_seconds, get_seconds_from_start_of_year_for_date
 
 # Add parent directory to path
@@ -182,7 +182,7 @@ class BookingDialog(ctk.CTkToplevel):
                 anchor="w", pady=(0, 5)
             )
 
-            self.time_slots = TimeSlotGrid(form_frame, on_select=self.on_grid_select)
+            self.time_slots = TimeSlider(form_frame, on_change=self.on_slider_change)
             self.time_slots.pack(fill="x", pady=(0, SPACING["md"]))
 
             # Custom Time Input
@@ -248,14 +248,14 @@ class BookingDialog(ctk.CTkToplevel):
             command=self.confirm_booking,
         ).pack(side="right")
 
-    def on_grid_select(self, start_h, end_h):
-        """Callback when grid selection changes"""
+    def on_slider_change(self, sh, sm, eh, em):
+        """Callback when slider selection changes"""
         if hasattr(self, "start_input") and hasattr(self, "end_input"):
             self.start_input.delete(0, "end")
-            self.start_input.insert(0, f"{start_h:02d}:00")
+            self.start_input.insert(0, f"{sh:02d}:{sm:02d}")
 
             self.end_input.delete(0, "end")
-            self.end_input.insert(0, f"{end_h:02d}:00")
+            self.end_input.insert(0, f"{eh:02d}:{em:02d}")
 
     def on_date_change(self, value):
         """Handle date selection change"""
@@ -294,22 +294,36 @@ class BookingDialog(ctk.CTkToplevel):
                     b_end = b["end"]
 
                     if b_end > day_start_sec and b_start < day_end_sec:
-                        # Map to hours 0-23
-                        # Start hour
-                        start_h = max(0, int((b_start - day_start_sec) / 3600))
-                        # End hour (ceil)
-                        end_h = min(24, int((b_end - day_start_sec + 3599) / 3600))
+                        # Map to minutes 0-1440
+                        start_min = max(0, int((b_start - day_start_sec) / 60))
+                        end_min = min(
+                            1440, int((b_end - day_start_sec + 59) / 60)
+                        )  # ceilish
 
-                        day_bookings.append({"start": start_h, "end": end_h})
+                        day_bookings.append({"start": start_min, "end": end_min})
 
-                self.time_slots.set_booked_slots(day_bookings)
+                if hasattr(self.time_slots, "set_blocked_intervals"):
+                    # Handle past time visualization
+                    past_minutes = 0
+                    if not (
+                        hasattr(self, "date_var") and self.date_var.get() == "Tomorrow"
+                    ):
+                        past_minutes = today.hour * 60 + today.minute
+
+                    if hasattr(self.time_slots, "set_disabled_until"):
+                        self.time_slots.set_disabled_until(past_minutes)
+
+                    self.time_slots.set_blocked_intervals(day_bookings)
+                    self.time_slots.set_blocked_intervals(day_bookings)
+                elif hasattr(self.time_slots, "set_booked_slots"):
+                    # Fallback if somehow grid is used (shouldn't be)
+                    self.time_slots.set_booked_slots([])
             except Exception as e:
                 print(f"Error fetching bookings: {e}")
 
     def open_book_search(self):
         """Open the book search dialog"""
-        dialog = BookSearchDialog(self, self.lib_system, self.on_book_selected)
-        dialog.grab_set()
+        BookSearchDialog(self, self.lib_system, self.on_book_selected)
 
     def on_book_selected(self, book_id, title, author):
         """Callback when a book is selected"""
@@ -381,8 +395,26 @@ class BookingDialog(ctk.CTkToplevel):
             start = datetime_to_seconds(d, m, y, sh, sm)
             end = datetime_to_seconds(d, m, y, eh, em)
 
+            if start is None or end is None:
+                self.show_notification("Invalid date or time selected", "error")
+                return
+
             if (end - start) > 3 * 3600:
                 self.show_notification("Maximum booking duration is 3 hours", "error")
+                return
+
+            # Check if booking is in the past
+            now_dt = datetime.datetime.now()
+            # Note: We must ensure we compare apples to apples.
+            # datetime_to_seconds calculates offset from 2025 reference.
+            # So we calculate 'now' using the same function.
+            now_sec = datetime_to_seconds(
+                now_dt.day, now_dt.month, now_dt.year, now_dt.hour, now_dt.minute
+            )
+
+            # Allow a small buffer (e.g. 1 minute) for execution time
+            if start < (now_sec - 60):
+                self.show_notification("Cannot book in the past", "error")
                 return
 
         else:

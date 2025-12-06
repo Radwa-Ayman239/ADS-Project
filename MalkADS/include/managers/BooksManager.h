@@ -81,7 +81,7 @@ public:
   // Get all book details (ID, title, author) for search
   template <typename Func> void forEachBookWithDetails(Func func) {
     ID_To_BookTable.forEach([&](const string &bookId, Book &book) {
-      func(bookId, book.getTitle(), book.getAuthor());
+      func(book.getID(), book.getTitle(), book.getAuthor());
     });
   }
 };

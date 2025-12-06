@@ -17,7 +17,10 @@ def get_start_of_year_timestamp():
 def datetime_to_seconds(day, month, year, hour, minute):
     """Convert date and time components to seconds from start of the year"""
     try:
-        dt = datetime.datetime(year, month, day, hour, minute)
+        # Use start of the specific day, then add time delta to handle hours >= 24
+        dt_day = datetime.datetime(year, month, day)
+        dt = dt_day + datetime.timedelta(hours=hour, minutes=minute)
+
         start_of_year = datetime.datetime(year, 1, 1, 0, 0, 0)
 
         # Calculate difference in seconds

@@ -1,13 +1,6 @@
-the c++ programming language,the c++ programming language,Bjarne Stroustrup
-java puzzlers,java puzzlers,Joshua Bloch
-python crash course,python crash course,Eric Matthes
-data structures and algorithms,data structures and algorithms,Mark Allen Weiss
-advanced python projects,advanced python projects,Eric Matthes
-introduction to c++,introduction to c++,Bjarne Stroustrup
-programming: principles and practice using c++,programming: principles and practice using c++,Bjarne Stroustrup
-python fundamentals,python fundamentals,Eric Matthes
-1984,1984,George Orwell
-java concurrency in practice,java concurrency in practice,Joshua Bloch
-object-oriented data structures using java,object-oriented data structures using java,Mark Allen Weiss
-effective java,effective java,Joshua Bloch
-more data structures and problem solving,more data structures and problem solving,Mark Allen Weiss
+9780134685991,Effective Java,Joshua Bloch
+9780451524935,1984,George Orwell
+020112078X,The C++ Programming Language,Bjarne Stroustrup
+9780321336781,Java Puzzlers,Joshua Bloch & Neal Gafter
+9780321543721,Programming: Principles And Practice Using C++,Bjarne Stroustrup
+9781593276034,Python Crash Course,Eric Matthes

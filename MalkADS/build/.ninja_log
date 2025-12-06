@@ -202,3 +202,22 @@
 2150	3970	7867530582161767	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
 183	10734	7867530544518548	CMakeFiles/library_system.dir/bindings.cpp.obj	5330723aab94940
 10735	11511	7867530650006465	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+67	417	7867556268616684	CMakeFiles/MalkADS_lib.dir/src/models/book.cpp.obj	74fcb295de074c78
+74	622	7867556268687881	CMakeFiles/MalkADS.dir/main.cpp.obj	4483bf883ea54d0b
+53	628	7867556268483394	CMakeFiles/MalkADS_lib.dir/src/managers/LibrarySystem.cpp.obj	b4452397d0746104
+61	880	7867556268564422	CMakeFiles/MalkADS_lib.dir/src/managers/BooksManager.cpp.obj	ec6af8100b20b506
+881	1030	7867556276761199	libMalkADS_lib.a	7f6870002b942bb2
+92	1084	7867556268873609	tests/CMakeFiles/tests.dir/BooksManagerTester.cpp.obj	5d29f827cbd774ae
+1030	1189	7867556278257006	MalkADS.exe	27c9c587a0ca1906
+1084	2321	7867556291041577	tests/tests.exe	feb1c6439e2e28fc
+1084	2321	7867556291041577	tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+1084	2321	7867556291041577	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+82	4901	7867556268773308	CMakeFiles/library_system.dir/bindings.cpp.obj	5330723aab94940
+4902	5334	7867556316960462	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+53	609	7867560805046345	CMakeFiles/MalkADS_lib.dir/src/managers/BooksManager.cpp.obj	ec6af8100b20b506
+609	765	7867560810603050	libMalkADS_lib.a	7f6870002b942bb2
+765	908	7867560812159595	MalkADS.exe	27c9c587a0ca1906
+772	1229	7867560812225450	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/library_system.cp313-win_amd64.pyd	9b6ff7ace8a07cb0
+780	2067	7867560825098982	tests/tests.exe	feb1c6439e2e28fc
+780	2067	7867560825098982	tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
+780	2067	7867560825098982	C:/AUC/data structures/ADS-2/ADS-Project/MalkADS/build/tests/tests-b12d07c_tests.cmake	feb1c6439e2e28fc
