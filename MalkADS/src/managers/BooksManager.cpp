@@ -64,11 +64,11 @@ void BooksManager::loadBooksFromFile() {
       c = tolower(c);
 
     auto newBook = Book(bookID, bookTitle, bookAuthor);
-    // Data Structure Change
-    ID_To_BookTable.putNew(bookID, newBook);
+    // Data Structure Change: Key by Title
+    ID_To_BookTable.putNew(bookTitle, newBook);
 
     auto *tree = new RedBlackIntervalTree();
-    // Data Structure Change
+    // Revert: Key BookTable by ID for ISBN lookup
     BookTable.putNew(bookID, tree);
 
     // Update Secondary Index
@@ -142,23 +142,9 @@ void BooksManager::BorrowBook(User *user) {
       for (char &c : titlesearchLower)
         c = tolower(c);
 
-      Book *foundBook = nullptr;
+      Book *foundBook = ID_To_BookTable.get(titlesearchLower);
 
-      ID_To_BookTable.forEach([&](const string &id, Book &book) {
-        if (bookfound)
-          return;
-
-        string temp = book.getTitle();
-        for (char &c : temp)
-          c = tolower(c);
-
-        if (temp == titlesearchLower) {
-          bookfound = true;
-          foundBook = &book;
-        }
-      });
-
-      if (!bookfound) {
+      if (!foundBook) {
         printError("Sorry, the library does not have this book.");
         continue;
       }
@@ -166,6 +152,7 @@ void BooksManager::BorrowBook(User *user) {
       foundbookID = foundBook->getID();
       foundBookTitle = foundBook->getTitle();
       foundBookAuthor = foundBook->getAuthor();
+      bookfound = true;
 
     } else if (searchmethod == 2) {
       // Search by Author
@@ -206,25 +193,19 @@ void BooksManager::BorrowBook(User *user) {
       for (char &c : titlesearchLower)
         c = tolower(c);
 
-      ID_To_BookTable.forEach([&](const string &id, Book &book) {
-        string temp = book.getTitle();
-        for (char &c : temp)
-          c = tolower(c);
-        if (!bookfound && temp == titlesearchLower) {
-          bookfound = true;
-          foundbookID = id;
-          foundBookTitle = book.getTitle();
-          foundBookAuthor = book.getAuthor();
-        }
-      });
+      Book *foundBook = ID_To_BookTable.get(titlesearchLower);
 
-      if (!bookfound) {
+      if (!foundBook) {
         printError("Sorry, the library does not have this book.");
         continue;
       }
 
-      // Check if author matches (optional, but good for UX as per original
-      // code)
+      foundbookID = foundBook->getID();
+      foundBookTitle = foundBook->getTitle();
+      foundBookAuthor = foundBook->getAuthor();
+      bookfound = true;
+
+      // Check if author matches
       string bookAuthorLower = foundBookAuthor;
       for (char &c : bookAuthorLower)
         c = tolower(c);
@@ -241,6 +222,7 @@ void BooksManager::BorrowBook(User *user) {
         if (tolower(choice) != 'y')
           continue;
       }
+
     } else {
       printError("Invalid option.");
       continue;
@@ -359,15 +341,20 @@ void BooksManager::addBookInteractive() {
   cout << COLOR_PROMPT << "Enter author: " << COLOR_RESET;
   getline(cin, author);
 
-  if (ID_To_BookTable.contains(id)) {
-    printError("A book with this ID already exists.");
+  string titleLower = title;
+  for (char &c : titleLower)
+    c = tolower(c);
+
+  if (ID_To_BookTable.contains(titleLower)) {
+    printError("A book with this Title already exists.");
     return;
   }
 
   Book b(id, title, author);
-  ID_To_BookTable.putNew(id, b);
+  ID_To_BookTable.putNew(titleLower, b);
 
   auto *tree = new RedBlackIntervalTree();
+  // Key BookTable by ID
   BookTable.putNew(id, tree);
 
   // Update Secondary Index
@@ -390,15 +377,20 @@ void BooksManager::addBookInteractive() {
 // Non-interactive version for Python API
 bool BooksManager::addBookDirect(const string &bookId, const string &title,
                                  const string &author) {
-  if (ID_To_BookTable.contains(bookId)) {
-    return false; // Book already exists
+  string titleLower = title;
+  for (char &c : titleLower)
+    c = tolower(c);
+
+  if (ID_To_BookTable.contains(titleLower)) {
+    return false; // Book already exists (by title)
   }
 
   // Create book with provided details
   Book b(bookId, title, author);
-  ID_To_BookTable.putNew(bookId, b);
+  ID_To_BookTable.putNew(titleLower, b);
 
   auto *tree = new RedBlackIntervalTree();
+  // Key BookTable by ID
   BookTable.putNew(bookId, tree);
 
   // Update Secondary Index
@@ -425,31 +417,40 @@ void BooksManager::removeBookInteractive() {
   cout << COLOR_PROMPT << "Enter book ID to remove: " << COLOR_RESET;
   cin >> id;
 
-  if (!ID_To_BookTable.contains(id)) {
+  bool found = false;
+  string titleToRemove = "";
+  string authorToRemove = "";
+
+  ID_To_BookTable.forEach([&](const string &keyTitle, Book &book) {
+    if (book.getID() == id) {
+      found = true;
+      titleToRemove = keyTitle;
+      authorToRemove = book.getAuthor();
+    }
+  });
+
+  if (!found) {
     printError("No book with this ID.");
     return;
   }
 
-  RedBlackIntervalTree **treePtr = BookTable.get(id);
+  RedBlackIntervalTree **treePtr = BookTable.get(id); // Use ID
   if (treePtr && *treePtr) {
     delete *treePtr;
     *treePtr = nullptr;
   }
 
   // Remove data from secondary index
-  Book *b = ID_To_BookTable.get(id);
+  Book *b = ID_To_BookTable.get(titleToRemove);
   if (b) {
-    string author = b->getAuthor();
-    string title = b->getTitle();
-    string authorLower = author;
+    string originalTitle = b->getTitle();
+    string authorLower = b->getAuthor();
     for (char &c : authorLower)
       c = tolower(c);
 
     LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
     if (listPtr && *listPtr) {
-      (*listPtr)->remove(title);
-      // Optional: if list empty, remove author from map (not strictly necessary
-      // but cleaner)
+      (*listPtr)->remove(originalTitle);
       if ((*listPtr)->empty()) {
         delete *listPtr;
         Author_To_BooksTable.erase(authorLower);
@@ -457,15 +458,27 @@ void BooksManager::removeBookInteractive() {
     }
   }
 
-  BookTable.erase(id);
-  ID_To_BookTable.erase(id);
+  BookTable.erase(id); // Use ID
+  ID_To_BookTable.erase(titleToRemove);
 
   printSuccess("Book removed.");
 }
 
 // Non-interactive version for Python API
 bool BooksManager::removeBookDirect(const string &bookId) {
-  if (!ID_To_BookTable.contains(bookId)) {
+  bool found = false;
+  string titleToRemove = "";
+  string authorToRemove = "";
+
+  ID_To_BookTable.forEach([&](const string &keyTitle, Book &book) {
+    if (book.getID() == bookId) {
+      found = true;
+      titleToRemove = keyTitle;
+      authorToRemove = book.getAuthor();
+    }
+  });
+
+  if (!found) {
     return false; // Book doesn't exist
   }
 
@@ -476,17 +489,16 @@ bool BooksManager::removeBookDirect(const string &bookId) {
   }
 
   // Remove data from secondary index
-  Book *b = ID_To_BookTable.get(bookId);
+  Book *b = ID_To_BookTable.get(titleToRemove);
   if (b) {
-    string author = b->getAuthor();
-    string title = b->getTitle();
-    string authorLower = author;
+    string originalTitle = b->getTitle();
+    string authorLower = b->getAuthor();
     for (char &c : authorLower)
       c = tolower(c);
 
     LinkedList<string> **listPtr = Author_To_BooksTable.get(authorLower);
     if (listPtr && *listPtr) {
-      (*listPtr)->remove(title);
+      (*listPtr)->remove(originalTitle);
       if ((*listPtr)->empty()) {
         delete *listPtr;
         Author_To_BooksTable.erase(authorLower);
@@ -495,13 +507,26 @@ bool BooksManager::removeBookDirect(const string &bookId) {
   }
 
   BookTable.erase(bookId);
-  ID_To_BookTable.erase(bookId);
+  ID_To_BookTable.erase(titleToRemove);
 
   return true;
 }
 
 Book *BooksManager::getBook(const string &bookId) {
-  return ID_To_BookTable.get(bookId);
+  // We need to return the Book by ID.
+  // ID_To_BookTable is keyed by Title.
+  // We must iterate to find the ID.
+  // This helper is used by Python bindings?
+  // Or usually valid since bookId is unique.
+  // Searching Title map by ID is O(N).
+
+  Book *foundBook = nullptr;
+  ID_To_BookTable.forEach([&](const string &keyTitle, Book &book) {
+    if (book.getID() == bookId) {
+      foundBook = &book;
+    }
+  });
+  return foundBook;
 }
 
 void BooksManager::loadBookBookingsFromFile() {
@@ -524,7 +549,16 @@ void BooksManager::showUserBookings(const std::string &username) const {
         tree->forEachInterval(
             [&](const int low, const int high, const std::string &user) {
               if (user == username) {
-                Book *b = ID_To_BookTable.get(bookId);
+                // BookTable is keyed by ID. So bookId is ID.
+                // ID_To_BookTable is keyed by Title.
+                // We need to find Book by ID.
+                Book *b = nullptr;
+                const_cast<HashMap<string, Book> &>(ID_To_BookTable)
+                    .forEach([&](const string &key, Book &book) {
+                      if (book.getID() == bookId)
+                        b = &book;
+                    });
+
                 const string title = b ? b->getTitle() : "(unknown)";
                 const string author = b ? b->getAuthor() : "(unknown)";
 

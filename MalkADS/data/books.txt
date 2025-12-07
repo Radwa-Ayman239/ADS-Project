@@ -1,6 +1,6 @@
-9780451524935,1984,George Orwell
-9780134685991,Effective Java,Joshua Bloch
-020112078X,The C++ Programming Language,Bjarne Stroustrup
-9780321336781,Java Puzzlers,Joshua Bloch & Neal Gafter
-9780321543721,Programming: Principles And Practice Using C++,Bjarne Stroustrup
-9781593276034,Python Crash Course,Eric Matthes
+1984,1984,George Orwell
+the c++ programming language,The C++ Programming Language,Bjarne Stroustrup
+java puzzlers,Java Puzzlers,Joshua Bloch & Neal Gafter
+python crash course,Python Crash Course,Eric Matthes
+effective java,Effective Java,Joshua Bloch
+programming: principles and practice using c++,Programming: Principles And Practice Using C++,Bjarne Stroustrup
