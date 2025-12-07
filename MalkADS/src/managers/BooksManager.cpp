@@ -516,9 +516,11 @@ Book *BooksManager::getBook(const string &bookId) {
   // We need to return the Book by ID.
   // ID_To_BookTable is keyed by Title.
   // We must iterate to find the ID.
-  // This helper is used by Python bindings?
+  // This helper is used by Python bindings
   // Or usually valid since bookId is unique.
   // Searching Title map by ID is O(N).
+
+  // Will try to solve that when we have time
 
   Book *foundBook = nullptr;
   ID_To_BookTable.forEach([&](const string &keyTitle, Book &book) {
